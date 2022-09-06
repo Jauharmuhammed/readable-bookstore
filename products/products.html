@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block head %}
+
+<title>Products</title>
+<link rel="stylesheet" href="{% static 'styles/products.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<section class="gallery">
+  <div class="container">
+      <div class="row">
+          {% for product in products %}
+          <div class="col-lg-3 mb-3 px-2">
+              <div class="card mx-3">
+                  <div class="img-container">
+                    <a href="{{ product.get_url }}" >
+                      <img src='{{ product.cover_image.url }}'  alt="" class="image card-img-top px-5 pt-5">
+                    </a>
+                    <div class="overlay text-nowrap">
+                        <button class="btn btn-outline-secondary btn-sm btn-invert"><i class="fas fa-cart-plus mr-2"></i>Add to Cart</button>
+                        <button class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-heart"></i></buttons>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                      <a href="{{ product.get_url }}" >
+                        <h6 class="card-title mb-1">{{ product.name }}</h6>
+                      </a>
+                      <p class="mb-3"><small>{{ product.author }}</small></p>
+                      <h6 class="card-subtitle mb-2 text-muted">&#8377;{{ product.price }}</h6>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+</section>
+
+{% endblock %}

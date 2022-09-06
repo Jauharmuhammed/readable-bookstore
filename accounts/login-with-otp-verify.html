@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+    <title>login</title>
+    <link href="{% static 'styles/login.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+    
+    <main class="container vh-100 d-flex justify-content-center align-items-center ">
+      <div class="form-signin ">
+          <form action="" method="POST">
+              {% csrf_token %}
+              <h2 class="mb-5 text-center">Login with OTP</h2>
+      
+      
+              <div class="form-floating">
+                  <input type="text" class="form-control " name='otp' id="floatingInput" placeholder=" ">
+                  <label for="floatingInput">OTP
+                    <span class="text-danger"><small> *</small></span>
+                  </label>
+              </div>
+      
+              {% if messages %}
+                  {% for message in messages %}
+                      <p {% if message.tags %}
+                          class="text-{{ message.tags }} text-center pb-3"
+                      {% endif %} id="message">{{ message }}</p>
+                  {% endfor %}
+              {% endif %}
+      
+              <button class="w-100  btn btn-lg" type="submit">Submit</button>
+              
+              <p class="text-center pt-4">Didn't recieve OTP or want to change number?<a href="{% url 'login-with-otp' %}"> click here.</a></p>
+          </form>
+        </div>
+      </main>
+
+{% endblock %}

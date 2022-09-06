@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Register</title>
+    <link href="{% static 'styles/register.css' %}" rel="stylesheet">
+    
+{% endblock  %}
+
+
+{% block body %}
+
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <main class="form-signin">
+      <form action="{% url 'register' %}" method="POST" >
+          {% csrf_token %}
+          <h1 class="mb-4 text-center">Register</h1>
+  
+          <div class="d-flex form-floating-double justify-content-between">
+            <div class="form-floating ">
+                {{ form.first_name }}
+                <span class="text-danger">{{ form.errors.first_name }}</span>
+                <label for="floatingInput">First Name
+                  <span class="text-danger"><small> *</small></span>
+                </label>
+            </div>
+            <div class="form-floating">
+              {{ form.last_name }}
+              <span class="text-danger">{{ form.errors.last_name }}</span>
+              <label for="floatingInput">Last Name </label>
+            </div>
+          </div>
+          <div class="form-floating">
+              {{ form.email }}
+              <span class="text-danger">{{ form.errors.email }}</span>
+              <label for="floatingPassword">Email
+                <span class="text-danger"><small> *</small></span>
+              </label>
+          </div>
+          <div class="form-floating">
+              {{ form.mobile_number }}
+              <span class="text-danger">{{ form.errors.mobile_number }}</span>
+              <label for="floatingPassword">Mobile Number
+                <span class="text-danger"><small> *</small></span>
+              </label>
+          </div>
+          <div class="form-floating">
+              {{ form.password }}
+              <!-- <span class="password-eye" onclick="togglePass()"><i class="fa fa-eye-slash"></i></span> -->
+              <span class="text-danger ">{{ form.errors.password }}</span>
+              <label for="floatingPassword"> Password
+                <span class="text-danger"><small> *</small></span>
+              </label>
+  
+          </div>
+  
+          <input class="w-100 btn btn-lg" type="submit" value="Create my account">
+  
+          {% if messages %}
+              {% for message in messages %}
+                  <p {% if message.tags %}
+                      class="text-{{ message.tags }} text-center pb-3"
+                  {% endif %} id="message">{{ message }}</p>
+              {% endfor %}
+          {% endif %}
+  
+          <p class="text-center mb-2">By continuing, I agree to the Terms of Use & Privacy Policy</p>
+          <p class="text-center ">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+  
+      </form>
+  </main>
+</div>
+
+<script>
+
+  // const passwordEl = document.querySelector("password");
+  // const eyeButton = document.querySelector("fa");
+  // let isPass = true;
+  // function togglePass() {
+  //     if (isPass) {
+  //       passwordEl.setAttribute("type", "text");
+  //       eyeButton.classList.remove("fa-eye-slash");
+  //       eyeButton.classList.add("fa-eye");
+  //       isPass = false;}
+  //     else {
+  //       passwordEl.setAttribute("type", "password");
+  //       eyeButton.classList.remove("fa-eye");
+  //       eyeButton.classList.add("fa-eye-slash");
+  //       isPass = true;
+  //     }
+  // }
+
+</script>
+
+
+{% endblock %}
