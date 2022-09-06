@@ -1,0 +1,175 @@
+import os
+
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+
+from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage, send_mail
+
+from django.http import HttpResponse
+
+from django.shortcuts import redirect, render
+
+from django.template.loader import render_to_string
+
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+
+from twilio.rest import Client
+
+from .models import *
+from .forms import *
+
+def user_register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+        if request.method == 'POST':
+            form = CustomUserCreationForm(request.POST)
+            if form.is_valid():
+                first_name = form.cleaned_data['first_name']
+                last_name = form.cleaned_data['last_name']
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
+                mobile_number = form.cleaned_data['mobile_number']
+
+                username = email.split('@')[0]
+                
+                user = CustomUser.objects.create_user(first_name=first_name, email=email, password=password, username=username)
+
+                user.mobile_number = mobile_number
+                user.last_name = last_name
+
+                user.save()
+
+                #user activation using email id
+                current_site = get_current_site(request)
+                mail_subject = 'Activation email for your account'
+                message = render_to_string('accounts/account_verification_email.html',{
+                    'user' : user,
+                    'domain' : current_site,
+                    'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token' : default_token_generator.make_token(user),
+                })
+                to_email = email
+                send_mail(mail_subject, message, 'readablebookstore@gmail.com', [to_email], fail_silently=False)
+
+                return redirect('/login/?command=verification&email='+email)
+        
+        context = {'form': form}
+        return render(request, 'accounts/register.html', context)
+
+def user_login(request):
+    if request.user.is_authenticated :
+        return redirect('home')
+    else:
+
+        if request.method == 'POST':
+            email = request.POST['email']
+            password = request.POST['password']
+            
+            user= authenticate(email =email, password = password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, "Invalid login credentials")
+        return render(request, 'accounts/login.html')
+
+@login_required(login_url= 'login')
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+def user_activate(request, uidb64, token):
+    try:
+      uid = urlsafe_base64_decode(uidb64).decode()
+      user = CustomUser._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+      user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+      user.is_active = True
+      user.save()
+      messages.success(request, 'Your account is activated successfully')
+      return redirect('login')
+
+    else:
+      messages.error(request, 'Activation failed')
+      return redirect('register')
+    
+
+
+def login_with_otp(request):
+  if request.user.is_authenticated :
+        return redirect('home')
+  else:
+    if request.method == 'POST':
+        mobile_number = request.POST['mobile_number']
+
+        if CustomUser.objects.filter(mobile_number=mobile_number):
+
+            request.session['mobile_number'] = mobile_number
+
+            account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            client = Client(account_sid,auth_token)
+
+            verification = client.verify \
+                .services('VA9c891ebf0f6f2f35cd621eda6e927657') \
+                .verifications \
+                .create(to='+91'+mobile_number, channel='sms')
+
+            print(verification.status)
+            messages.success(request, 'OTP is send to +91 '+mobile_number)
+            return redirect('login-with-otp-verify')
+
+        else:
+            messages.error(request, 'Phone Number is not Registered')
+            return redirect('login-with-otp')
+    else:
+        return render(request,'accounts/login-with-otp.html' )
+
+
+
+def login_with_otp_verify(request):
+  if request.user.is_authenticated :
+        return redirect('home')
+  else:
+      if request.method == 'POST':
+          otp = request.POST['otp']
+
+          mobile_number= request.session['mobile_number']
+
+          account_sid = os.environ['TWILIO_ACCOUNT_SID']
+          auth_token = os.environ['TWILIO_AUTH_TOKEN']
+          client = Client(account_sid, auth_token)
+
+          verification_check = client.verify \
+              .services('VA9c891ebf0f6f2f35cd621eda6e927657')\
+              .verification_checks \
+              .create(to='+91'+mobile_number, code=otp)
+
+          print(verification_check.status)
+
+          if verification_check.status == 'approved':
+
+              user = CustomUser.objects.get(mobile_number=mobile_number)
+
+              if user is not None:
+                  login(request, user)
+                  return redirect('home')
+                  
+              else:
+                  return redirect('login-with-otp-verify')
+
+          else:
+              messages.error(request, 'OTP is incorrect')
+              return redirect('login-with-otp-verify')
+      else:
+          return render(request,'accounts/login-with-otp-verify.html' )
+

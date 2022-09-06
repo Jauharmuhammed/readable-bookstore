@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+
+:root {
+  --primary-color: #8e8c6d;
+  --secondary--color: #FFFFFF;
+  --color-light: white;
+  --color-dark: #black;
+  --color-danger: #CB2B2B;
+  --color-success: #12700A;
+
+  --primary-2: #8e8c6d;
+  --secondary-2: #142f3a;
+
+  --primary-1: #454545;
+  --secondary--1: #FFFFFF;
+
+  --primary-font: 'Montserrat', sans-serif;
+
+  --font-regular-12: 400 .75rem 'Montserrat', sans-serif;
+  --font-regular-16: 400 1rem 'Montserrat', sans-serif;
+  --font-regular-20: 400 1.25rem 'Montserrat', sans-serif;
+  --font-regular-24: 400 1.5rem 'Montserrat', sans-serif;
+  --font-regular-32: 400 2rem 'Montserrat', sans-serif;
+  --font-regular-36: 400 2.25rem 'Montserrat', sans-serif;
+  --font-regular-40: 400 2.5rem 'Montserrat', sans-serif;
+  --font-regular-48: 400 3rem 'Montserrat', sans-serif;
+
+  --font-normal-12: 500 .75rem 'Montserrat', sans-serif;
+  --font-normal-16: 500 1rem 'Montserrat', sans-serif;
+  --font-normal-20: 500 1.25rem 'Montserrat', sans-serif;
+  --font-normal-24: 500 1.5rem 'Montserrat', sans-serif;
+  --font-normal-32: 500 2rem 'Montserrat', sans-serif;
+  --font-normal-36: 500 2.25rem 'Montserrat', sans-serif;
+  --font-normal-40: 500 2.5rem 'Montserrat', sans-serif;
+  --font-normal-48: 500 3rem 'Montserrat', sans-serif;
+
+  --font-semibold-12: 600 .75rem 'Montserrat', sans-serif;
+  --font-semibold-16: 600 1rem 'Montserrat', sans-serif;
+  --font-semibold-20: 600 1.25rem 'Montserrat', sans-serif;
+  --font-semibold-24: 600 1.5rem 'Montserrat', sans-serif;
+  --font-semibold-32: 600 2rem 'Montserrat', sans-serif;
+  --font-semibold-36: 600 2.25rem 'Montserrat', sans-serif;
+  --font-semibold-40: 600 2.5rem 'Montserrat', sans-serif;
+  --font-semibold-48: 600 3rem 'Montserrat', sans-serif;
+
+  --font-bold-12: 700 .75rem 'Montserrat', sans-serif;
+  --font-bold-16: 700 1rem 'Montserrat', sans-serif;
+  --font-bold-20: 700 1.25rem 'Montserrat', sans-serif;
+  --font-bold-24: 700 1.5rem 'Montserrat', sans-serif;
+  --font-bold-32: 700 2rem 'Montserrat', sans-serif;
+  --font-bold-36: 700 2.25rem 'Montserrat', sans-serif;
+  --font-bold-40: 700 2.5rem 'Montserrat', sans-serif;
+  --font-bold-48: 700 3rem 'Montserrat', sans-serif;
+
+}
+
+.navbar-brand img {
+  max-height: 50px;
+  max-width: 200px;
+  margin-top: -7px;
+}
+
+.navbar-top {
+  height: 2.2rem;
+  background-color: var(--primary-color);
+  color: var(--color-light);
+}
+
+.navbar-bottom {
+  top: 2.2rem;
+  min-height: 80px;
+  box-shadow: 0px 3px 16px 0px rgba(148, 148, 148, 0.25);
+}
+
+.section-right a {
+  color: var(--color-dark);
+}
+
+.navbar-icon {
+  margin: 0 20px;
+}
+
+.navbar-categories>li {
+  margin: 0 10px;
+}
+
+.section-middle .navbar-toggler,
+.section-middle .navbar-toggler:hover,
+.section-middle .navbar-toggler:active,
+.section-middle .navbar-toggler:focus {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.section-left .navbar-toggler,
+.section-left .navbar-toggler:hover,
+.section-left .navbar-toggler:active,
+.section-left .navbar-toggler:focus {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.section-middle .dropdown-menu {
+  border: none;
+  background-color: transparent;
+  padding-top: 0;
+
+}
+
+.dropdown-toggle::after {
+  all: unset;
+}
+
+.user-dropdown li {
+  float: left;
+}
+
+.user-menu li a{
+  padding: .3rem !important;
+}
+
+.section-right .dropdown-menu {
+  border-radius: 0;
+  padding: 1rem;
+  border: none;
+  box-shadow: 0px 3px 16px 0px rgba(148, 148, 148, 0.15);
+  top: 48px !important;
+}
+
+a:active,
+a:focus,
+a:focus-within {
+  box-shadow: none !important;
+  outline-color: black !important;
+}
+
+
+
+
+
+@media (max-width :575px) {
+  .navbar-brand img {
+    max-width: 120px;
+  }
+
+  .navbar-icon {
+    margin: 0 10px;
+  }
+
+  .section-right {
+    margin-right: 0 !important;
+    min-width: 50%;
+  }
+
+  .section-left {
+    margin-left: 0 !important;
+    min-width: 50%;
+  }
+
+  .navbar-top {
+    font-size: .5rem;
+    height: 1.5rem;
+  }
+
+  .navbar-bottom {
+    top: 1.5rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .navbar-brand img {
+    max-width: 150px;
+  }
+
+  .navbar-icon {
+    margin: 0 10px;
+  }
+
+  .section-right {
+    margin-right: 0 !important;
+    min-width: 50%;
+  }
+
+  .section-left {
+    margin-left: 0 !important;
+    min-width: 50%;
+  }
+
+  .navbar-top {
+    font-size: .75rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar-brand img {
+    max-width: 180px;
+  }
+
+  .section-right {
+    margin-right: 0 !important;
+    min-width: 50%;
+  }
+
+  .section-left {
+    margin-left: 0 !important;
+    padding-left: 10px !important;
+    min-width: 50%;
+  }
+
+  .container-fluid {
+    justify-content: end;
+  }
+
+  .navbar-top {
+    font-size: .85rem;
+  }
+}
+
+@media (min-width: 992px) {
+
+  .section-middle .navbar-toggler,
+  .section-middle .navbar-toggler:hover,
+  .section-middle .navbar-toggler:active,
+  .section-middle .navbar-toggler:focus,
+  .section-middle .navbar-toggler:focus-within {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* .dropdown {
+    position: relative;
+  } */
+
+  .section-middle .dropdown-menu {
+    border: 1;
+    background-color: var(--secondary--color);
+    box-shadow: 0px 3px 16px 0px rgba(148, 148, 148, 0.15);
+    border-radius: 0;
+    width: 600px;
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+    top: 113px !important;
+    z-index: -10;
+  }
+
+  .section-middle .dropdown-toggle::after {
+    all: unset;
+  }
+
+
+  .dropdown-item {
+    color: var(--color-dark);
+    padding: .7rem;
+  }
+
+  .dropdown-item:active {
+    background-color: #8e8c6d;
+  }
+
+
+  .category-list {
+    column-count: 2;
+    margin-top: 0;
+    padding: 1rem 1.5rem .5rem;
+
+  }
+  /* .navbar{
+    z-index: 10 !important;
+  }
+  .dropdown-menu{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    z-index: -10 !important;
+  }
+
+  .dropdown:hover .dropdown-menu
+  {
+    display: block !important;
+  } */
+}

@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+    <title>login</title>
+    <link href="{% static 'styles/login.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+
+{% if request.GET.command == 'verification' %}
+
+    <div class="email-veriy-msg container text-center w-50 vh-100 ">
+      <p><span class="ch2">Thank you for registering!</span> <br> <br> <br> You're so close, there's a Readable Bookstore account waiting just for you. We just need you to confirm your email address to finish setting you up! We promise, it'll just take a sec.</p>
+      <br>
+      <p>Please click on the link in the verification email that we sent to <span style="font-weight: 500;">{{ request.GET.email }}</span>.</p>
+      <br><br>
+      <p>Already verified! Take me to the<a href="{% url 'login' %}"> login </a>page</p>
+      <br>
+      <p style="font-size: .85rem;">* If not recieved please check the spam section also.</p>
+    </div> 
+
+{% else %}
+    
+    <main class="container vh-100 d-flex justify-content-center align-items-center ">
+      <div class="form-signin ">
+          <form action="" method="POST">
+              {% csrf_token %}
+              <h1 class="mb-4 text-center">Login</h1>
+      
+      
+              <div class="form-floating">
+                  <input type="text" class="form-control " name='email' id="floatingInput" placeholder=" ">
+                  <label for="floatingInput">Email id
+                    <span class="text-danger"><small> *</small></span>
+                  </label>
+              </div>
+              <div class="form-floating">
+                  <input type="password" class="form-control" name='password' id="floatingPassword"
+                      placeholder=" ">
+                  <label for="floatingPassword">
+                    Password
+                    <span class="text-danger"><small> *</small></span>
+                  </label>
+              </div>
+      
+              {% if messages %}
+                  {% for message in messages %}
+                      <p {% if message.tags %}
+                          class="text-{{ message.tags }} text-center pb-3"
+                      {% endif %} id="message">{{ message }}</p>
+                  {% endfor %}
+              {% endif %}
+      
+              <button class="w-100 btn btn-lg" type="submit">Login</button>
+              
+              <p class="ch2 text-center pt-3">OR</p>
+              <a href="{% url 'login-with-otp' %}" class="w-100 btn btn-lg mt-3" >Login with OTP</a>
+              <p class="text-center pt-4">Are you new? Welcome!  <a href="{% url 'register' %}">Create an account</a></p>
+              <p class="text-center pt-2">Oh no! Forgot your password?</p>
+          </form>
+        </div>
+      </main>
+
+{% endif %}
+
+{% endblock %}

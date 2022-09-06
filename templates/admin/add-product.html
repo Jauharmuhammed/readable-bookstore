@@ -1,0 +1,265 @@
+{% extends 'admin/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / </span> Add Product</h6>
+  
+  <!-- Hoverable Table rows -->
+  <div class="col-xxl">
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">Add a new Produt</h5>
+        <small class="text-muted float-end">Fill details</small>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> Title</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.name }}
+                {{ form.name.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> {{ form.isbn.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.isbn }}
+                {{ form.isbn.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.sub_category.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.sub_category }}
+                {{ form.sub_category.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.language.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.language }}
+                {{ form.language.errors }}
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.author.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.author }}
+                {{ form.author.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.Publisher.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.Publisher }}
+                {{ form.Publisher.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.release_date.label}}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.release_date }}
+                {{ form.release_date.errors }}
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.price.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.price }}
+                {{ form.price.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.stock.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
+                {{ form.stock }}
+                {{ form.stock.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.is_available.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge mt-2">
+                {{ form.is_available }}
+                {{ form.is_available.errors }}
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.cover_image.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.cover_image }}
+                {{ form.cover_image.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.image1.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.image1 }}
+                {{ form.image1.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.image2.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.image2 }}
+                {{ form.image2.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.image3.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.image3 }}
+                {{ form.image3.errors }}
+              </div>
+            </div>
+          </div>
+          
+          <br>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.binding.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.binding }}
+                {{ form.binding.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.description.label}}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.description }}
+                {{ form.description.errors }}
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.number_of_pages.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.number_of_pages }}
+                {{ form.number_of_pages.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.height.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.height }}
+                {{ form.height.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.width.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.width }}
+                {{ form.width.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.weight.label }}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.weight }}
+                {{ form.weight.errors }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.spine_width.label}}</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                {{ form.spine_width }}
+                {{ form.spine_width.errors}}
+              </div>
+            </div>
+          </div>
+          {% if messages %}
+              {% for message in messages %}
+                  <p {% if message.tags %}
+                      class="text-{{ message.tags }} text-center pb-3"
+                  {% endif %} id="message">{{ message }}</p>
+              {% endfor %}
+          {% endif %}
+
+          <div class="row justify-content-end">
+            <div class="col-sm-10 text-end">
+              <input type="submit" class="btn btn-primary" value="Save">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/ Hoverable Table rows -->
+
+{% endblock %}
+
+
+
+{% block script %}
+
+
+{% endblock %}

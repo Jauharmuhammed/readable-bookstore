@@ -1,0 +1,71 @@
+
+{% load static %}
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  
+  <link rel="stylesheet" href="{% static 'styles/admin-login.css' %}">
+  <link rel="stylesheet" href="{% static 'styles/layout.css' %}">
+
+
+  <script src="https://kit.fontawesome.com/636cd13699.js" crossorigin="anonymous"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
+
+  <title>Admin Login</title>
+</head>
+
+<body>
+
+  <nav class="navbar fixed-top bg-light px-2">
+    <div class="container-fluid d-flex justify-content-start">
+      <a class="navbar-brand" href="#">
+        <img class='brand-logo ms-4' src="{% static 'images/readablelogo.png' %} " alt="readable-brand-logo">
+      </a>
+    </div>
+  </nav>
+
+  <main class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="form-signin ">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <h2 class="mb-5 text-center">Admin Login</h2>
+
+
+        <div class="form-floating">
+          <input type="text" class="form-control " name='email' id="floatingInput" placeholder=" ">
+          <label for="floatingInput">Email id
+            <span class="text-danger"><small> *</small></span>
+          </label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" name='password' id="floatingPassword" placeholder=" ">
+          <label for="floatingPassword">
+            Password
+            <span class="text-danger"><small> *</small></span>
+          </label>
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <p {% if message.tags %} class="text-{{ message.tags }} text-center pb-3" {% endif %} id="message">{{ message }}
+        </p>
+        {% endfor %}
+        {% endif %}
+
+        <button class="w-100 btn btn-lg" type="submit">Login</button>
+        <p class="text-center pt-4">Oh no! Forgot your password?</p>
+      </form>
+    </div>
+  </main>
+
+    
+</body>
+
+</html>

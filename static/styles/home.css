@@ -1,0 +1,13 @@
+
+
+.navbar{
+    border-bottom: 1px solid lightgray;
+    padding-top: 4px !important;
+    padding-bottom: 1px !important;
+
+}
+
+.navbar-brand img {
+  max-height: 50px;
+  max-width: 200px;
+}

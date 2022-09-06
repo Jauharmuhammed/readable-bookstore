@@ -1,0 +1,35 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+a {
+    text-decoration: none;
+}
+
+span ul {
+    list-style-type: none;
+    font-style: italic;
+    font-size: .75rem;
+    padding: 0 1rem;
+    margin-bottom: 10px;
+}
+
+
+form p {
+  font-size: .9rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

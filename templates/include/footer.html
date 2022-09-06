@@ -1,0 +1,90 @@
+{% load static %}
+
+<div class=" footer-container">
+  <div class="container">
+    <footer class="pt-5">
+      <div class="row">
+
+        <div class="footer-list footer-list-newsletter col-12  col-md-4 mb-3 ms-5">
+          <form action="" method="POST">
+            {% csrf_token %}
+            <p class="mb-4 text-uppercase">Newsletter</p>
+            <p class=" mb-3">Subscribe to receive updates, access to exclusive deals, and more.</p>
+            <div class="form-floating">
+              <input type="email" class="form-control mb-3" name='email' id="floatingInput" placeholder=" ">
+              <label for="floatingInput">Enter you email address</label>
+            </div>
+            <button class="w-50 btn btn-subscribe" type="submit">SUBSCRIBE</button>
+          </form>
+        </div>
+
+        <div class="footer-list col-3  ms-5 col-md-2 mb-3">
+          <p class="mb-4 text-uppercase">Shop</p>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Fiction</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Nonfiction</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">History</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Self-Help</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Kids Fiction</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Business & Money</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Science</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Technology</a></li>
+          </ul>
+        </div>
+
+        <div class="col-3 col-md-2 mb-3 ms-4 p-0">
+          <p class="mb-4 text-uppercase">Support</p>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">FAQs</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Shipping</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Warranty Policy</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Returns & Exchanges</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="col-3 col-md-2 mb-2 ms-4 p-0">
+          <p class="mb-4 text-uppercase">Learn More</p>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">About Us</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Terms & Conditions</a></li>
+            <li class="nav-item mb-3"><a href="#" class="nav-link p-0">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="sm-12 px-5 mt-4">
+          <p class="about-us text-center"><small>
+              <span class="text-uppercase">Readable Bookstore</span> is designed and developed as a part of a full-stack
+              web development project, and it is completely for learning purpose only. This project is
+              developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS,
+              Bootstrap and JavaScript
+
+            </small></p>
+        </div>
+
+
+      </div>
+
+      <div class="footer-list-connect d-flex flex-column flex-sm-row justify-content-between py-4 mt-4">
+
+        <div class="order-lg-2 order-md-1">
+          <ul class="list-unstyled d-flex ">
+            <li class="ms-3 me-4"><small>Connect Us</small></li>
+            <li class="ms-3"><a class="link-dark" href="#">
+                <iconify-icon icon="arcticons:twitter" width="24" height="24"></iconify-icon>
+              </a></li>
+            <li class="ms-3"><a class="link-dark" href="#">
+                <iconify-icon icon="openmoji:instagram" width="24" height="24"></iconify-icon>
+              </a></li>
+            <li class="ms-3"><a class="link-dark" href="#">
+                <iconify-icon icon="uit:facebook-f" width="24" height="24"></iconify-icon>
+              </a></li>
+          </ul>
+        </div>
+        <div class="order-lg-1 order-md-2">
+          <p class="copyright">&copy; 2022 Readable Bookstore, Inc. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

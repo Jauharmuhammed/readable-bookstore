@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+
+:root {
+  --primary-color : #454545;
+  --secondary--color : #FFFFFF;
+  --color-light : white;
+  --color-dark : black;
+  --color-danger : #CB2B2B;
+  --color-success : #12700A;
+
+  --primary-2 : #8e8c6d;
+  --secondary-2 : #142f3a;
+
+  --primary-1 : #454545;
+  --secondary--1 : #FFFFFF;
+
+
+  --primary-font : 'Montserrat', sans-serif;
+
+  --font-regular-12 : 400 .75rem 'Montserrat', sans-serif;
+  --font-regular-16 : 400 1rem 'Montserrat', sans-serif;
+  --font-regular-20 : 400 1.25rem 'Montserrat', sans-serif;
+  --font-regular-24 : 400 1.5rem 'Montserrat', sans-serif;
+  --font-regular-32 : 400 2rem 'Montserrat', sans-serif;
+  --font-regular-36 : 400 2.25rem 'Montserrat', sans-serif;
+  --font-regular-40 : 400 2.5rem 'Montserrat', sans-serif;
+  --font-regular-48 : 400 3rem 'Montserrat', sans-serif;
+
+  --font-normal-12 : 500 .75rem 'Montserrat', sans-serif;
+  --font-normal-16 : 500 1rem 'Montserrat', sans-serif;
+  --font-normal-20 : 500 1.25rem 'Montserrat', sans-serif;
+  --font-normal-24 : 500 1.5rem 'Montserrat', sans-serif;
+  --font-normal-32 : 500 2rem 'Montserrat', sans-serif;
+  --font-normal-36 : 500 2.25rem 'Montserrat', sans-serif;
+  --font-normal-40 : 500 2.5rem 'Montserrat', sans-serif;
+  --font-normal-48 : 500 3rem 'Montserrat', sans-serif;
+
+  --font-semibold-12 : 600 .75rem 'Montserrat', sans-serif;
+  --font-semibold-16 : 600 1rem 'Montserrat', sans-serif;
+  --font-semibold-20 : 600 1.25rem 'Montserrat', sans-serif;
+  --font-semibold-24 : 600 1.5rem 'Montserrat', sans-serif;
+  --font-semibold-32 : 600 2rem 'Montserrat', sans-serif;
+  --font-semibold-36 : 600 2.25rem 'Montserrat', sans-serif;
+  --font-semibold-40 : 600 2.5rem 'Montserrat', sans-serif;
+  --font-semibold-48 : 600 3rem 'Montserrat', sans-serif;
+
+  --font-bold-12 : 700 .75rem 'Montserrat', sans-serif;
+  --font-bold-16 : 700 1rem 'Montserrat', sans-serif;
+  --font-bold-20 : 700 1.25rem 'Montserrat', sans-serif;
+  --font-bold-24 : 700 1.5rem 'Montserrat', sans-serif;
+  --font-bold-32 : 700 2rem 'Montserrat', sans-serif;
+  --font-bold-36 : 700 2.25rem 'Montserrat', sans-serif;
+  --font-bold-40 : 700 2.5rem 'Montserrat', sans-serif;
+  --font-bold-48 : 700 3rem 'Montserrat', sans-serif;
+
+}
+
+.ch2{
+  font: var(--font-semibold-20);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  
+}
+ 
+p, body, html {
+  margin: 0;
+  padding: 0;
+
+}
+
+body{
+  display: block !important;
+  font: 400 1rem 'Montserrat', sans-serif;
+  border-radius: 0 ;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 500px;
+}
+.email-veriy-msg{
+  padding: 250px 0;
+  
+}
+
+.form-signin input:focus {
+  box-shadow: none;
+  border-color: black;
+  border-width: 1.4px;
+
+}
+
+.form-floating-double > div {
+  width: 48.6%;
+}
+
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input {
+  margin-bottom: 1rem;
+  border-radius: 0;
+}
+
+.btn {
+  background-color: var(--primary-color);
+  color: var(--color-light);
+  border-radius: 0;
+}
+
+form .btn:hover {
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border: 1px solid grey;
+}
+
+.btn-invert {
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border-radius: 0;
+  border: 1px solid grey;
+}
+
+.btn-invert:hover
+ {
+  border: 1.7px solid rgb(0, 0, 0);
+  background-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+.btn-invert:active,
+.btn-invert:focus{
+  background-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+h1{
+  font: var(--font-regular-40);
+}
+
+.btn:focus,
+.btn:active,
+input:focus,
+input:active
+{
+  box-shadow: none !important;
+}
+
+
+/* scroll bar customisation */
+
+::-webkit-scrollbar-track
+{
+	box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 7px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #FFF;
+	background-image: -webkit-linear-gradient(top,
+											  #8e8c6d 0%,
+											  #b7b58a 50%,
+											  #bab88d 51%,
+											  #8e8c6d 100%);
+}
+
+
+/* .password-eye {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  bottom: auto;
+  float: right;
+  background: #fff;
+  cursor: pointer;
+  padding: 6.5px;
+}
+
+.form-floating{
+  position: relative;
+} */
+
+@media (max-width :575px) {
+  html {
+    font-size: 12px;
+  }
+}

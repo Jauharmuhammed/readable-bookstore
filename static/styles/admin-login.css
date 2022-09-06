@@ -1,0 +1,100 @@
+.ch2 {
+  font: var(--font-semibold-20);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+}
+
+p,
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: block !important;
+  font: 400 1rem 'Montserrat', sans-serif;
+  border-radius: 0;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 500px;
+}
+
+.email-veriy-msg {
+  padding: 250px 0;
+
+}
+
+.form-signin input:focus {
+  box-shadow: none;
+  border-color: black;
+  border-width: 1.4px;
+
+}
+
+.form-floating-double>div {
+  width: 48.6%;
+}
+
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input {
+  margin-bottom: 1rem;
+  border-radius: 0;
+}
+
+.btn {
+  background-color: var(--primary-color);
+  color: var(--color-light);
+  border-radius: 0;
+}
+
+form .btn:hover {
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border: 1px solid var(--color-dark);
+}
+
+h1 {
+  font: var(--font-regular-40);
+}
+
+.navbar {
+  border-bottom: 1px solid lightgray;
+  padding-top: 4px !important;
+  padding-bottom: 1px !important;
+
+}
+
+.navbar-brand img {
+  max-height: 50px;
+  max-width: 200px;
+}
+
+@media (max-width :575px){
+  .navbar-brand img {
+    max-width: 120px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px){
+  .navbar-brand img {
+    max-width: 150px;
+  }
+
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+  .navbar-brand img {
+    max-width: 180px;
+  }
+}

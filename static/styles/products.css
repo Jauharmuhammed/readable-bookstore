@@ -1,0 +1,56 @@
+.img-container{
+  position: relative;
+}
+
+.image{
+  transition: .5s ease;
+}
+
+.overlay{
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.img-container:hover .image{
+  opacity: 0.2;
+}
+.img-container:hover .overlay{
+  opacity: 1;
+}
+.card{
+  border-radius: 0 !important;
+  box-shadow: 0 5px 8px rgba(0,0,0,.08), 0 0 5px rgba(0,0,0,.05);
+  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition-duration: .5s;
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.gallery{
+  padding-top: 15%;
+}
+
+.navbar{
+  border-bottom: 1px solid lightgray;
+  padding-top: 4px !important;
+  padding-bottom: 1px !important;
+}
+
+.card-body a ,
+.img-container a{
+  text-decoration: none;
+  color: inherit !important;
+}
+
+.btn-invert:hover {
+  border: 1px solid rgb(0, 0, 0);
+}
+

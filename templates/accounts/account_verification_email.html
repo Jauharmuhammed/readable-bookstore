@@ -1,0 +1,14 @@
+{% autoescape off %}
+
+Hi, {{ user.first_name }}
+
+You're so close, there's a Readable Bookstore account waiting just for you. We just need you to confirm your email address to finish setting you up! We promise, it'll just take a sec.
+
+Please click on the link below to confirm your registration.
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+If you think it's not you, please ignore this email.
+
+You're receiving this email because you registered in Readable Bookstore.
+
+{% endautoescape %}

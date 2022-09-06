@@ -1,0 +1,171 @@
+{% load static %}
+
+<nav class="fixed-top navbar-top">
+  <p class="text-center pt-2 ">FREE SHIPPING FOR ORDERS ABOVE ₹500 . 10% DISCOUNT FOR FIRST TIME PURCAHSE</p>
+</nav>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light navbar-bottom">
+  <div class="container-fluid ">
+
+
+    <section class="section-left ms-4 d-flex justify-content-start">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <iconify-icon icon="fluent:navigation-20-regular"></iconify-icon>
+      </button>
+
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img class='brand-logo' src="{% static 'images/readablelogo.png' %} " alt="readable-brand-logo">
+      </a>
+    </section>
+
+    <section class="section-right me-3 order-lg-2">
+      <div class="nav-icones d-flex justify-content-end ">
+        <ul class="list-unstyled my-auto user-dropdown">
+          <li>
+            <a class="navbar-icon " href="#">
+              <iconify-icon icon="bytesize:search"></iconify-icon>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="navbar-icon dropdown-toggle active" href="#" data-bs-toggle="dropdown">
+              <iconify-icon icon="simple-line-icons:user"></iconify-icon>
+            </a>
+            <div class="user-menu dropdown-menu">
+              <ul class="list-unstyled">
+                {% if user.is_authenticated %}
+                  <li><a class="dropdown-item border-bottom mb-2" href="#"> Hi, {{ user.first_name }}. </a></li>
+                  <li><a class="dropdown-item" href="#"> Profile </a></li>
+                  <li><a class="dropdown-item" href="#"> Settings </a></li>
+                  <li><a class="dropdown-item" href="#"> Whishlist </a></li>
+                  <li><a class="dropdown-item" href="#"> Orders </a></li>
+                  <li><a class="dropdown-item" href="{% url 'logout'%}"> Logout </a></li>
+                {% else %}
+                  <li><a class="dropdown-item" href="{% url 'login' %}"> Login </a></li>
+                  <li><a class="dropdown-item" href="{% url 'register' %}"> Register </a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+
+          <li>
+            <a class="navbar-icon" href="#">
+              <iconify-icon icon="bi:heart"></iconify-icon>
+            </a>
+          </li>
+          <li>
+            <a class="navbar-icon" href="#">
+              <iconify-icon icon="bi:bag"></iconify-icon>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+
+    <section class="section-middle order-lg-1 ">
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-categories">
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'products' %}">Best Sellers</a>
+          </li>
+          {% if category_links %}
+          {% for category in category_links %}
+              <li class="nav-item dropdown">
+                <a class="nav-link  dropdown-toggle active" href="" data-bs-toggle="dropdown">{{ category.category_name }}</a>
+                <ul class="dropdown-menu list-unstyled category-list ">
+                  {% if sub_category_links %}
+                    {% for sub_category in sub_category_links %}
+                      {% if sub_category.category_id == category.pk %}
+                          <li><a class="dropdown-item" href="{{ sub_category.get_url }}"> {{ sub_category.subcategory_name }} </a></li>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                    <li><a class="dropdown-item" href="{{ category.get_url }}"> View All </a></li>
+                  </ul>
+              </li>
+          {% endfor %}
+          {% endif %}
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link  dropdown-toggle active" href="" data-bs-toggle="dropdown"> Languages </a>
+            <ul class="dropdown-menu list-unstyled category-list">
+                {% if language_links %}
+                {% for language in language_links %}
+                <li><a class="dropdown-item" href="{{ language.get_url }}"> {{ language.language_name }} </a></li>
+                {% endfor %}
+                {% endif %}
+                <li><a class="dropdown-item" href="{% url 'products' %}"> View All </a></li>
+              </ul>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'products' %}">New Arrivals</a>
+          </li>
+        </ul>
+      </div>
+
+    </section>
+
+  </div>
+</nav>
+
+
+<script type="text/javascript">
+  //	window.addEventListener("resize", function() {
+  //		"use strict"; window.location.reload(); 
+  //	});
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+
+    /////// Prevent closing from click inside dropdown
+    document.querySelectorAll('.dropdown-menu').forEach(function (element) {
+      element.addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+    })
+
+
+
+    // make it as accordion for smaller screens
+    if (window.innerWidth < 992) {
+
+      // close all inner dropdowns when parent is closed
+      document.querySelectorAll('.navbar .dropdown').forEach(function (everydropdown) {
+        everydropdown.addEventListener('hidden.bs.dropdown', function () {
+          // after dropdown is hidden, then find all submenus
+          this.querySelectorAll('.submenu').forEach(function (everysubmenu) {
+            // hide every submenu as well
+            everysubmenu.style.display = 'none';
+          });
+        })
+      });
+
+      document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+        element.addEventListener('click', function (e) {
+
+          let nextEl = this.nextElementSibling;
+          if (nextEl && nextEl.classList.contains('submenu')) {
+            // prevent opening link if link needs to open dropdown
+            e.preventDefault();
+            console.log(nextEl);
+            if (nextEl.style.display == 'block') {
+              nextEl.style.display = 'none';
+            } else {
+              nextEl.style.display = 'block';
+            }
+
+          }
+        });
+      })
+    }
+    // end if innerWidth
+
+  });
+    // DOMContentLoaded  end
+</script>

@@ -1,0 +1,55 @@
+.footer-container {
+  background-color: #8e8c6d23;
+}
+
+.form-control{
+  height: 2.5rem;
+  border-radius: 0;
+}
+
+.form-control:focus{
+  box-shadow: none;
+  border-color: black;
+  border-width: 1.4px;
+}
+
+.btn-subscribe {
+  height: 3rem;
+}
+
+.about-us{
+  line-height: 1.4rem;
+}
+a {
+  color: var(--color-dark) !important;
+}
+
+li,
+.copyright
+ {
+  font-weight: 300;
+}
+
+
+@media (max-width: 991px) {
+  .footer-list {
+    margin-left: .8rem !important;
+    max-width: 94%;
+  }
+
+
+  .footer-list-connect ul {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer-list-connect p {
+    justify-content: center;
+    text-align: center;
+    font-size: .75rem;
+  }
+  .footer-list-newsletter {
+    margin-bottom: 4rem !important;
+  }
+
+}

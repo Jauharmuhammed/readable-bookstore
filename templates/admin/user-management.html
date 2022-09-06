@@ -1,0 +1,92 @@
+{% extends 'admin/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> User Mangement</h6>
+
+  <!-- Hoverable Table rows -->
+  <div class="card">
+    <h5 class="card-header">Users</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table " id="user_table">
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Name and Email Address</th>
+            <th>Mobile Number</th>
+            <th>Date Joined</th>
+            <th>Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if users %}
+          {% for user in users %}
+          {% if not user.is_superuser %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><span class="name"><strong>{{ user.first_name }} {{ user.last_name }}</strong><br></span>
+              <span class="email ">{{ user.email }}</span>
+            </td>
+            <td><span class="name">+91 {{ user.mobile_number }}</span></td>
+            <td><span class="name">{{ user.date_joined }}</span></td>
+            <td class="text-center">
+              {% if user.is_active %}
+              <span class="text-success">
+                Active
+              </span>
+              {% else %}
+              <span class="bi bi-x-circle-fill text-danger">
+                Inactive
+              </span>
+              {% endif %}
+            </td>
+            <td class="user-block-unblock">
+
+              {% if user.is_active %}
+              <a type="button" class="btn btn-danger w-100" href="{% url 'block-user' pk=user.id %}"
+                onclick="blockconfirm(event,'{{user.first_name}}'+' {{user.last_name}}')">
+                Block
+              </a>
+              {% else %}
+              <a type="button" class="btn btn-success w-100" href="{% url 'unblock-user' pk=user.id %}"
+                onclick="unblockconfirm(event,'{{user.first_name}}'+' {{user.last_name}}')">
+                Unblock
+              </a>
+              {% endif %}
+
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--/ Hoverable Table rows -->
+
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+
+
+
+{% endblock %}

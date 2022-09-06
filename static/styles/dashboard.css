@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
+
+:root {
+  --primary-color : #454545;
+  --secondary--color : #FFFFFF;
+  --color-light : white;
+  --color-dark : black;
+  --color-danger : #cd0000;
+  --color-success : #12700A;
+
+  --primary-2 : #8e8c6d;
+  --secondary-2 : #142f3a;
+
+  --primary-1 : #454545;
+  --secondary--1 : #FFFFFF;
+
+
+  --primary-font : 'Montserrat', sans-serif;
+
+  --font-regular-12 : 400 .75rem 'Montserrat', sans-serif;
+  --font-regular-16 : 400 1rem 'Montserrat', sans-serif;
+  --font-regular-20 : 400 1.25rem 'Montserrat', sans-serif;
+  --font-regular-24 : 400 1.5rem 'Montserrat', sans-serif;
+  --font-regular-32 : 400 2rem 'Montserrat', sans-serif;
+  --font-regular-36 : 400 2.25rem 'Montserrat', sans-serif;
+  --font-regular-40 : 400 2.5rem 'Montserrat', sans-serif;
+  --font-regular-48 : 400 3rem 'Montserrat', sans-serif;
+
+  --font-normal-12 : 500 .75rem 'Montserrat', sans-serif;
+  --font-normal-16 : 500 1rem 'Montserrat', sans-serif;
+  --font-normal-20 : 500 1.25rem 'Montserrat', sans-serif;
+  --font-normal-24 : 500 1.5rem 'Montserrat', sans-serif;
+  --font-normal-32 : 500 2rem 'Montserrat', sans-serif;
+  --font-normal-36 : 500 2.25rem 'Montserrat', sans-serif;
+  --font-normal-40 : 500 2.5rem 'Montserrat', sans-serif;
+  --font-normal-48 : 500 3rem 'Montserrat', sans-serif;
+
+  --font-semibold-12 : 600 .75rem 'Montserrat', sans-serif;
+  --font-semibold-16 : 600 1rem 'Montserrat', sans-serif;
+  --font-semibold-20 : 600 1.25rem 'Montserrat', sans-serif;
+  --font-semibold-24 : 600 1.5rem 'Montserrat', sans-serif;
+  --font-semibold-32 : 600 2rem 'Montserrat', sans-serif;
+  --font-semibold-36 : 600 2.25rem 'Montserrat', sans-serif;
+  --font-semibold-40 : 600 2.5rem 'Montserrat', sans-serif;
+  --font-semibold-48 : 600 3rem 'Montserrat', sans-serif;
+
+  --font-bold-12 : 700 .75rem 'Montserrat', sans-serif;
+  --font-bold-16 : 700 1rem 'Montserrat', sans-serif;
+  --font-bold-20 : 700 1.25rem 'Montserrat', sans-serif;
+  --font-bold-24 : 700 1.5rem 'Montserrat', sans-serif;
+  --font-bold-32 : 700 2rem 'Montserrat', sans-serif;
+  --font-bold-36 : 700 2.25rem 'Montserrat', sans-serif;
+  --font-bold-40 : 700 2.5rem 'Montserrat', sans-serif;
+  --font-bold-48 : 700 3rem 'Montserrat', sans-serif;
+
+}
+
+.btn-danger{
+  background-color: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
+}
+.btn-success{
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important;
+  font: 400 .9rem 'Montserrat', sans-serif;
+}
+ 
+p, body, html {
+  margin: 0;
+  padding: 0;
+
+}
+
+.swal-icon {
+  border-radius: 50% !important;
+}
+
+.swal-icon--success__ring {
+  border-radius: 50% !important;
+}

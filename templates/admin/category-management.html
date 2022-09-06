@@ -1,0 +1,360 @@
+{% extends 'admin/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="d-flex justify-content-between">
+    <h6 class="fw-bold py-3 mb-4 w-75"><span class="text-muted fw-light">Home /</span> Category Management</h6>
+    <button type="button" class="btn btn-primary  my-3 align-items-center text-nowrap" data-bs-toggle="modal" data-bs-target="#modalCenterCategory">
+      Add Category
+    </button>
+  </div>
+
+  <div class="modal fade" id="modalCenterCategory" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCenterTitle">Create a new category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" , method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="nameWithTitle" class="form-label">{{ category_form.category_name.label }}</label>
+                {{ category_form.category_name }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="nameWithTitle" class="form-label">{{ category_form.description.label }}</label>
+                {{ category_form.description }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="nameWithTitle" class="form-label">{{ category_form.image.label }}</label>
+                {{ category_form.image }}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <input type="submit" name="category_submit" class="btn btn-primary" value="Save">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filled Pilles -->
+  <div class="col-xl-12">
+    <h6 class="text-muted">Categories</h6>
+    <div class="nav-align-top mb-4">
+      <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+        {% for category in categories %}
+        <li class="nav-item">
+          <button type="button" class="nav-link {% if forloop.first %} active {% endif %}" role="tab"
+            data-bs-toggle="tab" data-bs-target="#nave-pills-{{category.id}}" aria-controls="nave-pills-{{category.id}}"
+            aria-selected="false">
+            <i class="tf-icons bx bx-user"></i> {{ category.category_name }}
+          </button>
+        </li>
+        {% endfor %}
+        <li class="nav-item">
+          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-languages"
+            aria-controls="navs-pills-languages" aria-selected="false">
+            <i class="tf-icons bx bx-message-square"></i> Languages
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-binding"
+            aria-controls="navs-pills-binding" aria-selected="false">
+            <i class="tf-icons bx bx-message-square"></i> Binding
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content">
+
+
+
+        <!-- Tab Test -->
+        {% for category in categories %}
+        <div class="tab-pane fade {% if forloop.first %} show active {% endif %} " id="nave-pills-{{category.id}}"
+          role="tabpanel">
+          <div class="card">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-header w-50">Sub-categories</h5>
+              <div class="d-flex justify-content-between">
+
+                <div class="btn-group m-3">
+                  <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCenter{{category.id}}">Add Sub-category</a></li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'del-category' pk=category.id %}"
+                        onclick="deleteconfirm(event,'{{category.category_name}}')">
+                        Delete This Category
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- modal -->
+            <div class="modal fade" id="modalCenter{{category.id}}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">Add a new Sub-category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">
+                            {{ sub_category_form.subcategory_name.label}}
+                          </label>
+                          {{ sub_category_form.subcategory_name }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ sub_category_form.category.label }}</label>
+                          {{ sub_category_form.category }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ sub_category_form.description.label}}</label>
+                          {{ sub_category_form.description }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ sub_category_form.image.label }}</label>
+                          {{ sub_category_form.image }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                      </button>
+                      <input type="submit" name="sub_category_submit" class="btn btn-primary" value="Save">
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive text-nowrap">
+              <table class="table " id="user_table">
+                <thead>
+                  <tr>
+                    <th>Serial No</th>
+                    <th>Sub-Category Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if sub_categories %}
+                  {% for sub_category in sub_categories %}
+                  {% if sub_category.category_id == category.id %}
+                  <tr>
+                    <td><span class="name">{{ forloop.counter }}</span></td>
+                    <td><span class="name">{{ sub_category.subcategory_name }}</span></td>
+                    <td>
+                      <a type="button" class="btn btn-danger py-1"
+                        href="{% url 'del-sub-category' pk=sub_category.id %}"
+                        onclick="deleteconfirm(event,'{{sub_category.subcategory_name}}')">
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- Tab Test -->
+
+
+        <!-- Tab -->
+        <div class="tab-pane fade" id="navs-pills-languages" role="tabpanel">
+          <div class="card">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-header w-75">Language categories</h5>
+              <div class="btn-group m-3">
+                <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCenterLanguage">Add Language</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalCenterLanguage" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalCenterTitle">Add a new language</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form action="" , method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ language_form.language_name.label }}</label>
+                          {{ language_form.language_name }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ language_form.description.label }}</label>
+                          {{ language_form.description }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ language_form.image.label }}</label>
+                          {{ language_form.image }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                      </button>
+                      <input type="submit" name="language_submit" class="btn btn-primary" value="Save">
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- /add language modal -->
+
+            <div class="table-responsive text-nowrap">
+              <table class="table" id="language_table">
+                <thead>
+                  <tr>
+                    <th>Serial No</th>
+                    <th>Language</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if languages %}
+                  {% for language in languages %}
+                  <tr>
+                    <td><span class="name">{{ forloop.counter }}</span></td>
+                    <td><span class="name">{{ language.language_name }}</span></td>
+                    <td>
+                      <a type="button" class="btn btn-danger py-1" href="{% url 'del-language' pk=language.id %}"
+                        onclick="deleteconfirm(event,'{{language.language_name}}')">
+                        Delete
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Tab -->
+        <!-- Tab -->
+        <div class="tab-pane fade" id="navs-pills-binding" role="tabpanel">
+          <div class="card">
+            <h5 class="card-header">Book Formats</h5>
+            <div class="table-responsive text-nowrap">
+              <table class="table " id="user_table">
+                <thead>
+                  <tr>
+                    <th>Serial No</th>
+                    <th>Binding</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if bindings %}
+                  {% for binding in bindings %}
+                  <tr>
+                    <td><span class="name">{{ forloop.counter }}</span></td>
+                    <td><span class="name">{{ binding.binding_name }}</span></td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Tab -->
+
+      </div>
+    </div>
+  </div>
+  <!-- /Filled Pilles -->
+
+
+
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+
+<script>
+  function deleteconfirm(ev, name) {
+    ev.preventDefault();
+    var urlToRedirect = ev.currentTarget.getAttribute('href');
+    console.log(urlToRedirect);
+    swal({
+      title: "Are you sure?",
+      text: ("Are you sure that you want to delete category " + name + "? All data related to " + name + " will be also deleted!"),
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Poof! " + name + " has been deleted!", {
+            icon: "success",
+          });
+          window.location.href = urlToRedirect;
+        }
+      });
+  }
+</script>
+
+{% endblock %}
