@@ -16,7 +16,7 @@ class CustomUserCreationForm(forms.ModelForm):
     last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': ' ','class': 'form-control ',}),required=False)
     email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': ' ','class': 'form-control', }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': ' ','class': 'form-control password',}),validators=[validate_password])
-    mobile_number = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': ' ','class': 'form-control',}))
+    mobile_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': ' ','class': 'form-control','maxlength':"10", 'pattern':"\d{10}", 'title':"Please enter exactly 10 digits", }))
     
 
  

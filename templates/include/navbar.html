@@ -55,8 +55,14 @@
             </a>
           </li>
           <li>
-            <a class="navbar-icon" href="#">
+            <a class="navbar-icon position-relative" href="{% url 'cart' %}">
               <iconify-icon icon="bi:bag"></iconify-icon>
+              {% if cart_count > 0 %}
+              <span class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge">
+                {{ cart_count }}
+                <span class="visually-hidden">Cart item count</span>
+              {% endif %}
+              </span>
             </a>
           </li>
         </ul>

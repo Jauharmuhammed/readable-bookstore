@@ -1,3 +1,4 @@
+from email import message
 import os
 
 from django.contrib import messages
@@ -19,6 +20,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
 
 from .models import *
 from .forms import *
@@ -111,8 +113,8 @@ def login_with_otp(request):
     if request.method == 'POST':
         mobile_number = request.POST['mobile_number']
 
-        if CustomUser.objects.filter(mobile_number=mobile_number):
-
+        if CustomUser.objects.filter(mobile_number=mobile_number).exists():
+          try:
             request.session['mobile_number'] = mobile_number
 
             account_sid = os.environ['TWILIO_ACCOUNT_SID']
@@ -127,7 +129,9 @@ def login_with_otp(request):
             print(verification.status)
             messages.success(request, 'OTP is send to +91 '+mobile_number)
             return redirect('login-with-otp-verify')
-
+          except TwilioRestException:
+            messages.error(request, 'An error occured')
+            return redirect('login-with-otp')
         else:
             messages.error(request, 'Phone Number is not Registered')
             return redirect('login-with-otp')
@@ -172,4 +176,65 @@ def login_with_otp_verify(request):
               return redirect('login-with-otp-verify')
       else:
           return render(request,'accounts/login-with-otp-verify.html' )
+
+
+def forgot_password(request):
+  if request.method == 'POST':
+    email = request.POST['email']
+    if CustomUser.objects.filter(email__iexact = email).exists():
+      user = CustomUser.objects.get(email=email)
+      current_site = get_current_site(request)
+      mail_subject = 'Password change request'
+      message = render_to_string('accounts/forgot-password-email.html',{
+          'user' : user,
+          'domain' : current_site,
+          'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+          'token' : default_token_generator.make_token(user),
+      })
+      to_email = email
+      send_mail(mail_subject, message, 'readablebookstore@gmail.com', [to_email], fail_silently=False)
+
+      messages.success(request, 'Password change email has been send successfully.')
+      return redirect('login')
+
+    else:
+      messages.error(request, 'No account is registered with email id you entered!')
+      return redirect('forgot-password')
+
+  return render(request, 'accounts/forgot-password.html')
+
+
+def forgot_password_verify(request, uidb64, token):
+  try:
+    uid = urlsafe_base64_decode(uidb64).decode()
+    user = CustomUser._default_manager.get(pk=uid)
+  except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+    user = None
+
+  if user is not None and default_token_generator.check_token(user, token):
+    request.session['uid'] = uid
+    return redirect('reset-password')
+  else:
+    messages.error(request, 'The link has been expired!')
+    return redirect('login')
+
+  
+def reset_password(request):
+  if request.method == 'POST':
+    password = request.POST['new-password']
+    confirm_password = request.POST['confirm-password']
+
+    if password == confirm_password:
+      uid = request.session.get('uid')
+      user = CustomUser.objects.get(pk=uid)
+      user.set_password(password)
+      user.save()
+      messages.success(request, 'Password changed successfully.')
+      return redirect('login')
+    else:
+      messages.error(request, 'Password do not match!')
+      return redirect('reset-password')
+  return render(request, 'accounts/reset-password.html')
+
+
 

@@ -34,14 +34,14 @@
       
       
               <div class="form-floating">
-                  <input type="text" class="form-control " name='email' id="floatingInput" placeholder=" ">
+                  <input type="email" class="form-control " name='email' id="floatingInput" placeholder=" " required>
                   <label for="floatingInput">Email id
                     <span class="text-danger"><small> *</small></span>
                   </label>
               </div>
               <div class="form-floating">
                   <input type="password" class="form-control" name='password' id="floatingPassword"
-                      placeholder=" ">
+                      placeholder=" " required>
                   <label for="floatingPassword">
                     Password
                     <span class="text-danger"><small> *</small></span>
@@ -56,12 +56,12 @@
                   {% endfor %}
               {% endif %}
       
-              <button class="w-100 btn btn-lg" type="submit">Login</button>
+              <button class="w-100 btn py-2" type="submit">Login</button>
               
-              <p class="ch2 text-center pt-3">OR</p>
-              <a href="{% url 'login-with-otp' %}" class="w-100 btn btn-lg mt-3" >Login with OTP</a>
-              <p class="text-center pt-4">Are you new? Welcome!  <a href="{% url 'register' %}">Create an account</a></p>
-              <p class="text-center pt-2">Oh no! Forgot your password?</p>
+              <p class="text-center pt-3">OR</p>
+              <a href="{% url 'login-with-otp' %}" class="w-100 btn btn-invert py-2 mt-3" >Login with OTP</a>
+              <p class="text-center pt-4">Are you new here? Welcome!  <a href="{% url 'register' %}">Create an account</a></p>
+              <p class="text-center pt-2">Oh no! Forgot your password? <a href="{% url 'forgot-password' %}"> click here</a></p>
           </form>
         </div>
       </main>

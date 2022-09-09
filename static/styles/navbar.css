@@ -136,6 +136,11 @@ a:focus-within {
   outline-color: black !important;
 }
 
+.cart-badge {
+  background-color: var(--primary-color) !important;
+  color: var(--color-light);
+  font-weight: 400;
+}
 
 
 

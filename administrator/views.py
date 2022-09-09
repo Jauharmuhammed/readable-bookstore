@@ -53,7 +53,7 @@ def dashboard(request):
 @staff_member_required(login_url='login')
 def user_management(request):
     User = get_user_model()
-    users = User.objects.all()
+    users = User.objects.all().order_by('-date_joined')
     context = {
         'users' : users,
     }
@@ -81,10 +81,10 @@ def unblock_user(request, pk):
 @login_required(login_url='admin-login')
 @staff_member_required(login_url='login')
 def category_management(request):
-    categories = Category.objects.all()
-    sub_categories = SubCategory.objects.all()
-    languages = Language.objects.all()
-    bindings = Binding.objects.all()
+    categories = Category.objects.all().order_by('id')
+    sub_categories = SubCategory.objects.all().order_by('id')
+    languages = Language.objects.all().order_by('id')
+    bindings = Binding.objects.all().order_by('id')
 
     category_form = CategoryCreationForm()
     sub_category_form = SubCategoryCreationForm()
@@ -153,7 +153,7 @@ def del_language(request, pk):
 # product management
 
 def product_management(request):
-    products = Products.objects.all()
+    products = Products.objects.all().order_by('-modified_date')
     context = {
       'products' : products
     }

@@ -20,8 +20,8 @@
 .about-us{
   line-height: 1.4rem;
 }
-a {
-  color: var(--color-dark) !important;
+.nav-item a {
+  color: var(--color-dark) ;
 }
 
 li,

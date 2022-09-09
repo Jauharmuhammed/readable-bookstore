@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'administrator',
     'categories',
     'products',
+    'carts',
 
 
 ]
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'categories.context_processors.category_links',
                 'categories.context_processors.sub_category_links',
                 'categories.context_processors.language_links',
+                'carts.context_processors.cart_counter',
             ],
         },
     },

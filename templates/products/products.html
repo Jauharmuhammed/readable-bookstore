@@ -20,23 +20,23 @@
   <div class="container">
       <div class="row">
           {% for product in products %}
-          <div class="col-lg-3 mb-3 px-2">
+          <div class=" col-6 col-md-4 col-lg-3 mb-3 px-1">
               <div class="card mx-3">
                   <div class="img-container">
                     <a href="{{ product.get_url }}" >
                       <img src='{{ product.cover_image.url }}'  alt="" class="image card-img-top px-5 pt-5">
                     </a>
                     <div class="overlay text-nowrap">
-                        <button class="btn btn-outline-secondary btn-sm btn-invert"><i class="fas fa-cart-plus mr-2"></i>Add to Cart</button>
+                        <a href="{{ product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>
                         <button class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-heart"></i></buttons>
                     </div>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body text-center">
                       <a href="{{ product.get_url }}" >
                         <h6 class="card-title mb-1">{{ product.name }}</h6>
                       </a>
                       <p class="mb-3"><small>{{ product.author }}</small></p>
-                      <h6 class="card-subtitle mb-2 text-muted">&#8377;{{ product.price }}</h6>
+                      <h6 class="card-subtitle mb-0 text-muted">&#8377;{{ product.price }}</h6>
                   </div>
               </div>
           </div>
@@ -44,5 +44,7 @@
       </div>
   </div>
 </section>
+
+
 
 {% endblock %}

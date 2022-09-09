@@ -20,12 +20,15 @@
       
       
               <div class="form-floating">
-                  <input type="text" class="form-control " name='mobile_number' id="floatingInput" placeholder=" ">
+                  <input type="text" class="form-control " 
+                    name='mobile_number' maxlength="10" pattern="\d{10}" title="Please enter exactly 10 digits"
+                    id="floatingInput" placeholder=" ">
                   <label for="floatingInput">Mobile Number
                     <span class="text-danger"><small> *</small></span>
                   </label>
               </div>
-      
+
+
               {% if messages %}
                   {% for message in messages %}
                       <p {% if message.tags %}
@@ -34,9 +37,9 @@
                   {% endfor %}
               {% endif %}
       
-              <button class="w-100  btn btn-lg" type="submit">Send OTP</button>
+              <button class="w-100  btn py-2" type="submit">Send OTP</button>
               
-              <p class="text-center pt-4">Login with email! go to <a href="{% url 'login' %}">Login</a> page</p>
+              <p class="text-center pt-4">Login with email. go to <a href="{% url 'login' %}">Login</a> page</p>
           </form>
         </div>
       </main>

@@ -1,0 +1,160 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+    <title>Cart</title>
+    <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+    
+
+{% endblock %}
+
+
+{% block body %}
+
+
+{% if cart_items %}
+<div class="container container-cart px-5 py-5 mx-auto">
+  <div class="row d-flex justify-content-center">
+      <div class="col-12 text-center mb-5">
+          <h4 class="heading fw-normal">CART</h4>
+      </div>
+      <div class="col-12">
+          <div class="row ">
+              <div class="col-6 px-0 ">
+                  <h6 class="mt-2 fw-normal">PRODUCT</h6>
+              </div>
+              <div class="col-4 text-center">
+                  <h6 class="mt-2 fw-normal">QUANTITY</h6>
+              </div>
+              <div class="col-2 px-0 text-end">
+                  <h6 class="mt-2 fw-normal">TOTAL</h6>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  {% if cart_items %}
+  {% for cart_item in cart_items %}
+  <div class="row d-flex justify-content-center border-top">
+      <div class="col-6 px-0">
+          <div class="d-flex justify-content-start">
+              <div class="book">
+                  <a href="{{ cart_item.product.get_url }}">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                  </a>
+              </div>
+              <div class="my-auto flex-column d-flex">
+                  <a href="{{ cart_item.product.get_url }}">
+                    <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                  </a>
+                  <p class=""><small>({{ cart_item.product.author }})</small></p>
+                  {% if cart_item.product.binding %}
+                  <p class=""><small>{{ cart_item.product.binding }}</small></p>
+                  {% endif %}
+                  <h6 class=" pt-2">₹ {{ cart_item.product.price }}</h6>
+              </div>
+          </div>
+      </div>
+      <div class="my-auto col-6 ">
+          <div class="row ">
+              <div class="col-8 d-flex justify-content-center ">
+                <div class="d-flex flex-column">
+                  <div class=" col-12 btn-invert quantity-box py-2 ">
+                    {% if cart_item.quantity == 1 %}
+                    <span  class="py-2 px-3 disabled">-</span>
+                    {% else %}
+                    <a href="{% url 'remove-from-cart' cart_item.product.id %}" class="py-2 px-3">-</a>
+                    {% endif %}
+                    <span class="p-2">{{ cart_item.quantity }}</span>
+                    <a href="{% url 'add-to-cart' cart_item.product.id %}" class="py-2 px-3">+</a>
+                  </div>
+                  <div class=" col-12 py-3 text-center">
+                    <a type="button" class=" remove-btn" data-bs-toggle="modal" data-bs-target="#cart-item-remove-confirmation-{{cart_item.product.id}}">
+                      REMOVE
+                    </a>
+
+                    <div class="modal fade" id="cart-item-remove-confirmation-{{cart_item.product.id}}" tabindex="-1" role="dialog" aria-labelledby="CartItemRemoveConfirmationLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header d-flex align-self-center ">
+                          <h5 class="modal-title"><b class="fw-normal ">Are you sure?</b></h5>
+                          </div>
+                          <div class="modal-body text-canter">
+                              Are you sure you want to Remove <b>{{ cart_item.product.name }} </b>from your cart?
+                          </div>
+                          <div class="modal-footer">
+                          <button type="button" class="btn btn-invert" data-bs-dismiss="modal">Close</button>
+                          <a href="{% url 'remove-cart-item' cart_item.product.id %}"><button type="button" class="btn">Confirm</button></a>
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 px-0 text-end align-self-center">
+                  <h6 class="mob-text">₹ {{ cart_item.sub_total }}</h6>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="row d-flex justify-content-center border-top">
+      <div class="my-auto col-12 ">
+          <div class="row mt-4">
+
+              <div class=" px-0 align-self-center">
+                  <h6 class=" text-end ">TOTAL : ₹ {{ total }} INR</h6>
+                  <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
+                  <div class=" d-flex justify-content-between">
+                    <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
+                    <a href="" class=" btn px-5 py-2 my-2  ">CHECKOUT</a>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+{% else %}
+  <div class="text-center empty-cart">
+    <div>YOUR CART IS EMPTY !</div>
+    <a href="{% url 'products' %}" class=" btn mt-4 px-5 py-3">CONTINUE SHOPPING</a>
+  </div>
+{% endif %}
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+  function removeconfirm(ev, name) {
+    ev.preventDefault();
+    var urlToRedirect = ev.currentTarget.getAttribute('href');
+    console.log(urlToRedirect);
+    swal({
+      title: "Are you sure?",
+      text: ("Are you sure that you want to remove " + name + " from cart?"),
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Poof! " + name + " has been deleted!", {
+            icon: "success",
+          });
+          window.location.href = urlToRedirect;
+        }
+      });
+  }
+</script>
+
+{% endblock %}

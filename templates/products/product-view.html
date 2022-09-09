@@ -10,11 +10,13 @@
   integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
   crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"></script>
-
 <!-- drift css -->
 <link rel="stylesheet" href="{% static 'css/drift-basic.min.css' %}">
+
+<script src="{% static 'js/drift.min.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"></script>
 
 {% endblock %}
 
@@ -26,80 +28,78 @@
     <div class="row g-0">
       <div class="col-md-3">
         <div class="d-flex flex-column justify-content-bottom">
-          <div class="main_image">
+          <div class="main_image ">
             <img src="{{ product.cover_image.url }}" class="drift-demo-trigger"
               data-zoom="{{ product.cover_image.url }}" id="main_product_image" height="280">
+
           </div>
           <div class="thumbnail_images">
             <ul id="thumbnail" class="ps-0">
-              <li><img onclick="changeImage(this)" src="{{ product.cover_image.url }}" width="35"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.cover_image.url }}" height="50"></li>
               {% if product.image1 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image1.url }}" width="35"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image1.url }}" height="50"></li>
               {% endif %}
               {% if product.image2 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image2.url }}" width="35"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image2.url }}" height="50"></li>
               {% endif %}
               {% if product.image3 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image3.url }}" width="35"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image3.url }}" height="50"></li>
               {% endif %}
             </ul>
           </div>
         </div>
       </div>
-      <div class="col-md-9">
-        <div class="p-3 right-side d-flex flex-column justify-content-between h-100 pt-5">
+      <div class="col-md-9 ">
+        <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-5">
           <div class="d-flex justify-content-between align-items-center">
             <h3>{{ product.name }}</h3>
           </div>
           <h6>Author: {{ product.author }}</h6>
           <br>
-            {% if product.Publisher %}
-            <p>Publisher: {{ product.Publisher}}</p>
-            {% endif %}
-            {% if product.release_date %}
-            <p>Released: {{ product.release_date }}</p>
-            {% endif %}
-            <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
+          {% if product.Publisher %}
+          <p>Publisher: {{ product.Publisher}}</p>
+          {% endif %}
+          {% if product.release_date %}
+          <p>Released: {{ product.release_date }}</p>
+          {% endif %}
+          <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
             <h4>₹{{product.price}}</h4>
 
-            {% if product.stock > 1%}
+            {% if product.stock > 0 %}
 
-              {% if product.is_available %}
 
-                {% if product.stock < 10 and product.stock > 0 %}
-                  <p class="text-danger my-2">
-                      Only {{ product.stock}} quantity left.
-                  </p>
-                {% else %}
-                <p class="text-success my-2 ">Available</p>
-                {% endif %}
-                <p>Ships within 2-4 Business Days</p>
-
+            {% if product.stock < 10 and product.stock  > 0 %}
+              <p class="text-danger my-2">
+                Only {{ product.stock}} quantity left.
+              </p>
               {% else %}
-                <p class="text-danger">Currently Unavailable</p>
+              <p class="text-success my-2 ">Available</p>
+              {% endif %}
+              <p>Ships within 2-4 Business Days</p>
+
+
               {% endif %}
 
-            {% endif %}
+              {% if product.binding %}
+              <p class="pt-2">{{ product.binding }}</p>
+              {% endif %}
 
-            {% if product.binding %}
-            <p>{{ product.binding }}</p>
-            {% endif %}
-
-            {% if product.stock < 1 %}
-              <h3 class='text-danger mt-2'>
+              {% if product.stock < 1 %} <h3 class='text-danger mt-2'>
                 Out of Stock
-              </h3>
-            {% endif %}
+                </h3>
+                {% endif %}
 
-            <div class="buttons d-flex flex-row mt-3 gap-3">
-              {% if product.stock < 1 or not product.is_available%}
-              <button class="btn disabled">Add to Cart</button>
-              {% else %}
-              <button class="btn">Add to Cart</button>
-              {% endif %}
-              
-              <button class="btn btn-invert">Add to Wishlist</button>
-            </div>
+                <div class="buttons d-flex flex-row mt-3 gap-3">
+                  {% if product.stock < 1 or not product.is_available %} <button class="btn disabled">Add to
+                    Cart</button>
+                    {% elif in_cart %}
+                    <button class="btn"><a href="{% url 'cart' %}">Go to Cart</a></button>
+                    {% else %}
+                    <button class="btn"><a href="{% url 'add-to-cart' product_id=product.id %}">Add to Cart</a></button>
+                    {% endif %}
+
+                    <button class="btn btn-invert">Add to Wishlist</button>
+                </div>
 
           </div>
         </div>
@@ -187,9 +187,17 @@
 
 {% block script %}
 
+<script>
+  var demoTrigger = document.querySelector('.drift-demo-trigger');
+  var paneContainer = document.querySelector('.detail');
+
+  new Drift(demoTrigger, {
+    paneContainer: paneContainer,
+    inlinePane: false,
+  });
+</script>
 
 <!-- drift script -->
-<script src="{% static 'js/drift.min.js' %}"></script>
 
 <script src="{% static 'scripts/product-view.js' %}"></script>
 

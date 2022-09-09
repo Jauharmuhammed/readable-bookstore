@@ -1,0 +1,96 @@
+.container-cart {
+  margin-top: 10rem ;
+  margin-bottom: 7rem ;
+  padding: 0 7rem !important;
+}
+
+body {
+  color: #000;
+  overflow-x: hidden;
+  height: 100%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+}
+
+ a {
+  text-decoration: none !important;
+}
+.quantity-box {
+  border: 1pxn solid black;
+  width: fit-content;
+}
+
+.book, .book-img {
+  width: 120px;
+  height: 180px;
+}
+
+.book {
+  margin: 20px 15px 20px 0px;
+}
+
+
+.card {
+  margin: 40px 0px;
+  padding: 40px 50px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 5px 10px 1px rgba(0,0,0,0.2);
+}
+
+.btn {
+  color: var(--color-light) !important;
+}
+.btn-invert {
+  color: var(--color-dark) !important;
+}
+
+.btn:hover{
+  color: var(--color-dark) !important;
+}
+
+.modal-header,
+.modal-footer{
+  border: none !important;
+}
+.empty-cart{
+  margin: 50vh;
+}
+
+.container-cart a {
+  color: var(--color-dark);
+}
+
+.remove-btn {
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  border-bottom: .5px solid black;
+}
+
+@media screen and (max-width: 768px) {
+
+  .container {
+    padding: 0 2rem !important;
+  }
+  .book, .book-img {
+      width: 100px;
+      height: 150px;
+  }
+
+  .card {
+      padding-left: 15px;
+      padding-right: 15px;
+  }
+  .pad-left { 
+      padding-left: 20px;
+  }
+}
+
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    padding: 0 0rem !important;
+  }
+}

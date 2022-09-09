@@ -60,3 +60,4 @@ function deleteconfirm(ev, name) {
       }
     });
 }
+

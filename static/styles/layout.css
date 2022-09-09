@@ -107,36 +107,43 @@ body{
   border-radius: 0;
 }
 
-.btn {
+.btn,
+.btn:focus {
   background-color: var(--primary-color);
   color: var(--color-light);
   border-radius: 0;
+  align-self: center;
 }
 
-form .btn:hover {
+
+.btn:hover {
   background-color: var(--color-light);
-  color: var(--color-dark);
-  border: 1px solid grey;
+  color: var(--color-dark) !important;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.btn:active {
+  border: 1.7px solid rgb(0, 0, 0);
 }
 
 .btn-invert {
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  background-color: var(--color-light)!important;
+  color: var(--color-dark)  !important;
   border-radius: 0;
   border: 1px solid grey;
 }
 
 .btn-invert:hover
  {
-  border: 1.7px solid rgb(0, 0, 0);
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  border: 1.7px solid rgb(0, 0, 0) !important;
+  background-color: var(--color-light) !important;
+  color: var(--color-dark) !important;
 }
 
 .btn-invert:active,
 .btn-invert:focus{
-  background-color: var(--color-light);
-  color: var(--color-dark);
+  background-color: var(--color-light) !important;
+  color: var(--color-dark) !important;
 }
 
 h1{
