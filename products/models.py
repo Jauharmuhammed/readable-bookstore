@@ -1,4 +1,5 @@
 from email.policy import default
+from operator import mod
 from django.db import models
 from categories.models import Category, SubCategory, Language, Binding
 
@@ -49,5 +50,21 @@ class Products(models.Model):
   def __str__(self):
     return self.name
 
+variation_category_choice = (
+  ('format', 'format'),
+)
 
+variation_value_choice = (
+  ('paperback', ' Paperback'),
+  ('hardcover','Hard Cover'),
+)
 
+class Variation(models.Model):
+  product = models.ForeignKey(Products, on_delete=models.CASCADE)
+  variation_category = models.CharField(max_length=100, choices=variation_category_choice)
+  variation_value = models.CharField(max_length=100, choices=variation_value_choice)
+  is_available = models.BooleanField(default=True)
+  date_added = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return self.variation_value

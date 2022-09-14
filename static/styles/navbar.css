@@ -141,7 +141,13 @@ a:focus-within {
   color: var(--color-light);
   font-weight: 400;
 }
+.modal-backdrop {
+  z-index: 1041 !important;
+}
 
+.modal-content {
+  z-index: 1100 !important;
+}
 
 
 
@@ -287,3 +293,4 @@ a:focus-within {
     display: block !important;
   } */
 }
+

@@ -38,6 +38,7 @@
 
 .gallery{
   padding-top: 15%;
+  min-height: 100vh;
 }
 
 /* .navbar{
@@ -56,5 +57,12 @@
   border: 1px solid rgb(0, 0, 0);
 }
 
+.search-heading{
+  margin-top: -1.5rem;
+}
+
+.empty-search{
+  height: 100vh;
+}
 
 

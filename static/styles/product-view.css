@@ -67,8 +67,8 @@ body {
 
 
 .buttons .btn {
-  height: 50px;
-  width: 150px;
+  height: 3rem;
+  width: 10rem;
   border-radius: 0px !important
 }
 
@@ -92,6 +92,21 @@ body {
 .nav-tabs .nav-item .active{
   color: var(--color-dark);
   font-weight: 500;
+}
+
+.btn-invert-radio {
+  color: var(--color-dark);
+  background-color: var(--color-light);
+  border: 1px solid rgb(163, 163, 163) !important;
+}
+.btn-invert-radio:hover {
+  border: 1px solid black !important;
+}
+
+.btn-invert-radio:focus {
+  box-shadow: 3px var(--primary-2) !important;
+  background-color: var(--color-dark) !important;
+  color: var(--color-light) !important;
 }
 
 @media (max-width :575px) {

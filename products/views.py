@@ -1,5 +1,7 @@
-import imp
+
+from itertools import product
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 
 from carts.models import CartItem
 from carts.views import _cart_id
@@ -31,9 +33,11 @@ def products(request, category_slug=None, sub_category_slug= None):
   else:
     products = Products.objects.all().filter(is_available=True).order_by('-modified_date')
 
+  product_count = products.count()
 
   context = {
-    'products' : products
+    'products' : products,
+    'product_count': product_count,
   }
   return render(request, 'products/products.html', context)
 
@@ -49,8 +53,11 @@ def products_by_language(request, language_slug=None):
   else:
     products = Products.objects.all().filter(is_available=True).order_by('-modified_date')
 
+  product_count = products.count()
+
   context = {
-    'products' : products
+    'products' : products,
+    'product_count': product_count,
   }
   return render(request, 'products/products.html', context)
 
@@ -62,6 +69,23 @@ def product_view(request, product_slug=None):
 
   context = {
     'product': product,
-    'in_cart': in_cart
+    'in_cart': in_cart,
   }
   return render(request, 'products/product-view.html', context)
+
+
+def search(request):
+  if 'keyword' in request.GET:
+    keyword = request.GET['keyword']
+    if keyword :
+      products = Products.objects.filter(Q(name__icontains=keyword) | Q(author__icontains=keyword)).order_by('-modified_date')
+      product_count = products.count()
+    else:
+      products = None
+      product_count = 0
+  context = {
+    'products' : products ,
+    'product_count': product_count,
+    'keyword' : keyword
+  }
+  return render(request, 'products/products.html', context)

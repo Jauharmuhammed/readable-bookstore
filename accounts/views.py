@@ -1,4 +1,3 @@
-from email import message
 import os
 
 from django.contrib import messages
@@ -10,6 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage, send_mail
 
+from django.db.models import Count
 from django.http import HttpResponse
 
 from django.shortcuts import redirect, render
@@ -22,8 +22,13 @@ from django.utils.encoding import force_bytes
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
+
 from .models import *
 from .forms import *
+
+import requests
 
 def user_register(request):
     if request.user.is_authenticated:
@@ -75,8 +80,59 @@ def user_login(request):
             password = request.POST['password']
             
             user= authenticate(email =email, password = password)
+
             if user is not None:
-                login(request, user)
+              try:
+                cart=Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists=CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exists:
+                  cart_item=CartItem.objects.filter(cart=cart)
+
+                  product_variations= []
+                  product_id = []
+                  for item in cart_item:
+                    variation=item.variation.all()
+                    product_variations.append(list(variation))
+                    product_id.append(item.id)
+
+
+                  cart_item=CartItem.objects.filter(user=user)
+                  existing_variation_list=[]
+                  id=[]
+                  for item in cart_item:
+                    existing_variation=item.variation.all()
+                    existing_variation_list.append(list(existing_variation))
+                    id.append(item.id)
+
+
+                  for product_variation in product_variations:
+                    if product_variation in existing_variation_list:
+                      index=existing_variation_list.index( product_variation)
+                      item_id=id[index]
+                      item=CartItem.objects.get(id=item_id)
+                      item.quantity += 1
+                      item.user = user
+                      item.save()
+
+                    else:
+                      index=product_variations.index( product_variation)
+                      item_id=product_id[index]
+                      item=CartItem.objects.get(id=item_id)
+                      item.user = user
+                      item.save()
+
+              except:
+                pass
+
+              login(request, user)
+              url = request.META.get('HTTP_REFERER')
+              try:
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                  next_page = params['next']
+                  return redirect(next_page)
+              except:
                 return redirect('home')
             else:
                 messages.error(request, "Invalid login credentials")

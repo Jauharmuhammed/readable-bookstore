@@ -50,135 +50,149 @@
         </div>
       </div>
       <div class="col-md-9 ">
-        <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-5">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3>{{ product.name }}</h3>
-          </div>
-          <h6>Author: {{ product.author }}</h6>
-          <br>
-          {% if product.Publisher %}
-          <p>Publisher: {{ product.Publisher}}</p>
-          {% endif %}
-          {% if product.release_date %}
-          <p>Released: {{ product.release_date }}</p>
-          {% endif %}
-          <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
-            <h4>₹{{product.price}}</h4>
-
-            {% if product.stock > 0 %}
-
-
-            {% if product.stock < 10 and product.stock  > 0 %}
-              <p class="text-danger my-2">
-                Only {{ product.stock}} quantity left.
-              </p>
-              {% else %}
-              <p class="text-success my-2 ">Available</p>
+        <form action="{% url 'add-to-cart' product_id=product.id %}" method="POST" class="h-100">
+          {% csrf_token %}
+          <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-4">
+            <div class="content-top d-flex flex-column justify-content-start h-100">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3>{{ product.name }}</h3>
+              </div>
+              <h6>Author: {{ product.author }}</h6>
+              <br>
+              {% if product.Publisher %}
+              <p>Publisher: {{ product.Publisher}}</p>
               {% endif %}
-              <p>Ships within 2-4 Business Days</p>
-
-
+              {% if product.release_date %}
+              <p>Released: {{ product.release_date }}</p>
               {% endif %}
+              <div class="varitaion-group my-3 d-flex justify-content-start">
+                {% for i in product.variation_set.all %}
+                <div class="form-variation me-2">
+                  <input type="radio" class="btn-check" name="variation-option" id="{{ i.variation_value }}" required
+                    value="{{ i.variation_value }}" autocomplete="off" {% if forloop.counter == 1 %} checked {% endif %}>
+                  <label class=" btn btn-outline-secondary " for="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
 
-              {% if product.binding %}
-              <p class="pt-2">{{ product.binding }}</p>
-              {% endif %}
+            <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
+              <h4>₹{{product.price}}</h4>
 
-              {% if product.stock < 1 %} <h3 class='text-danger mt-2'>
-                Out of Stock
-                </h3>
+              {% if product.stock > 0 %}
+
+
+              {% if product.stock < 10 and product.stock > 0 %}
+                <p class="text-danger my-2">
+                  Only {{ product.stock}} quantity left.
+                </p>
+                {% else %}
+                <p class="text-success my-2 ">Available</p>
+                {% endif %}
+                <p>Ships within 2-4 Business Days</p>
+
+
                 {% endif %}
 
-                <div class="buttons d-flex flex-row mt-3 gap-3">
-                  {% if product.stock < 1 or not product.is_available %} <button class="btn disabled">Add to
-                    Cart</button>
-                    {% elif in_cart %}
-                    <button class="btn"><a href="{% url 'cart' %}">Go to Cart</a></button>
+                {% if product.binding %}
+                <p class="pt-2">{{ product.binding }}</p>
+                {% endif %}
+
+                {% if product.stock < 1 %} <h3 class='text-danger mt-2'>
+                  Out of Stock
+                  </h3>
+                  {% endif %}
+
+                  <div class="buttons d-flex flex-row mt-3 gap-3">
+                    {% if product.stock < 1 or not product.is_available %} 
+                      <button class="btn disabled"> Add to Cart</button>
                     {% else %}
-                    <button class="btn"><a href="{% url 'add-to-cart' product_id=product.id %}">Add to Cart</a></button>
+                      <button type="submit" class="btn">
+                        Add to Cart
+                      </button>
                     {% endif %}
 
-                    <button class="btn btn-invert">Add to Wishlist</button>
-                </div>
+                      <button class="btn btn-invert">Add to Wishlist</button>
+                  </div>
 
-          </div>
-        </div>
+            </div>
+        </form>
       </div>
     </div>
-    <div>
-      <br>
-      <div class="row">
-        <div class="col-xl-12  my-5">
-          <div class="nav-align-top mb-4">
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item">
-                <button type="button" class="nav-link active text-uppercase" role="tab" data-bs-toggle="tab"
-                  data-bs-target="#navs-top-description" aria-controls="navs-top-description" aria-selected="true">
-                  Product Description
-                </button>
-              </li>
-              <li class="nav-item">
-                <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
-                  data-bs-target="#navs-top-details" aria-controls="navs-top-details" aria-selected="false">
-                  Specification
-                </button>
-              </li>
-              <li class="nav-item">
-                <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
-                  data-bs-target="#navs-top-policy" aria-controls="navs-top-policy" aria-selected="false">
-                  Delivery, Cancellation, and Return Policy
-                </button>
-              </li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane fade show active border-start border-end border-bottom" id="navs-top-description"
-                role="tabpanel">
-                <p class="px-3 pb-3 lh-lg" style="white-space: pre-wrap;">
-                  {{ product.description }}
-                </p>
-              </div>
-              <div class="tab-pane fade border-start border-end border-bottom" id="navs-top-details" role="tabpanel">
-                <ul class="list-unstyled specification-list px-2 pb-2 pt-4">
-                  <li>ISBN : {{ product.isbn }} </li>
-                  <li>Publisher : {{ product.Publisher }} </li>
-                  <li>Released Date : {{ product.release_date }} </li>
-                  <li>Binding : {{ product.binding }} </li>
-                  <li>Language : {{ product.language }} </li>
-                  <li>Number of Pages : {{ product.number_of_pages }} </li>
-                  <li>Height : {{ product.height }} </li>
-                  <li>Weight : {{ product.weight }} </li>
-                  <li>Spine Width : {{ product.spine_width }} </li>
-                </ul>
-              </div>
-              <div class="tab-pane fade border-start border-end border-bottom pb-3" id="navs-top-policy"
-                role="tabpanel">
-                <p class=" px-3 pb-1 pt-4 lh-lg">
-                  SHIPPING COSTS: The shipping cost upon checkout may vary depending on external and uncontrollable
-                  circumstances. It might change anytime after the order has been placed. Our support team will contact
-                  you in case of changes in shipping fees.
-                </p>
+  </div>
+  <div>
+    <br>
+    <div class="row">
+      <div class="col-xl-12  my-5">
+        <div class="nav-align-top mb-4">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <button type="button" class="nav-link active text-uppercase" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-top-description" aria-controls="navs-top-description" aria-selected="true">
+                Product Description
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-top-details" aria-controls="navs-top-details" aria-selected="false">
+                Specification
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-top-policy" aria-controls="navs-top-policy" aria-selected="false">
+                Delivery, Cancellation, and Return Policy
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active border-start border-end border-bottom" id="navs-top-description"
+              role="tabpanel">
+              <p class="px-3 pb-3 lh-lg" style="white-space: pre-wrap;">
+                {{ product.description }}
+              </p>
+            </div>
+            <div class="tab-pane fade border-start border-end border-bottom" id="navs-top-details" role="tabpanel">
+              <ul class="list-unstyled specification-list px-2 pb-2 pt-4">
+                <li>ISBN : {{ product.isbn }} </li>
+                <li>Publisher : {{ product.Publisher }} </li>
+                <li>Released Date : {{ product.release_date }} </li>
+                <li>Binding : {{ product.binding }} </li>
+                <li>Language : {{ product.language }} </li>
+                <li>Number of Pages : {{ product.number_of_pages }} </li>
+                <li>Height : {{ product.height }} </li>
+                <li>Weight : {{ product.weight }} </li>
+                <li>Spine Width : {{ product.spine_width }} </li>
+              </ul>
+            </div>
+            <div class="tab-pane fade border-start border-end border-bottom pb-3" id="navs-top-policy" role="tabpanel">
+              <p class=" px-3 pb-1 pt-4 lh-lg">
+                SHIPPING COSTS: The shipping cost upon checkout may vary depending on external and uncontrollable
+                circumstances. It might change anytime after the order has been placed. Our support team will contact
+                you in case of changes in shipping fees.
+              </p>
 
-                <p class=" px-3 py-1 lh-lg">
-                  RETURN POLICY: Returns will only be honored if you have received a wrong item. However, we cannot
-                  grant return requests if you have received the right item based on your order. Cancellations and
-                  change in order will only be accepted within 24 hours after the order has been placed.
-                </p>
+              <p class=" px-3 py-1 lh-lg">
+                RETURN POLICY: Returns will only be honored if you have received a wrong item. However, we cannot
+                grant return requests if you have received the right item based on your order. Cancellations and
+                change in order will only be accepted within 24 hours after the order has been placed.
+              </p>
 
-                <p class=" px-3 py-1 lh-lg">
-                  CANCELLATION FEES: Once the order has been placed, you can request a refund within 24 hours of
-                  purchase. Beyond this timeframe and you requested a refund, we have to deduct 10% cancellation fee in
-                  every order (computations are made based on SRP not including the shipping.) Please take note that
-                  this policy also covers trade customers.
-                </p>
+              <p class=" px-3 py-1 lh-lg">
+                CANCELLATION FEES: Once the order has been placed, you can request a refund within 24 hours of
+                purchase. Beyond this timeframe and you requested a refund, we have to deduct 10% cancellation fee in
+                every order (computations are made based on SRP not including the shipping.) Please take note that
+                this policy also covers trade customers.
+              </p>
 
-                <p class=" px-3 py-1 lh-lg">In case of FREIGHT DAMAGE, please refer to this page.</p>
-              </div>
+              <p class=" px-3 py-1 lh-lg">In case of FREIGHT DAMAGE, please refer to this page.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 

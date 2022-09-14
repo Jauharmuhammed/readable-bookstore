@@ -55,6 +55,38 @@
 
 }
 
+html{
+  font-size: 14px;
+}
+
+
+/* customizing height and size of floating input */
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext {
+  padding: 0rem 0.75rem;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+  height: calc(3rem + 2px);
+  line-height: 1;
+}
+
+.form-floating>label {
+  padding: 0.9rem 0.75rem;
+}
+
+.btn-float-input{
+  padding-top:.75rem;
+  padding-bottom: .75rem;
+}
+
+a:hover {
+  color: inherit;
+}
+
 .ch2{
   font: var(--font-semibold-20);
 }
@@ -135,7 +167,8 @@ body{
 
 .btn-invert:hover
  {
-  border: 1.7px solid rgb(0, 0, 0) !important;
+  border: 1px solid rgb(0, 0, 0) !important;
+  box-shadow: black;
   background-color: var(--color-light) !important;
   color: var(--color-dark) !important;
 }
@@ -199,8 +232,53 @@ input:active
   position: relative;
 } */
 
+
+.footer-cart li{
+
+  float: left;
+}
+.footer-cart a {
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+.footer-cart {
+  background-color: #8e8c6d6c;
+}
+
+/* preloader end */
+
+
+
 @media (max-width :575px) {
   html {
     font-size: 12px;
   }
+}
+
+
+/* sub-footer */
+
+.sub-footer img {
+  height: 5rem;
+  margin-right: 1rem;
+}
+
+
+@media (max-width :575px) {
+  
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+   
+}
+
+@media (min-width: 992px) {
+  .sub-footer-border {
+      border-right: 1px solid black;
+    }
 }

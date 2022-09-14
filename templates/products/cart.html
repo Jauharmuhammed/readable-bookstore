@@ -49,10 +49,12 @@
                     <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
                   </a>
                   <p class=""><small>({{ cart_item.product.author }})</small></p>
-                  {% if cart_item.product.binding %}
-                  <p class=""><small>{{ cart_item.product.binding }}</small></p>
+                  {% if cart_item.variation.all %}
+                  {% for item in cart_item.variation.all %}
+                  <p class="pt-2"><small>{{ item.variation_value | capfirst}}</small></p>
+                  {% endfor %}
                   {% endif %}
-                  <h6 class=" pt-2">₹ {{ cart_item.product.price }}</h6>
+                  <h6 class=" pt-1">₹ {{ cart_item.product.price }}</h6>
               </div>
           </div>
       </div>
@@ -60,42 +62,54 @@
           <div class="row ">
               <div class="col-8 d-flex justify-content-center ">
                 <div class="d-flex flex-column">
-                  <div class=" col-12 btn-invert quantity-box py-2 ">
+                  <div class=" col-12 btn-invert quantity-box py-2 d-flex justify-content-between">
                     {% if cart_item.quantity == 1 %}
                     <span  class="py-2 px-3 disabled">-</span>
                     {% else %}
-                    <a href="{% url 'remove-from-cart' cart_item.product.id %}" class="py-2 px-3">-</a>
+                    <a href="{% url 'remove-from-cart' cart_item.product.id cart_item.id %}" class="py-2 px-3">-</a>
                     {% endif %}
                     <span class="p-2">{{ cart_item.quantity }}</span>
-                    <a href="{% url 'add-to-cart' cart_item.product.id %}" class="py-2 px-3">+</a>
+                    
+                    <form action="{% url 'add-to-cart' cart_item.product.id %}" method="POST">
+                      {% csrf_token %}
+                      {% for item in cart_item.variation.all %}
+                        <input type="hidden" name="{{ item.variation_category | lower }}" value="{{ item.variation_value | capfirst }}">
+                      {% endfor %}
+                        <button type="submit" class=" quantity-button py-2 px-3">+</a>
+                    </form>
+
                   </div>
+                  {% for item in cart_item.variation.all %}
                   <div class=" col-12 py-3 text-center">
-                    <a type="button" class=" remove-btn" data-bs-toggle="modal" data-bs-target="#cart-item-remove-confirmation-{{cart_item.product.id}}">
+                    <a type="button" class=" remove-btn" data-bs-toggle="modal" data-bs-target="#cart-item-remove-confirmation-{{cart_item.product.id}}-{{item.variation_value}}">
                       REMOVE
                     </a>
 
-                    <div class="modal fade" id="cart-item-remove-confirmation-{{cart_item.product.id}}" tabindex="-1" role="dialog" aria-labelledby="CartItemRemoveConfirmationLabel" aria-hidden="true">
+                    <div class="modal fade" id="cart-item-remove-confirmation-{{cart_item.product.id}}-{{item.variation_value}}" tabindex="-1" role="dialog" aria-labelledby="CartItemRemoveConfirmationLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
                           <div class="modal-header d-flex align-self-center ">
                           <h5 class="modal-title"><b class="fw-normal ">Are you sure?</b></h5>
                           </div>
                           <div class="modal-body text-canter">
-                              Are you sure you want to Remove <b>{{ cart_item.product.name }} </b>from your cart?
+                              Are you sure you want to Remove <b>{{ cart_item.product.name }}</b>
+                                  ({{ item.variation_value | capfirst }})
+                              from your cart?
                           </div>
                           <div class="modal-footer">
                           <button type="button" class="btn btn-invert" data-bs-dismiss="modal">Close</button>
-                          <a href="{% url 'remove-cart-item' cart_item.product.id %}"><button type="button" class="btn">Confirm</button></a>
+                          <a href="{% url 'remove-cart-item' cart_item.product.id cart_item.id %}"><button type="button" class="btn">Confirm</button></a>
                           </div>
                       </div>
                       </div>
-                  </div>
+                    </div>
                     
                   </div>
+                  {% endfor %}
                 </div>
               </div>
               <div class="col-4 px-0 text-end align-self-center">
-                  <h6 class="mob-text">₹ {{ cart_item.sub_total }}</h6>
+                  <h6 class="mob-text">₹ {{ cart_item.item_total }}</h6>
               </div>
           </div>
       </div>
@@ -107,11 +121,11 @@
           <div class="row mt-4">
 
               <div class=" px-0 align-self-center">
-                  <h6 class=" text-end ">TOTAL : ₹ {{ total }} INR</h6>
+                  <h6 class=" text-end ">TOTAL : ₹ {{ sub_total }} INR</h6>
                   <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
-                    <a href="" class=" btn px-5 py-2 my-2  ">CHECKOUT</a>
+                    <a href="{% url 'checkout' %}" class=" btn px-5 py-2 my-2  ">CHECKOUT</a>
                   </div>
 
               </div>
@@ -134,27 +148,6 @@
 
 {% block script %}
 
-<script>
-  function removeconfirm(ev, name) {
-    ev.preventDefault();
-    var urlToRedirect = ev.currentTarget.getAttribute('href');
-    console.log(urlToRedirect);
-    swal({
-      title: "Are you sure?",
-      text: ("Are you sure that you want to remove " + name + " from cart?"),
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-          swal("Poof! " + name + " has been deleted!", {
-            icon: "success",
-          });
-          window.location.href = urlToRedirect;
-        }
-      });
-  }
-</script>
+<script src="{% static 'scripts/cart.js'%}"></script>
 
 {% endblock %}

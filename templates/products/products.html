@@ -15,10 +15,24 @@
 
 {% block body %}
 
+{% if not product_count %}
+<div class=" empty-search text-center d-flex flex-column justify-content-center">
+  <h4 class=" fw-normal">OOPS! NO ITEM FOUND</h4>
+  <p class="text-muted">Try again</p>
+</div>
+
+{% else %}
 
 <section class="gallery">
   <div class="container">
       <div class="row">
+        {% if 'search' in request.path %}
+            <div class="col-12 text-center mb-5">
+              <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
+              <p class="text-muted">{{ product_count }} items found for keyword '{{ keyword }}'</p>
+            </div>
+        {% endif %}
+
           {% for product in products %}
           <div class=" col-6 col-md-4 col-lg-3 mb-3 px-1">
               <div class="card mx-3">
@@ -44,6 +58,8 @@
       </div>
   </div>
 </section>
+
+{% endif %}
 
 
 

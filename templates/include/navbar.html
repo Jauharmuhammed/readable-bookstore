@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav class="fixed-top navbar-top">
-  <p class="text-center pt-2 ">FREE SHIPPING FOR ORDERS ABOVE ₹500 . 10% DISCOUNT FOR FIRST TIME PURCAHSE</p>
+  <p class="text-center pt-2 ">FREE SHIPPING FOR ORDERS ABOVE ₹500 . 10% DISCOUNT FOR FIRST PURCAHSE</p>
 </nav>
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light navbar-bottom">
@@ -24,9 +24,10 @@
       <div class="nav-icones d-flex justify-content-end ">
         <ul class="list-unstyled my-auto user-dropdown">
           <li>
-            <a class="navbar-icon " href="#">
+            <a class="navbar-icon " href="#" data-bs-toggle="modal" data-bs-target="#searchModal">
               <iconify-icon icon="bytesize:search"></iconify-icon>
             </a>
+            
           </li>
           <li class="dropdown">
             <a class="navbar-icon dropdown-toggle active" href="#" data-bs-toggle="dropdown">
@@ -35,15 +36,15 @@
             <div class="user-menu dropdown-menu">
               <ul class="list-unstyled">
                 {% if user.is_authenticated %}
-                  <li><a class="dropdown-item border-bottom mb-2" href="#"> Hi, {{ user.first_name }}. </a></li>
-                  <li><a class="dropdown-item" href="#"> Profile </a></li>
-                  <li><a class="dropdown-item" href="#"> Settings </a></li>
-                  <li><a class="dropdown-item" href="#"> Whishlist </a></li>
-                  <li><a class="dropdown-item" href="#"> Orders </a></li>
-                  <li><a class="dropdown-item" href="{% url 'logout'%}"> Logout </a></li>
+                <li><a class="dropdown-item border-bottom mb-2" href="#"> Hi, {{ user.first_name }}. </a></li>
+                <li><a class="dropdown-item" href="#"> Profile </a></li>
+                <li><a class="dropdown-item" href="#"> Settings </a></li>
+                <li><a class="dropdown-item" href="#"> Whishlist </a></li>
+                <li><a class="dropdown-item" href="#"> Orders </a></li>
+                <li><a class="dropdown-item" href="{% url 'logout'%}"> Logout </a></li>
                 {% else %}
-                  <li><a class="dropdown-item" href="{% url 'login' %}"> Login </a></li>
-                  <li><a class="dropdown-item" href="{% url 'register' %}"> Register </a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}"> Login </a></li>
+                <li><a class="dropdown-item" href="{% url 'register' %}"> Register </a></li>
                 {% endif %}
               </ul>
             </div>
@@ -61,7 +62,7 @@
               <span class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge">
                 {{ cart_count }}
                 <span class="visually-hidden">Cart item count</span>
-              {% endif %}
+                {% endif %}
               </span>
             </a>
           </li>
@@ -80,34 +81,36 @@
           </li>
           {% if category_links %}
           {% for category in category_links %}
-              <li class="nav-item dropdown">
-                <a class="nav-link  dropdown-toggle active" href="" data-bs-toggle="dropdown">{{ category.category_name }}</a>
-                <ul class="dropdown-menu list-unstyled category-list ">
-                  {% if sub_category_links %}
-                    {% for sub_category in sub_category_links %}
-                      {% if sub_category.category_id == category.pk %}
-                          <li><a class="dropdown-item" href="{{ sub_category.get_url }}"> {{ sub_category.subcategory_name }} </a></li>
-                      {% endif %}
-                    {% endfor %}
-                  {% endif %}
-                    <li><a class="dropdown-item" href="{{ category.get_url }}"> View All </a></li>
-                  </ul>
+          <li class="nav-item dropdown">
+            <a class="nav-link  dropdown-toggle active" href="" data-bs-toggle="dropdown">
+              {{ category.category_name}}</a>
+            <ul class="dropdown-menu list-unstyled category-list ">
+              {% if sub_category_links %}
+              {% for sub_category in sub_category_links %}
+              {% if sub_category.category_id == category.pk %}
+              <li><a class="dropdown-item" href="{{ sub_category.get_url }}"> {{ sub_category.subcategory_name }} </a>
               </li>
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+              <li><a class="dropdown-item" href="{{ category.get_url }}"> View All </a></li>
+            </ul>
+          </li>
           {% endfor %}
           {% endif %}
-          
+
           <li class="nav-item dropdown">
             <a class="nav-link  dropdown-toggle active" href="" data-bs-toggle="dropdown"> Languages </a>
             <ul class="dropdown-menu list-unstyled category-list">
-                {% if language_links %}
-                {% for language in language_links %}
-                <li><a class="dropdown-item" href="{{ language.get_url }}"> {{ language.language_name }} </a></li>
-                {% endfor %}
-                {% endif %}
-                <li><a class="dropdown-item" href="{% url 'products' %}"> View All </a></li>
-              </ul>
+              {% if language_links %}
+              {% for language in language_links %}
+              <li><a class="dropdown-item" href="{{ language.get_url }}"> {{ language.language_name }} </a></li>
+              {% endfor %}
+              {% endif %}
+              <li><a class="dropdown-item" href="{% url 'products' %}"> View All </a></li>
+            </ul>
           </li>
-         
+
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'products' %}">New Arrivals</a>
           </li>
@@ -120,11 +123,41 @@
 </nav>
 
 
+
+<!-- search modal -->
+
+<div class="modal fade" id="searchModal"  tabindex="-1"
+  aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <img class='brand-logo' src="{% static 'images/readablelogo.png' %} " alt="readable-brand-logo">
+        </a>
+        <button type="button" class="btn-close me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center d-flex flex-column justify-content-center">
+        <form action="{% url 'search' %}" name="search_form">
+          <div class=" mb-5 d-flex justify-content-center">
+            <input type="search" class="btn btn-invert py-3 w-50 text-start"
+            placeholder="SEARCH IN OUR SHOP" name="keyword" autofocus="autofocus" id="search">
+            <button type="submit" class="btn btn-invert py-3 px-4 ">
+                <iconify-icon icon="bytesize:search"></iconify-icon>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /search modal -->
+
+
 <script type="text/javascript">
   //	window.addEventListener("resize", function() {
   //		"use strict"; window.location.reload(); 
   //	});
-
 
   document.addEventListener("DOMContentLoaded", function () {
 

@@ -69,6 +69,12 @@ body {
   border-bottom: .5px solid black;
 }
 
+.quantity-button{
+  border: none !important;
+  background-color: transparent;
+}
+
+
 @media screen and (max-width: 768px) {
 
   .container {

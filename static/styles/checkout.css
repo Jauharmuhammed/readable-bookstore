@@ -1,0 +1,118 @@
+.container-checkout {
+  /* margin-top: 6rem; */
+  margin-bottom: 5rem;
+  padding: 0 7rem !important;
+}
+
+/* test */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.book {
+  width: 15%;
+}
+
+.book img{
+  width: 100%;
+}
+
+header {
+  padding: 20px 0px;
+}
+
+header .active {
+  font-weight: 700;
+  position: relative;
+}
+
+header .active .fa-check {
+  position: absolute;
+  left: 44%;
+  bottom: -27px;
+  background-color: #fff;
+  font-size: 0.7rem;
+  padding: 5px;
+  border: 1px solid #008000;
+  border-radius: 50%;
+  color: #008000;
+}
+
+.progress {
+  height: 2px;
+  background-color: #ccc;
+}
+
+.progress div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress .progress-bar {
+  width: 40%;
+}
+
+.order-summery {
+  background-color: #8e8c6d23;
+  padding: 1.5rem;
+}
+
+
+@media(min-width:768px) and (max-width: 991px) {
+  .progress .progress-bar {
+    width: 33%;
+  }
+
+  .container-checkout {
+    padding: 0 5.rem !important;
+  }
+
+}
+
+@media(min-width: 576px) and (max-width: 767px) {
+  .progress .progress-bar {
+    width: 29%;
+  }
+
+  .container-checkout {
+    padding: 0 4rem !important;
+  }
+
+}
+
+@media(max-width: 575px) {
+  .progress .progress-bar {
+    width: 38%;
+  }
+
+  .container-checkout {
+    padding: 0 2rem !important;
+  }
+
+  header .active .fa-check {
+    left: 37%;
+    padding: 3px;
+    bottom: -20px;
+    font-size: 0.5rem;
+  }
+
+}
+
+/* 
+@media(max-width: 424px) {
+  body {
+    width: fit-content;
+  }
+}
+
+@media(max-width: 375px) {
+  .progress .progress-bar {
+    width: 35%;
+  }
+
+} */
