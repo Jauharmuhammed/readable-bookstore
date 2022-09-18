@@ -94,7 +94,16 @@ a:hover {
 * {
   margin: 0;
   padding: 0;
-  
+}
+
+a:focus,
+button:focus,
+input:focus,
+.btn:focus
+{
+  outline: 0 !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
  
 p, body, html {

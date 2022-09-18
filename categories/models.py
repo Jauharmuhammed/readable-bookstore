@@ -53,15 +53,3 @@ class Language(models.Model):
 
   def __str__(self):
     return self.language_name
-
-class Binding(models.Model):
-  binding_name = models.CharField(max_length=50, unique=True)  
-  slug = AutoSlugField(populate_from='binding_name', max_length=100, unique=True,)
-
-
-  class Meta:
-    verbose_name = 'bindings'
-    verbose_name_plural = 'binding'
-
-  def __str__(self):
-    return self.binding_name

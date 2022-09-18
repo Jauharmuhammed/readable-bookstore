@@ -1,0 +1,42 @@
+
+
+.summary {
+  max-height: 28vh !important;
+  overflow-y: auto !important;
+  padding-right: 2px;
+}
+.summary-3 {
+  max-height: 40vh !important;
+  overflow-y: auto !important;
+  padding-right: 2px;
+}
+
+.summary::-webkit-scrollbar,
+.summary-3::-webkit-scrollbar
+ {
+  width: 5px;
+}
+
+.summary::-webkit-scrollbar-track,
+.summary-3::-webkit-scrollbar-track {
+  background-color: #b7b58a6a;
+}
+
+.accordion-item,
+.accordion-item:first-of-type,
+.accordion-item:last-of-type
+ {
+  border-radius: 0 !important;
+}
+
+.accordion-button:focus
+ {
+  border-color: transparent !important;
+  outline: 0 !important;
+  -webkit-box-shadow:none !important;
+  box-shadow: none !important;
+}
+.accordion-button:not(.collapsed){
+  background-color: #bab89045 !important;
+  color: var(--color-dark);
+  }

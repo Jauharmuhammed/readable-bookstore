@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from accounts.models import Address
 
 from products.models import Products, Variation
 from .models import Cart, CartItem
@@ -57,15 +58,12 @@ def add_to_cart(request, product_id):
           item.quantity += 1
           item.save()
 
-          print('added to the existing variarion')
-
         else:
           item = CartItem.objects.create(product=product, quantity=1, user=user)
           item.variation.clear()
           item.variation.add(*product_variation)
           item.save()
 
-          print('added as a new variarion')
 
           
       else:
@@ -121,7 +119,6 @@ def add_to_cart(request, product_id):
           item.quantity += 1
           item.save()
 
-          print('added to the existing variarion')
 
         else:
           item = CartItem.objects.create(product=product, quantity=1, cart=cart)
@@ -129,7 +126,6 @@ def add_to_cart(request, product_id):
           item.variation.add(*product_variation)
           item.save()
 
-          print('added as a new variarion')
 
           
       else:
@@ -176,15 +172,19 @@ def remove_cart_item(request, product_id, cart_item_id):
   return redirect('cart')
 
 
-def cart(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0):
+def cart(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, quantity=0):
   try:
     if request.user.is_authenticated:
       cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
     else:
       cart = Cart.objects.get(cart_id = _cart_id(request))
       cart_items = CartItem.objects.filter(cart=cart, is_active =True).order_by('-created_date')
+
     for cart_item in cart_items:
       sub_total += (cart_item.product.price * cart_item.quantity)
+      quantity += cart_item.quantity
+
+
     if sub_total < 499:
       shipping_charge = 99
     total = sub_total + shipping_charge
@@ -195,21 +195,26 @@ def cart(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0):
     'cart_items' : cart_items,
     'sub_total': sub_total,
     'shipping_charge': shipping_charge,
-    'total' : total
+    'total' : total,
+    'quantity' : quantity
   }
   return render(request, 'products/cart.html', context)
 
 
 @login_required(login_url='login')
-def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0):
+def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, quantity=0):
   try:
     cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
     for cart_item in cart_items:
       sub_total += (cart_item.product.price * cart_item.quantity)
+      quantity += cart_item.quantity
+
 
     if sub_total < 499:
       shipping_charge = 99
     total = sub_total + shipping_charge
+
+    addresses = Address.objects.filter(user=request.user).order_by('-date_added')
   except ObjectDoesNotExist:
     pass
 
@@ -217,6 +222,8 @@ def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0
     'cart_items' : cart_items,
     'sub_total': sub_total,
     'shipping_charge': shipping_charge,
-    'total' : total
+    'total' : total,
+    'quantity' : quantity,
+    'addresses': addresses
   }
   return render(request, 'products/checkout.html', context)

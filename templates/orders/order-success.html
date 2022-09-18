@@ -1,0 +1,51 @@
+{% extends 'layout-cart.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Cart</title>
+<link rel="stylesheet" href="{% static 'styles/payment.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container-checkout  px-5 py-5 mx-auto">
+
+<div style="height: 60vh;">
+  <div class=" text-center" style="margin-top: 25vh;">
+    <h1 class="display-3 mb-4">
+      ORDER CONFIRMED
+    </h1>
+    <div class="mb-3 text-success">
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36">
+        <path fill="currentColor" d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm0 30a14 14 0 1 1 14-14a14 14 0 0 1-14 14Z"
+          class="clr-i-outline clr-i-outline-path-1" />
+        <path fill="currentColor"
+          d="M28 12.1a1 1 0 0 0-1.41 0l-11.1 11.05l-6-6A1 1 0 0 0 8 18.53L15.49 26L28 13.52a1 1 0 0 0 0-1.42Z"
+          class="clr-i-outline clr-i-outline-path-2" />
+        <path fill="none" d="M0 0h36v36H0z" />
+      </svg>
+    </div>
+    <h5 class="mb-3">Thank you, {{ request.user.first_name }}. Your order is confirmed.</h5>
+    <p>You will recieve a confirmation email of your order shotly.  <br>
+       <div class="pt-1">Your Order ID is {{ order_id }}.</div></p>
+    <!-- <p>Your order hasn't shipped yet but we will send you an email when it does.</p> -->
+  </div>
+  <div class="d-flex justify-content-center mt-5"><a href="{% url 'products' %}" class=" btn btn-invert text-center">CONTINUE SHOPPING</a></div>
+</div>
+  
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}

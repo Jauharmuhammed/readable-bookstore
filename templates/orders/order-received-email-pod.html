@@ -1,0 +1,26 @@
+{% autoescape off %}
+Hi, {{ user.first_name }}
+
+Your order for {{ product }} with Order ID {{ order_id }} has been successfully placed on {{ order_date }} You can Track the order status on our website. 
+
+Order ID   : {{ order_id }}
+Order Date : {{ order_date }}
+Payable Amount : Rs. {{ amount }}0
+
+Delivery Address :  
+{{ address.full_name }}
+{{ address.address }}, {{ address.landmark }}
+{{ address.city }}, {{ address.pin_code }}
+{{ address.state }}, {{ address.country }}
+Contact : {{ address.mobile }} 
+
+We are committed to serving you with utmost regard for your safety. Know more about our precautionary measures here.
+Please note, the delivery date of your order may change based on the government's zonal advisory in your area.
+
+Thank You for shopping with Readable Bookstore.
+Got Questions? Please get in touch with our 24x7 Customer Care
+
+If you think it's not you, please ignore this email.
+You're receiving this email because you registered in Readable Bookstore.
+
+{% endautoescape %}

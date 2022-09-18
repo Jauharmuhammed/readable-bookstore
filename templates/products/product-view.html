@@ -94,9 +94,6 @@
 
                 {% endif %}
 
-                {% if product.binding %}
-                <p class="pt-2">{{ product.binding }}</p>
-                {% endif %}
 
                 {% if product.stock < 1 %} <h3 class='text-danger mt-2'>
                   Out of Stock
@@ -157,7 +154,6 @@
                 <li>ISBN : {{ product.isbn }} </li>
                 <li>Publisher : {{ product.Publisher }} </li>
                 <li>Released Date : {{ product.release_date }} </li>
-                <li>Binding : {{ product.binding }} </li>
                 <li>Language : {{ product.language }} </li>
                 <li>Number of Pages : {{ product.number_of_pages }} </li>
                 <li>Height : {{ product.height }} </li>

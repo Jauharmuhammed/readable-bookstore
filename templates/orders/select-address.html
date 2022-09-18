@@ -1,0 +1,160 @@
+{% extends 'layout-cart.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Cart</title>
+<link rel="stylesheet" href="{% static 'styles/address.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container-checkout  px-5 py-5 mx-auto">
+
+
+  <header class="mb-5">
+    <div class="d-flex justify-content-center align-items-center pb-3 ">
+      <div class="px-sm-5 px-2 active">CART
+        <span class="fas fa-check"></span>
+      </div>
+      <div class="px-sm-5 px-2">DETAILS</div>
+      <div class="px-sm-5 px-2">SHIPPING</div>
+      <div class="px-sm-5 px-2">PAYMENT</div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container-fluid px-0">
+
+    <!-- form -->
+    <div class="row ">
+      <div class=" col-12 col-lg-7 mb-5 shippin-address">
+        <div class="h5 pb-3">Select Address</div>
+        <form action="{% url 'shipping-method' %}" method="POST">
+          {% csrf_token %}
+
+          {% if addresses %}
+          <div class="h6 pb-2">Select Address</div>
+          {% for address in addresses %}
+          <div class="col-12 pb-4">
+            <div>
+              <input type="radio" class="radio-button" name="address" id="{{ address.id }}" value="{{ address.id }}" 
+                {% if forloop.counter == 1 %} checked {% endif %} required >
+              <label for="{{ address.id }}" class="box first">
+                <div class="course"> <span class="circle align-self-top"></span>
+                  <span class="subject">
+                    <h6 class="pb-0">{{ address.full_name }}</h6 class="mb-2">
+                    {{ address.address }},
+                    {{ address.landmark }} <br>
+                    {{ address.city }},
+                    PIN: {{ address.pin_code }} <br>
+                    {{ address.state }},
+                    {{ address.country }} <br> <br>
+                    Mobile : {{ address.mobile }} <br>
+                    Email : {{ address.email }}
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+
+
+          <div class=" d-flex justify-content-center ">
+            <div class=" col-12 ">
+              <div class=" ">
+                <div class=" px-0 align-self-center">
+                  <div class=" d-flex justify-content-between">
+                    <a href="{% url 'checkout' %}" class=" btn btn-invert py-2 my-2">BACK TO CHECKOUT</a>
+                    <a href="">
+                      <button type="submit" class=" btn py-2 my-2  ">CONTINUE TO SHIPPING</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class=" col-12 col-lg-5 ps-lg-5 ">
+        <div class="order-summery">
+          <div class="h5 pb-3">Order Summary</div>
+          <div class="summary">
+            {% for cart_item in cart_items %}
+            <div class="d-flex justify-content-between py-3">
+              <div class="d-flex justify-content-start col-10">
+                <div class="book">
+                  <a href="#">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                  </a>
+                </div>
+                <div class="ps-2 my-auto flex-column d-flex">
+                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                  {% for item in cart_item.variation.all %}
+                  <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
+                  {% endfor %}
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                </div>
+              </div>
+              <div class="my-auto">
+                <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="border-top py-3">
+            <div class=" d-flex justify-content-between">
+              <div class="form-floating col-9 pe-3">
+                <input type="text" class="form-control " name='coupon' id="floatingCoupon" placeholder=" " required>
+                <label for="floatingCoupon">Dicount coupon
+                </label>
+              </div>
+              <a href="" class="btn-float-input btn btn-invert col-3 ">Apply</a>
+            </div>
+          </div>
+          <div class="border-top py-3">
+            <div class="d-flex justify-content-between pb-2">
+              <p>Subtotal</p>
+              <p>₹ {{ sub_total }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p>Shipping and Handling</p>
+              {% if shipping_charge %}
+              <p>₹ {{shipping_charge}}.00</p>
+              {% else %}
+              <p class="text-success">Free Delivery</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="border-top py-3">
+            <div class="d-flex justify-content-between">
+              <h5>Total</h5>
+              <h5>₹ {{total}}.00 </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}

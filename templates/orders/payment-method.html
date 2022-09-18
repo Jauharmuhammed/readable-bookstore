@@ -1,0 +1,314 @@
+{% extends 'layout-cart.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Cart</title>
+<link rel="stylesheet" href="{% static 'styles/payment.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="container-checkout  px-5 py-5 mx-auto">
+
+
+  <header class="mb-5">
+    <div class="d-flex justify-content-center align-items-center pb-3 ">
+      <div class="px-sm-5 px-2 active">CART
+        <span class="fas fa-check"></span>
+      </div>
+      <div class="px-sm-5 px-2 active">DETAILS
+        <span class="fas fa-check"></span>
+      </div>
+      <div class="px-sm-5 px-2 active">SHIPPING
+        <span class="fas fa-check"></span>
+      </div>
+      <div class="px-sm-5 px-2">PAYMENT</div>
+    </div>
+    <div class="progress">
+      <div class="progress-bar bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+      </div>
+    </div>
+  </header>
+
+
+  <div class="container-fluid px-0">
+
+    <!-- form -->
+    <div class="row ">
+      <div class=" col-12 col-lg-7 mb-5 shippin-address">
+
+        <div class="h5 pb-3">Shipping Address</div>
+        <div class="col-12 pb-4">
+          <div>
+            <div class="address border p-3 ">
+              {% if address %}
+              <div>
+                <h6 class="pb-0">{{ address.full_name }}</h6 class="mb-2">
+                {{ address.address }},
+                {{ address.landmark }} <br>
+                {{ address.city }},
+                {{ address.pin_code }},
+                {{ address.state }},
+                {{ address.country }} <br> <br>
+                Mobile : {{ address.mobile }} <br>
+                Email : {{ address.email }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="h5 pb-3">Shipping Method</div>
+        <div class="col-12 pb-4">
+          <div>
+            <div class="shipping border p-3 ">
+              {% if shipping_method == 'standard' %}
+              <div class="shipping-method">
+                <span class="subject d-flex justify-content-between w-100">
+                  <p>
+                    <strong>Standard</strong><br>
+                    International Free Shipping Tracked USPS First Class (3-4 Weeks)
+                  </p>
+                  <p>Free</p>
+                </span>
+              </div>
+              {% elif shipping_method == 'express' %}
+              <div class="course">
+                <span class="subject d-flex justify-content-between w-100">
+                  <p>
+                    <strong>Express</strong><br>
+                    FedEx International Priority (3-4 business days)
+                  </p>
+                  <p>₹ 249.00</p>
+                </span>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-3">
+          <div class="h5 mb-1">Payment</div>
+          <p>All transactions are secure and encrypted.</p>
+        </div>
+
+        <!-- accordion -->
+        <form action="{% url 'place-order' %}" method="POST">
+          {% csrf_token %}
+          
+        <input type="hidden" name="shipping-method" value="{{shipping_method}}">
+        <input type="hidden" name="address" value="{{address.id}}">
+        
+          <div class="payment">
+            <div class="accordion mt-2 mb-4" id="accordionPanelsStayOpenExample">
+              <div class="accordion-item ">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                  <button class="accordion-button fw-bolder" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    RAZORPAY
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                  aria-labelledby="panelsStayOpen-headingOne">
+                  <div class="accordion-body">
+
+                    <div class="form-payment">
+                      <input type="radio" name="payment-method" id="razorpay" value="razorpay" checked>
+                      <label for="razorpay" class="box first">
+                        <div class="course"> <span class="circle"></span>
+                          <span class="subject pt-1">
+                            <div class="d-flex justify-content-between">
+                              <p class="pe-1">
+                                <span class="h6">Pay with Razorpay</span><br><br>
+                                After clicking “Place Order”, you will be redirected to Razorpay to complete your purchase securely.
+                              </p>
+                              <div class="my-auto">
+                                <a href="https://razorpay.com/" target="_blank"> <img referrerpolicy="origin"
+                                  src="https://badges.razorpay.com/badge-light.png " style="height: 4rem; width: 10.5rem;"
+                                  alt="Razorpay | Payment Gateway | Neobank">
+                                </a>
+                              </div>
+                            </div>
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item ">
+                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                  <button class="accordion-button fw-bolder collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    CREDIT OR DEBIT CARD
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                  aria-labelledby="panelsStayOpen-headingTwo">
+                  <div class="accordion-body">
+            
+                    <div class="form-payment">
+                      <input type="radio" name="payment-method" id="card" value="card" disabled  >
+                      <label for="card" class="box first">
+                        <div class="course"> <span class="circle"></span>
+                          <span class="subject pt-1">
+                            <p>
+                              <div class="h6">Pay with Credit or Debit Card <span class=" text-danger small"> (Currently Not Available)</span></div><br>
+                              Please fill card details, After clicking “Place Order”, you will be redirected to complete your purchase securely.
+                              <form action="">
+                                <div class="form-floating col-12 mt-4 mb-3">
+                                  <input type="text" class="form-control " name='card_number' id="cardNumber" placeholder=" " minlength="16"
+                                    maxlength="16" pattern="\d{10}" title="Please enter Valid 16 digit Card Number">
+                                  <label for="cardNumber">Card Details
+                                    <span class="text-danger"><small> *</small></span>
+                                  </label>
+                                </div>
+                                <div class="form-floating col-12 mb-3">
+                                  <input type="text" class="form-control " name='name' id="cardName" placeholder=" " >
+                                  <label for="cardName">Name On Card
+                                    <span class="text-danger"><small> *</small></span>
+                                  </label>
+                                </div>
+                                <div class="d-flex form-floating-double justify-content-between">
+                                  <div class="form-floating col-12 mb-3">
+                                    <input type="text" class="form-control " name='expiry_date' id="date" placeholder=" " >
+                                    <label for="date">Expiry Date (MM/YY)
+                                      <span class="text-danger"><small> *</small></span>
+                                    </label>
+                                  </div>
+                                  <div class="form-floating col-12 mb-3">
+                                    <input type="text" class="form-control " name='security_number' id="securityNumber" placeholder=" " >
+                                    <label for="securityNumber">CVC / CVV
+                                      <span class="text-danger"><small> *</small></span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </form>
+                            </p>
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+            
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item ">
+                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                  <button class="accordion-button fw-bolder collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree">
+                    PAY ON DELIVERY
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                  aria-labelledby="panelsStayOpen-headingThree">
+                  <div class="accordion-body">
+            
+                    <div class="form-payment">
+                      <input type="radio" name="payment-method" id="payOnDelivery" value="payOnDelivery">
+                      <label for="payOnDelivery" class="box first">
+                        <div class="course"> <span class="circle"></span>
+                          <span class="subject pt-1">
+                            <p>
+                              <span class="h6">Pay On Delivery</span><br><br>
+                              By clicking “Place Order”, you can complete your purchase. Pay only when the order is delivered at your doorstep.
+                              </p>
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <!-- /accordion -->
+
+            <div class=" d-flex justify-content-center ">
+              <div class=" col-12 ">
+                <div class=" ">
+                  <div class=" px-0 align-self-center">
+                    <div class=" d-flex justify-content-between">
+                      <a href="{% url 'checkout' %}" class=" btn btn-invert py-2 my-2">BACK TO SHIPPING</a>
+                      <a href="">
+                        <button type="submit" class=" btn py-2 my-2  ">PLACE ORDER</button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class=" col-12 col-lg-5 ps-lg-5 ">
+        <div class="order-summery">
+          <div class="h5 pb-3">Order Summary</div>
+          <div class="summary-3">
+            {% for cart_item in cart_items %}
+            <div class="d-flex justify-content-between py-3">
+              <div class="d-flex justify-content-start col-10">
+                <div class="book">
+                  <a href="#">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                  </a>
+                </div>
+                <div class="ps-2 my-auto flex-column d-flex">
+                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                  {% for item in cart_item.variation.all %}
+                  <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
+                  {% endfor %}
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                </div>
+              </div>
+              <div class="my-auto">
+                <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="border-top py-3">
+            <div class="d-flex justify-content-between pb-2">
+              <p>Subtotal</p>
+              <p>₹ {{ sub_total }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p>Shipping and Handling</p>
+              {% if shipping_charge %}
+              <p>₹ {{shipping_charge}}.00</p>
+              {% else %}
+              <p class="text-success">Free Delivery</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="border-top pt-4">
+            <div class="d-flex justify-content-between">
+              <h5>Total</h5>
+              <h5>₹ {{total}}.00</h5>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}

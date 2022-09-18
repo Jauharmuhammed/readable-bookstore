@@ -1,5 +1,4 @@
 
-from itertools import product
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
@@ -78,7 +77,13 @@ def search(request):
   if 'keyword' in request.GET:
     keyword = request.GET['keyword']
     if keyword :
-      products = Products.objects.filter(Q(name__icontains=keyword) | Q(author__icontains=keyword)).order_by('-modified_date')
+      products = Products.objects.filter(
+          Q(name__icontains=keyword) | 
+          Q(author__icontains=keyword) |
+          Q(sub_category__subcategory_name__icontains=keyword) |
+          Q(sub_category__category__category_name__iexact=keyword) |
+          Q(language__language_name__iexact=keyword)
+        ).order_by('-modified_date')
       product_count = products.count()
     else:
       products = None

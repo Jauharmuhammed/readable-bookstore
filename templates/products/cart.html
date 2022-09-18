@@ -109,7 +109,7 @@
                 </div>
               </div>
               <div class="col-4 px-0 text-end align-self-center">
-                  <h6 class="mob-text">₹ {{ cart_item.item_total }}</h6>
+                  <h6 class="mob-text">₹ {{ cart_item.item_total }}.00</h6>
               </div>
           </div>
       </div>
@@ -121,7 +121,7 @@
           <div class="row mt-4">
 
               <div class=" px-0 align-self-center">
-                  <h6 class=" text-end ">TOTAL : ₹ {{ sub_total }} INR</h6>
+                  <h6 class=" text-end ">TOTAL : ₹ {{ sub_total }}.00</h6>
                   <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>

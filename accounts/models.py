@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
@@ -62,3 +63,52 @@ class CustomUser(AbstractBaseUser):
 
     def has_module_perms(self, add_label):
         return True
+
+
+class Address(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    mobile=models.CharField(max_length=15)
+    email=models.EmailField(max_length=50)
+    first_name=models.CharField(max_length=50)
+    last_name=models.CharField(max_length=50, blank=True)
+    address=models.CharField(max_length=255)
+    landmark=models.CharField(max_length=255, blank=True)
+    city=models.CharField(max_length=50)
+    pin_code= models.IntegerField()
+    state=models.CharField(max_length=50)
+    country=models.CharField(max_length=50)
+
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+      verbose_name = 'Address'
+      verbose_name_plural = 'Addresses'
+
+
+    def __str__(self):
+      return str(self.id)
+
+    def full_name(self):
+      return self.first_name + ' ' + self.last_name
+
+    def full_address(self):
+      return self.address + ', ' + self.landmark
+
+    def details(self):
+      return self.city + ', ' + self.pin_code  + ', ' + self.state  + ', ' + self.country
+
+    def __eq__(self, other):
+      if self.user == other.user \
+      and self.mobile == other.mobile \
+      and self.email == other.email \
+      and self.first_name == other.first_name \
+      and self.last_name == other.last_name \
+      and self.address == other.address \
+      and self.landmark == other.landmark \
+      and self.pin_code == other.pin_code \
+      and self.city == other.city \
+      and self.state == other.state \
+      and self.country == other.country:
+          return True
+      else:
+          return False

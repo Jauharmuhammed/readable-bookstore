@@ -37,8 +37,54 @@
     <!-- form -->
     <div class="row ">
       <div class=" col-12 col-lg-7 mb-5 shippin-address">
+        {% if addresses %}
         <div class="h5 pb-3">Shipping Address</div>
-        <form action="" method="POST">
+          <form action="{% url 'shipping-method' %}" method="POST">
+            {% csrf_token %}
+              <div class="h6 pb-2">Select Address</div>
+            {% for address in addresses %}
+              <div class="col-12 pb-4">
+                <div>
+                  <input type="radio" class="radio-button" name="address" id="{{ address.id }}" value="{{ address.id }}" 
+                  {% if forloop.counter == 1 %} checked {% endif %}
+                  required>
+                  <label for="{{ address.id }}" class="box first">
+                    <div class="course"> <span class="circle align-self-top"></span>
+                      <span class="subject">
+                        <h6 class="pb-0">{{ address.full_name }}</h6 class="mb-2">
+                        {{ address.address }},
+                        {{ address.landmark }} <br>
+                        {{ address.city }},
+                        PIN: {{ address.pin_code }} <br>
+                        {{ address.state }},
+                        {{ address.country }} <br> <br>
+                        Mobile : {{ address.mobile }} <br>
+                        Email : {{ address.email }}
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            {% endfor %}
+              <div class=" d-flex justify-content-center pb-3 mb-5 border-bottom">
+                <div class=" col-12 ">
+                  <div class=" ">
+                    <div class=" px-0 align-self-center">
+                      <div class=" d-flex justify-content-between">
+                        <a href="{% url 'cart' %}" class=" btn btn-invert py-2 my-2">BACK TO CART</a>
+                        <a href="">
+                          <button type="submit" class=" btn py-2 my-2  ">SELECT ADDRESS</button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </form>
+        {% endif %}
+
+        <div class="h5 pb-3 "> New Shipping Address</div>
+        <form action="{% url 'save-address' %}" method="POST">
           {% csrf_token %}
           <div class="form-floating mb-3">
             <input type="email" class="form-control " name='email' id="floatingemail" placeholder=" " required>
@@ -47,8 +93,8 @@
             </label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control " name='mobile_number' id="floatingMobileNumber" placeholder=" "
-              required>
+            <input type="text" class="form-control " name='mobile' id="floatingMobileNumber" placeholder=" "
+              required minlength="10" maxlength="10" pattern="\d{10}" title="Please enter a Valid 10 digit Mobile Number">
             <label for="floatingMobileNumber">Mobile Number
               <span class="text-danger"><small> *</small></span>
             </label>
@@ -80,14 +126,14 @@
           </div>
           <div class="d-flex form-floating-double justify-content-between">
             <div class="form-floating col-6 mb-3">
-              <input type="text" class="form-control " name='first_name' id="floatingCity" placeholder=" " required>
+              <input type="text" class="form-control " name='city' id="floatingCity" placeholder=" " required>
               <label for="floatingCity">City
                 <span class="text-danger"><small> *</small></span>
               </label>
             </div>
             <div class="form-floating col-6 mb-3">
-              <input type="number" class="form-control " name='first_name' id="floatingPincode" placeholder=" "
-                required>
+              <input type="number" class="form-control " name='pin_code' id="floatingPincode" placeholder=" "
+                required minlength="6" maxlength="6" pattern="\d{10}" title="Please enter Valid 6 digit PIN code">
               <label for="floatingPincode">PIN code
                 <span class="text-danger"><small> *</small></span>
               </label>
@@ -95,13 +141,13 @@
           </div>
           <div class="d-flex form-floating-double justify-content-between">
             <div class="form-floating col-6 mb-3">
-              <input type="text" class="form-control " name='first_name' id="floatingState" placeholder=" " required>
+              <input type="text" class="form-control " name='state' id="floatingState" placeholder=" " required>
               <label for="floatingState">State
                 <span class="text-danger"><small> *</small></span>
               </label>
             </div>
             <div class="form-floating col-6 mb-3">
-              <input type="text" class="form-control " name='first_name' id="floatingCountry" placeholder=" " required>
+              <input type="text" class="form-control " name='country' id="floatingCountry" placeholder=" " required>
               <label for="floatingCountry">Country
                 <span class="text-danger"><small> *</small></span>
               </label>
@@ -114,7 +160,7 @@
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'cart' %}" class=" btn btn-invert py-2 my-2">BACK TO CART</a>
                     <a href="">
-                      <button type="submit" class=" btn py-2 my-2  ">CONTINUE TO SHIPPING</button>
+                      <button type="submit" class=" btn py-2 my-2  ">SAVE ADDRESS</button>
                     </a>
                   </div>
                 </div>
@@ -126,27 +172,29 @@
       <div class=" col-12 col-lg-5 ps-lg-5 ">
         <div class="order-summery">
           <div class="h5 pb-3">Order Summary</div>
-          {% for cart_item in cart_items %}
-          <div class="d-flex justify-content-between py-3">
-            <div class="d-flex justify-content-start col-10">
-              <div class="book">
-                <a href="#">
-                  <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
-                </a>
+          <div class="summary">
+            {% for cart_item in cart_items %}
+            <div class="d-flex justify-content-between py-3 ">
+              <div class="d-flex justify-content-start col-10">
+                <div class="book">
+                  <a href="#">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                  </a>
+                </div>
+                <div class="ps-2 my-auto flex-column d-flex">
+                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                  {% for item in cart_item.variation.all %}
+                  <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
+                  {% endfor %}
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                </div>
               </div>
-              <div class="ps-2 my-auto flex-column d-flex">
-                <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
-                {% for item in cart_item.variation.all %}
-                <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
-                {% endfor %}
-                <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+              <div class="my-auto">
+                <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
               </div>
             </div>
-            <div class="my-auto">
-              <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
-            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
           <div class="border-top py-3">
             <div class=" d-flex justify-content-between">
               <div class="form-floating col-9 pe-3">
@@ -160,23 +208,22 @@
           <div class="border-top py-3">
             <div class="d-flex justify-content-between pb-2">
               <p>Subtotal</p>
-              <p>₹ {{ sub_total }} INR</p>
+              <p>₹ {{ sub_total }}.00</p>
             </div>
             <div class="d-flex justify-content-between">
-              <p>Shipping</p>
+              <p>Shipping and Handling</p>
               {% if shipping_charge %}
-              <p>₹ {{shipping_charge}} INR</p>
+              <p>₹ {{shipping_charge}}.00</p>
               {% else %}
               <p class="text-success">Free Delivery</p>
               {% endif %}
             </div>
           </div>
-          <div class="border-top py-3">
+          <div class="border-top pt-4">
             <div class="d-flex justify-content-between">
               <h5>Total</h5>
-              <h5>₹ {{total}} INR</h5>
+              <h5>₹ {{total}}.00</h5>
             </div>
-            
           </div>
         </div>
       </div>
@@ -195,3 +242,4 @@
 
 
 {% endblock %}
+

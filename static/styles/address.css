@@ -1,3 +1,5 @@
+
+
 .container-checkout {
   /* margin-top: 6rem; */
   margin-bottom: 5rem;
@@ -17,7 +19,7 @@
   width: 15%;
 }
 
-.book img{
+.book img {
   width: 100%;
 }
 
@@ -54,55 +56,12 @@ header .active .fa-check {
 }
 
 .progress .progress-bar {
-  width: 41.5%;
+  width: 40%;
 }
 
 .order-summery {
   background-color: #8e8c6d23;
   padding: 1.5rem;
-}
-
-
-/* redio button */
-
-label.box {
-  display: flex;
-  margin-top: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-  border: 1px solid #ddd
-}
-
-.radio-button:checked~label.first {
-  border-color: #8b8538
-}
-
-.radio-button:checked~label.first .circle {
-  border: 6px solid #8e8c6d;
-  background-color: #fff
-}
-
-label.box:hover {
-  background: #f3f2e5
-}
-
-label.box .course {
-  display: flex;
-  align-items: center;
-  width: 100%
-}
-
-label.box .circle {
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
-  margin-right: 15px;
-  border: 2px solid #ddd;
-  display: inline-block
-}
-
-input[type="radio"] {
-  display: none
 }
 
 
@@ -146,16 +105,50 @@ input[type="radio"] {
 
 }
 
-/* 
-@media(max-width: 424px) {
-  body {
-    width: fit-content;
-  }
+label.box {
+  display: flex;
+  margin-top: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border: 1px solid #ddd
 }
 
-@media(max-width: 375px) {
-  .progress .progress-bar {
-    width: 35%;
-  }
+.radio-button:checked~label.first {
+  border-color: #8b8538
+}
 
-} */
+.radio-button:checked~label.first .circle {
+  border: 6px solid #8e8c6d;
+  background-color: #fff
+}
+
+label.box:hover {
+  background: #f3f2e5
+}
+
+label.box .course {
+  display: flex;
+  align-items: center;
+  width: 100%
+}
+
+label.box .circle {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 2px solid #ddd;
+  display: inline-block
+}
+
+input[type="radio"] {
+  display: none
+}
+
+
+
+
+
+
+
+

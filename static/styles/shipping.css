@@ -1,10 +1,7 @@
 .container-checkout {
-  /* margin-top: 6rem; */
   margin-bottom: 5rem;
   padding: 0 7rem !important;
 }
-
-/* test */
 
 
 * {
@@ -17,7 +14,7 @@
   width: 15%;
 }
 
-.book img{
+.book img {
   width: 100%;
 }
 
@@ -54,7 +51,7 @@ header .active .fa-check {
 }
 
 .progress .progress-bar {
-  width: 41.5%;
+  width: 55%;
 }
 
 .order-summery {
@@ -63,7 +60,45 @@ header .active .fa-check {
 }
 
 
-/* redio button */
+@media(min-width:768px) and (max-width: 991px) {
+  .progress .progress-bar {
+    width: 57%;
+  }
+
+  .container-checkout {
+    padding: 0 5.rem !important;
+  }
+
+}
+
+@media(min-width: 576px) and (max-width: 767px) {
+  .progress .progress-bar {
+    width: 59%;
+  }
+
+  .container-checkout {
+    padding: 0 4rem !important;
+  }
+
+}
+
+@media(max-width: 575px) {
+  .progress .progress-bar {
+    width: 55%;
+  }
+
+  .container-checkout {
+    padding: 0 2rem !important;
+  }
+
+  header .active .fa-check {
+    left: 37%;
+    padding: 3px;
+    bottom: -20px;
+    font-size: 0.5rem;
+  }
+
+}
 
 label.box {
   display: flex;
@@ -73,11 +108,14 @@ label.box {
   border: 1px solid #ddd
 }
 
-.radio-button:checked~label.first {
+#standard:checked~label.first, 
+#express:checked~label.first {
   border-color: #8b8538
 }
 
-.radio-button:checked~label.first .circle {
+#standard:checked~label.first .circle,
+#express:checked~label.first .circle
+{
   border: 6px solid #8e8c6d;
   background-color: #fff
 }
@@ -104,58 +142,3 @@ label.box .circle {
 input[type="radio"] {
   display: none
 }
-
-
-@media(min-width:768px) and (max-width: 991px) {
-  .progress .progress-bar {
-    width: 33%;
-  }
-
-  .container-checkout {
-    padding: 0 5.rem !important;
-  }
-
-}
-
-@media(min-width: 576px) and (max-width: 767px) {
-  .progress .progress-bar {
-    width: 29%;
-  }
-
-  .container-checkout {
-    padding: 0 4rem !important;
-  }
-
-}
-
-@media(max-width: 575px) {
-  .progress .progress-bar {
-    width: 38%;
-  }
-
-  .container-checkout {
-    padding: 0 2rem !important;
-  }
-
-  header .active .fa-check {
-    left: 37%;
-    padding: 3px;
-    bottom: -20px;
-    font-size: 0.5rem;
-  }
-
-}
-
-/* 
-@media(max-width: 424px) {
-  body {
-    width: fit-content;
-  }
-}
-
-@media(max-width: 375px) {
-  .progress .progress-bar {
-    width: 35%;
-  }
-
-} */

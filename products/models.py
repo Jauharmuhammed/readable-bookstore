@@ -1,7 +1,6 @@
-from email.policy import default
-from operator import mod
+from itertools import product
 from django.db import models
-from categories.models import Category, SubCategory, Language, Binding
+from categories.models import Category, SubCategory, Language
 
 from autoslug import AutoSlugField
 
@@ -28,7 +27,6 @@ class Products(models.Model):
   image2 = models.ImageField(upload_to='images/products', blank=True, default=None, null=True)
   image3 = models.ImageField(upload_to='images/products', blank=True, default=None, null=True)
 
-  binding = models.ForeignKey(Binding, on_delete=models.SET_NULL, null=True, blank=True, default=None)
   description = models.TextField(max_length=2000, blank=True, default=None)
   create_date = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
@@ -50,12 +48,16 @@ class Products(models.Model):
   def __str__(self):
     return self.name
 
+class VariationManager(models.Manager):
+    def formats(self):
+        return super(VariationManager,self).filter(variation_category='format',product=self.product)
+
 variation_category_choice = (
   ('format', 'format'),
 )
 
 variation_value_choice = (
-  ('paperback', ' Paperback'),
+  ('paperback', 'Paperback'),
   ('hardcover','Hard Cover'),
 )
 
@@ -63,8 +65,10 @@ class Variation(models.Model):
   product = models.ForeignKey(Products, on_delete=models.CASCADE)
   variation_category = models.CharField(max_length=100, choices=variation_category_choice)
   variation_value = models.CharField(max_length=100, choices=variation_value_choice)
-  is_available = models.BooleanField(default=True)
+  is_available = models.BooleanField(default=True)  
   date_added = models.DateTimeField(auto_now_add=True)
+
+  objects = VariationManager()
 
   def __str__(self):
     return self.variation_value

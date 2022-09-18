@@ -1,5 +1,3 @@
-from dataclasses import fields
-from email.mime import image
 from django import forms
 from .models import Products
 
@@ -26,7 +24,6 @@ class ProductCreationForm(forms.ModelForm):
               'image2' : forms.ClearableFileInput(),
               'image3' : forms.ClearableFileInput(),
 
-              'binding': forms.Select(attrs={'class':"form-select", 'aria-label':"Choose book format"}),
               'description': forms.Textarea(attrs={'class':"form-control", 'placeholder':"Product Description" }),
 
               'number_of_pages': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Number of Pages"}),

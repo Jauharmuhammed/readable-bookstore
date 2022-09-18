@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import CustomUser
+from .models import CustomUser, Address
 
 class CustomUserAdmin(UserAdmin):
     list_display = ['email', 'first_name', 'last_name',  'is_active']
@@ -15,3 +15,4 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = ()
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Address)

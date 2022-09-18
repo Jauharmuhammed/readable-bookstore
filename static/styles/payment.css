@@ -1,10 +1,11 @@
+.container-fluid{
+  border-radius: 0 !important;
+}
+
 .container-checkout {
-  /* margin-top: 6rem; */
   margin-bottom: 5rem;
   padding: 0 7rem !important;
 }
-
-/* test */
 
 
 * {
@@ -17,7 +18,7 @@
   width: 15%;
 }
 
-.book img{
+.book img {
   width: 100%;
 }
 
@@ -54,7 +55,7 @@ header .active .fa-check {
 }
 
 .progress .progress-bar {
-  width: 41.5%;
+  width: 70%;
 }
 
 .order-summery {
@@ -63,39 +64,35 @@ header .active .fa-check {
 }
 
 
-/* redio button */
-
 label.box {
-  display: flex;
-  margin-top: 10px;
-  padding: 10px 12px;
   cursor: pointer;
-  border: 1px solid #ddd
 }
 
-.radio-button:checked~label.first {
+#razorpay:checked~label.first,
+#payOnDelivery:checked~label.first,
+#card:checked~label.first {
   border-color: #8b8538
 }
 
-.radio-button:checked~label.first .circle {
+#razorpay:checked~label.first .circle,
+#payOnDelivery:checked~label.first .circle,
+#card:checked~label.first .circle {
   border: 6px solid #8e8c6d;
   background-color: #fff
 }
 
-label.box:hover {
-  background: #f3f2e5
-}
 
 label.box .course {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   width: 100%
 }
 
 label.box .circle {
-  height: 22px;
-  width: 22px;
-  border-radius: 50%;
+  height: 1.5rem;
+  max-width: 1.5rem;
+  width: 100%;
+  border-radius: 50% !important;
   margin-right: 15px;
   border: 2px solid #ddd;
   display: inline-block
@@ -106,9 +103,10 @@ input[type="radio"] {
 }
 
 
+
 @media(min-width:768px) and (max-width: 991px) {
   .progress .progress-bar {
-    width: 33%;
+    width: 79%;
   }
 
   .container-checkout {
@@ -119,7 +117,7 @@ input[type="radio"] {
 
 @media(min-width: 576px) and (max-width: 767px) {
   .progress .progress-bar {
-    width: 29%;
+    width: 85%;
   }
 
   .container-checkout {
@@ -130,7 +128,7 @@ input[type="radio"] {
 
 @media(max-width: 575px) {
   .progress .progress-bar {
-    width: 38%;
+    width: 70%;
   }
 
   .container-checkout {
@@ -145,17 +143,3 @@ input[type="radio"] {
   }
 
 }
-
-/* 
-@media(max-width: 424px) {
-  body {
-    width: fit-content;
-  }
-}
-
-@media(max-width: 375px) {
-  .progress .progress-bar {
-    width: 35%;
-  }
-
-} */

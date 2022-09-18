@@ -1,6 +1,3 @@
-from itertools import product
-from tkinter.messagebox import RETRY
-from unicodedata import category, name
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -9,7 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 
 from accounts.models import CustomUser
-from categories.models import Category, SubCategory, Language, Binding
+from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
 
 from products.models import Products
@@ -84,7 +81,6 @@ def category_management(request):
     categories = Category.objects.all().order_by('id')
     sub_categories = SubCategory.objects.all().order_by('id')
     languages = Language.objects.all().order_by('id')
-    bindings = Binding.objects.all().order_by('id')
 
     category_form = CategoryCreationForm()
     sub_category_form = SubCategoryCreationForm()
@@ -125,7 +121,6 @@ def category_management(request):
       'categories' : categories,
       'sub_categories' : sub_categories,
       'languages' : languages,
-      'bindings' : bindings,
       'category_form' : category_form,
       'sub_category_form' : sub_category_form,
       'language_form' : language_form,

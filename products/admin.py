@@ -1,7 +1,5 @@
-from unicodedata import category
 from django.contrib import admin
 from .models import Products, Variation
-from categories.models import SubCategory
 
 
 class ProductAdmin(admin.ModelAdmin):

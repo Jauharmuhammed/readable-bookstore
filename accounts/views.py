@@ -65,7 +65,7 @@ def user_register(request):
                 to_email = email
                 send_mail(mail_subject, message, 'readablebookstore@gmail.com', [to_email], fail_silently=False)
 
-                return redirect('/login/?command=verification&email='+email)
+                return redirect('/account/login/?command=verification&email='+email)
         
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
