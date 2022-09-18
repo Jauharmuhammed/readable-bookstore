@@ -49,7 +49,27 @@
                       <a href="{{ product.get_url }}" >
                         <h6 class="card-title mb-1">{{ product.name }}</h6>
                       </a>
-                      <p class="mb-3"><small>{{ product.author }}</small></p>
+                      <p class="mb-2"><small>{{ product.author }}</small></p>
+
+                      <!-- Ratings -->
+                      <div class="rating-star mb-3">
+                        <span>
+                          <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                          <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half-o {% endif %}"
+                            aria-hidden="true"></i>
+                        </span>
+                        <small class="text-muted">
+                          ( {{ product.review_count}} )
+                        </small>
+                      </div>
+
                       <h6 class="card-subtitle mb-0 text-muted">&#8377;{{ product.price }}</h6>
                   </div>
               </div>

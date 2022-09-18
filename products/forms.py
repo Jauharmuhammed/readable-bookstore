@@ -1,5 +1,5 @@
 from django import forms
-from .models import Products
+from .models import Products, Review
 
 class ProductCreationForm(forms.ModelForm):
 
@@ -33,3 +33,9 @@ class ProductCreationForm(forms.ModelForm):
               'spine_width': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Spine width"}),
 
           }
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model=Review
+        fields=['title','review','rating',]

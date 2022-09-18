@@ -10,7 +10,7 @@ class CartItemAdmin(admin.ModelAdmin):
 
   # def formfield_for_manytomany(self, db_field, request, **kwargs):
   #     if db_field.name == "variation":
-  #         product = Products.objects.get(id='??')
+  #         product = Products.objects.get(id=product__id)
   #         kwargs["queryset"] = Variation.objects.filter(product=product.id)
   #     return super().formfield_for_manytomany(db_field, request, **kwargs)
 

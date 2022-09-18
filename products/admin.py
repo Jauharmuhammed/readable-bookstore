@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Products, Variation
+from .models import Products, Variation, Review
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class VariationAdmin(admin.ModelAdmin):
 
 admin.site.register(Products, ProductAdmin)
 admin.site.register(Variation, VariationAdmin)
+admin.site.register(Review)
