@@ -67,27 +67,29 @@ class Products(models.Model):
 
 
 
-class VariationManager(models.Manager):
-    def formats(self):
-        return super(VariationManager,self).filter(variation_category='format',product=self.product)
+# class VariationManager(models.Manager):
+#     def formats(self):
+#         return super(VariationManager,self).filter(variation_category='format',product=self.product)
 
-variation_category_choice = (
-  ('format', 'format'),
-)
 
-variation_value_choice = (
-  ('paperback', 'Paperback'),
-  ('hardcover','Hard Cover'),
-)
 
 class Variation(models.Model):
+
+  variation_category_choice = (
+    ('format', 'format'),
+  )
+  variation_value_choice = (
+    ('paperback', 'Paperback'),
+    ('hardcover','Hard Cover'),
+  )
+
   product = models.ForeignKey(Products, on_delete=models.CASCADE)
   variation_category = models.CharField(max_length=100, choices=variation_category_choice)
   variation_value = models.CharField(max_length=100, choices=variation_value_choice)
   is_available = models.BooleanField(default=True)  
   date_added = models.DateTimeField(auto_now_add=True)
 
-  objects = VariationManager()
+  # objects = VariationManager()
 
   def __str__(self):
     return self.variation_value
@@ -107,3 +109,13 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product.name

@@ -3,7 +3,7 @@
 
 {% block head %}
 
-<title>Cart</title>
+<title>Checkout</title>
 <link rel="stylesheet" href="{% static 'styles/checkout.css' %}">
 
 
@@ -60,6 +60,7 @@
                         {{ address.country }} <br> <br>
                         Mobile : {{ address.mobile }} <br>
                         Email : {{ address.email }}
+                        
                       </span>
                     </div>
                   </label>
@@ -72,9 +73,7 @@
                     <div class=" px-0 align-self-center">
                       <div class=" d-flex justify-content-between">
                         <a href="{% url 'cart' %}" class=" btn btn-invert py-2 my-2">BACK TO CART</a>
-                        <a href="">
-                          <button type="submit" class=" btn py-2 my-2  ">SELECT ADDRESS</button>
-                        </a>
+                        <button type="submit" class=" btn py-2 my-2  ">SELECT ADDRESS</button>
                       </div>
                     </div>
                   </div>

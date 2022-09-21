@@ -175,7 +175,7 @@ body{
 }
 
 .btn-invert:hover
- {
+{
   border: 1px solid rgb(0, 0, 0) !important;
   box-shadow: black;
   background-color: var(--color-light) !important;
@@ -191,6 +191,7 @@ body{
 h1{
   font: var(--font-regular-40);
 }
+
 
 .btn:focus,
 .btn:active,
@@ -226,6 +227,34 @@ input:active
 }
 
 
+.swal-custom,
+.swal-custom *{
+  font-size: 14px !important;
+  border-radius: 0 !important;
+  
+}
+.swal-custom{
+  padding: 0 ;
+}
+.swal-custom .swal-footer{
+  margin-top: 2px;
+  padding: 6px 16px;
+}
+.swal-custom .swal-title{
+  padding: 0px 16px;
+  font-size: 1.5rem !important;
+}
+.swal-text {
+  text-align: center !important;
+}
+
+.no-decoration {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+.border-none{
+  border: none !important;
+}
 /* .password-eye {
   position: absolute;
   right: 1rem;

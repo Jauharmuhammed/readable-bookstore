@@ -1,0 +1,169 @@
+{% extends 'administrator/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="d-flex justify-content-between ">
+    <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / </span>Product list </h6>
+    <a href="{% url 'add-product' %}">
+      <button type="button" class="btn btn-primary  align-items-center">
+        Add Product
+      </button>
+    </a>
+  </div>
+  <!-- Hoverable Table rows -->
+  <!-- <div class="card mt-5">
+    <h5 class="card-header">Products</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table " id="user_table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Products</th>
+            <th>Total</th>
+            <th class="text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="email ">f</span>
+            </td>
+            <td><span class="name">1</span></td>
+            <td><span class="name">g</span></td>
+            <td><span class="name">g</span></td>
+            <td class="delete"></td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div> -->
+
+  <div class="card mt-5">
+    <h5 class="card-header">Products</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table " id="outertable">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Products</th>
+            <th>Total</th>
+            <th class="text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <label for="accordion-test">
+            <tr>
+              <td>
+                <span class="email ">f</span>
+              </td>
+              <td><span class="name">1</span></td>
+              <td><span class="name">g</span></td>
+              <td><span class="name">g</span></td>
+              <td class="delete"></td>
+            </tr>
+          </label>
+          
+          <div class="accordion mt-3" id="accordionExample">
+            <div class="card accordion-item active">
+              <h2 class="accordion-header" id="headingOne">
+                <button type="button"  class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
+                  aria-expanded="true" aria-controls="accordionOne" id="accordion-test">
+                  Accordion Item 1
+                </button>
+                
+              </h2>
+          
+              <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+
+                  <table class="table " id="innertable">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Products</th>
+                        <th>Total</th>
+                        <th class="text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <span class="email ">f</span>
+                        </td>
+                        <td><span class="name">1</span></td>
+                        <td><span class="name">g</span></td>
+                        <td><span class="name">g</span></td>
+                        <td class="delete"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--/ Hoverable Table rows -->
+
+</div>
+<!-- <div class="accordion mt-3" id="accordionExample">
+  <div class="card accordion-item active">
+    <h2 class="accordion-header" id="headingOne">
+      <button type="button" hidden class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
+        aria-expanded="true" aria-controls="accordionOne" id="accordion-test">
+        Accordion Item 1
+      </button>
+      <label for="accordion-test">
+        <tr>
+          <td>
+            <span class="email ">f</span>
+          </td>
+          <td><span class="name">1</span></td>
+          <td><span class="name">g</span></td>
+          <td><span class="name">g</span></td>
+          <td class="delete"></td>
+        </tr>
+      </label>
+    </h2>
+
+    <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Lemon drops chocolate cake gummies carrot cake chupa chups muffin topping. Sesame snaps icing
+        marzipan gummi bears macaroon dragée danish caramels powder. Bear claw dragée pastry topping
+        soufflé. Wafer gummi bears marshmallow pastry pie.
+      </div>
+    </div>
+  </div>
+</div> -->
+{% endblock %}
+
+
+
+{% block script %}
+
+
+
+{% endblock %}

@@ -130,7 +130,7 @@
                       </button>
                     {% endif %}
 
-                      <button class="btn btn-invert">Add to Wishlist</button>
+                      <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn-invert" style="padding-top: .68rem !important;" >Add to Wishlist</a>
                   </div>
 
             </div>
@@ -242,21 +242,27 @@
             <label>Write down your review below </label>
             <br>
             <div class="form-floating mb-3 mt-3">
-              <input type="text" class="form-control " name='title' id="floatingTitle" placeholder=" " required minlength="2">
+              <input type="text" class="form-control "  name='title' id="floatingTitle" placeholder=" " required minlength="2">
               <label for="floatingTitle">Title
                 <span class="text-danger"><small> *</small></span>
               </label>
             </div>
-            <div class="form-floating mb-4" >
-              <textarea class="form-control" style="height: auto !important;" name='review' id="floatingReview" placeholder=" " rows="8"> </textarea>
-              <label for="floatingReview">Your Review
-              </label>
+            <div class="form-floating mb-4">
+              <textarea class="form-control" name='review' placeholder="Your Review" id="floatingTextarea"
+                style="height: 200px"></textarea>
+              <label for="floatingTextarea">Your Review</label>
             </div>
             {% if request.user.is_authenticated %}
               {% if is_ordered %}
-                <div class="text-end">
-                  <input type="submit" value="Submit" class="btn ">
-                </div>
+                {% if is_already_reviewed %}
+                  <div class="text-end">
+                    <input type="submit" value="Update Existing Review" class="btn ">
+                  </div>
+                {% else %}
+                  <div class="text-end">
+                    <input type="submit" value="Submit" class="btn ">
+                  </div>
+                {% endif%}
               {% else %}
                 <p>You must purchase the product to write a Review!</p>
               {% endif %}
@@ -299,25 +305,36 @@
                 <div class="h6 mb-1">{{review.user.full_name}} </div>
                 <div class="date text-muted ">{{review.updated_date}}</div>
               </div>
-              <div class="rating-star">
-                <span>
-                  <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}"
-                    aria-hidden="true"></i>
+              <div class="d-flex justify-content-between">
+                <div class="rating-star">
+                  <span>
+                    <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}"
+                      aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}"
+                      aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}"
+                      aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}"
+                      aria-hidden="true"></i>
+                    <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}"
+                      aria-hidden="true"></i>
+                </div>
+                <div>
+                  {% if request.user.is_authenticated %}
+                  {% if review.user == request.user %}
+                  <div class="text-end text-muted small">
+                    <a onclick="deleteReview(event, '{{ product.name }}')" href="{% url 'delete-review' product.id %}" title="Delete this review" style="color: inherit; text-decoration: none;">Delete</a>
+                  </div>
+                  {% endif %}
+                  {% endif %}
+                </div>
               </div>
+              
             </div>
           </div>
           <div class="mt-3">
             <h6>{{review.title}}</h6>
-            <p>{{review.review}}
-            </p>
+            <p>{{review.review}}</p>
           </div>
         </article>
         {% endfor %}
@@ -346,6 +363,25 @@
     paneContainer: paneContainer,
     inlinePane: false,
   });
+
+  function deleteReview(ev, name) {
+      ev.preventDefault();
+      var urlToRedirect = ev.currentTarget.getAttribute('href');
+      console.log(urlToRedirect);
+      swal({
+        title: "Are you sure?",
+        text: ("Are you sure that you want to delete your review of " + name + " ? You cannot undo this later!"),
+        // icon: "warning",
+        className: 'swal-custom',
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            window.location.href = urlToRedirect;
+          }
+        });
+    }
 </script>
 
 <!-- drift script -->

@@ -30,9 +30,6 @@ class Order(models.Model):
         ('Placed','Placed'),
         ('Failed','Failed'),
         ('Processing','Processing'),
-        ('Shipped','Shipped'),
-        ('Delivered','Delivered'),
-        ('Returned','Returned'),
         ('Closed','Closed'),
         ('Cancelled','Cancelled'),
     )
@@ -45,7 +42,7 @@ class Order(models.Model):
     user=models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     payment=models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     order_id=models.CharField(max_length=20)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT)
     order_total=models.FloatField()
     shipping_method = models.CharField(max_length=20, choices=shipping_method, default='Standard')
     status=models.CharField(max_length=10,choices=status,default='Pending')
@@ -60,6 +57,13 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
+    status =(
+        ('Processing','Processing'),
+        ('Shipped','Shipped'),
+        ('Delivered','Delivered'),
+        ('Refunded','Refunded'),
+        ('Cancelled','Cancelled'),
+    )
     order=models.ForeignKey(Order, on_delete=models.CASCADE)
     payment=models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
     user=models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -68,8 +72,12 @@ class OrderProduct(models.Model):
     quantity=models.IntegerField()
     amount=models.FloatField()
     is_ordered=models.BooleanField(default=False)
+    status=models.CharField(max_length=10,choices=status,default='Processing')
     created_date=models.DateTimeField(auto_now_add=True)
     updated_date=models.DateTimeField(auto_now=True)
     
+    def total_amount(self):
+        return self.product.price * self.quantity
+
     def __str__(self):
         return self.product.name

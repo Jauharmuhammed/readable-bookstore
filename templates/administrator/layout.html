@@ -112,6 +112,25 @@
               </li>
             </ul>
           </li>
+          <li class="menu-item {% if request.resolver_match.view_name == 'order-management' or request.resolver_match.view_name == 'payment-management' %}active open{% endif %}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-layout"></i>
+              <div data-i18n="Layouts">Order Management</div>
+            </a>
+      
+            <ul class="menu-sub">
+              <li class="menu-item {% if request.resolver_match.view_name == 'order-management' %}active{% endif %}">
+                <a href="{% url 'order-management' %}" class="menu-link">
+                  <div >Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'payment-management' %}active{% endif %}">
+                <a href="{% url 'payment-management' %}" class="menu-link">
+                  <div >Payments</div>
+                </a>
+              </li>
+            </ul>
+          </li>
       
           <!-- Layouts -->
           <li class="menu-item">

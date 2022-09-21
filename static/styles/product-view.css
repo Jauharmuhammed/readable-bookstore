@@ -148,7 +148,8 @@ body {
 /*click and hover*/
 input:checked~label,
 label:hover~label {
-  color: #ffb503;
+  color: #0f7da9;
+  /* color: #ffb503; */
 }
 
 /*hover highlite*/
@@ -156,11 +157,11 @@ input:checked+label:hover,
 input:checked~label:hover,
 input:checked~label:hover~label,
 label:hover~input:checked~label {
-  color: #f9d172;
+  color: #30b6eb;
 }
 
 .rating-star i {
-  color: #ffb503 ;
+  color: #0f7da9 ;
 
 }
 

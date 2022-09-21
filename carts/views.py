@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from accounts.models import Address
 
-from products.models import Products, Variation
+from products.models import Products, Variation, Wishlist
 from .models import Cart, CartItem
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,6 +16,7 @@ def _cart_id(request):
   return cart_id
 
 def add_to_cart(request, product_id):
+  url=request.META.get('HTTP_REFERER')
   user = request.user
   product = Products.objects.get(id=product_id)
   if user.is_authenticated:
@@ -138,7 +140,7 @@ def add_to_cart(request, product_id):
         cart_item.variation.add(*product_variation)
         cart_item.save()
     
-  return redirect('cart')
+  return redirect(url)
 
 
     
@@ -201,6 +203,31 @@ def cart(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, qu
   return render(request, 'products/cart.html', context)
 
 
+
+@login_required(login_url='login')
+def move_to_wishlist(request, product_id, cart_item_id):
+  product = get_object_or_404(Products, id=product_id)
+  try:
+    if request.user.is_authenticated:
+      cart_item = CartItem.objects.get(product=product, user=request.user, id=cart_item_id)
+
+      in_wishlist = Wishlist.objects.filter(user=request.user, product_id= product_id).exists()
+      if in_wishlist:
+        pass
+      else:
+        Wishlist.objects.create(
+          user = request.user,
+          product_id = product_id
+        )
+    else:
+      return redirect('login')
+    cart_item.delete()
+    messages.success(request,'Item is moved to your wishlist')
+  except:
+    pass
+  return redirect('cart')
+
+
 @login_required(login_url='login')
 def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, quantity=0):
   try:
@@ -214,7 +241,7 @@ def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0
       shipping_charge = 99
     total = sub_total + shipping_charge
 
-    addresses = Address.objects.filter(user=request.user).order_by('-date_added')
+    addresses = Address.objects.filter(user=request.user, is_active=True).order_by('-date_added')
   except ObjectDoesNotExist:
     pass
 

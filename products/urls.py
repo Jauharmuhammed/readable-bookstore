@@ -9,7 +9,9 @@ urlpatterns = [
     path('language/<slug:language_slug>/', views.products_by_language, name='products-by-language'),
 
     path('view/<slug:product_slug>/', views.product_view, name='product-view'),
+
     path('review/<int:product_id>/',views.review,name='review'),
+    path('review/delete-review/<int:product_id>/',views.delete_review,name='delete-review'),
 
     path('search/', views.search, name='search'),
 ]

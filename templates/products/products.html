@@ -42,7 +42,7 @@
                     </a>
                     <div class="overlay text-nowrap">
                         <a href="{{ product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>
-                        <button class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-heart"></i></buttons>
+                        <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-heart"></i></a>
                     </div>
                   </div>
                   <div class="card-body text-center">

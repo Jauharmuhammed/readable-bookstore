@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Dashboard</title>
+<link rel="stylesheet" href="{% static 'styles/user-dashboard.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class=" container container-dashboard  px-5 py-5 mx-auto">
+
+  <div class="container-fluid px-0">
+
+    <!-- form -->
+    <div class="container content">
+      <div class="row">
+        <div class=" col-12 col-lg-3 p-0 mb-5">
+          {% include 'include/sidebar-dashboard.html' %}
+        </div>
+        <div class=" col-12 col-lg-9 ps-lg-5 card-container ">
+
+          <div class="row row-cols-1 profile-header"> 
+            
+          </div>
+
+        
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+              <div class="card h-100">
+                <a href="{% url 'user-orders' %}">
+                  <div class="card-body text-center my-5">
+                    <iconify-icon icon="ph:package-light" width="32" ></iconify-icon>
+                    <h6 class="card-title mt-3">Orders ( {{orders_count}} )</h6>
+                    <p class="card-text text-muted small">Check your order status</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <a href="{% url 'wishlist' %}">
+                  <div class="card-body text-center my-5">
+                  <iconify-icon icon="clarity:heart-line" width="32"></iconify-icon>
+                    <h6 class="card-title mt-3">Wishlist ( {{wishlist_items_count}} )</h6>
+                    <p class="card-text text-muted small">All your curated product collections</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <a href="{% url 'cart' %}">
+                  <div class="card-body text-center my-5">
+                    <iconify-icon icon="bi:bag" width="32"></iconify-icon>
+                    <h6 class="card-title mt-3">Cart ( {{cart_items_count}} )</h6>
+                    <p class="card-text text-muted small">Products waiting for you</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <a href="{% url 'user-address' %}">
+                  <div class="card-body text-center my-5">
+                    <iconify-icon icon="ep:map-location" width="32"></iconify-icon>
+                    <h6 class="card-title mt-3">Addresses ( {{addresses_count}} )</h6>
+                    <p class="card-text text-muted small">Save addresses for a hassle-free checkout</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-body text-center my-5">
+                  <iconify-icon icon="carbon:password" width="32"></iconify-icon>
+                  <h6 class="card-title mt-3">Manage Password</h6>
+                  <p class="card-text text-muted small">Edit and manage your password</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card h-100">
+                <a href="{% url 'user-profile' %}">
+                  <div class="card-body text-center my-5">
+                    <iconify-icon icon="carbon:order-details" width="32"></iconify-icon>
+                    <h6 class="card-title mt-3">Profile Details</h6>
+                    <p class="card-text text-muted small">View and Edit your profile details</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+            
+          </div>
+      
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+
+{% endblock %}

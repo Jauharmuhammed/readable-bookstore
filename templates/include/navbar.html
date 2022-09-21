@@ -37,9 +37,9 @@
               <ul class="list-unstyled">
                 {% if user.is_authenticated %}
                 <li><a class="dropdown-item border-bottom mb-2" href="#"> Hi, {{ user.first_name }}. </a></li>
-                <li><a class="dropdown-item" href="#"> Profile </a></li>
+                <li><a class="dropdown-item" href="{% url 'user-dashboard'%}"> Profile </a></li>
                 <li><a class="dropdown-item" href="#"> Settings </a></li>
-                <li><a class="dropdown-item" href="#"> Whishlist </a></li>
+                <li><a class="dropdown-item" href="{% url 'wishlist'%}"> Whishlist </a></li>
                 <li><a class="dropdown-item" href="#"> Orders </a></li>
                 <li><a class="dropdown-item" href="{% url 'logout'%}"> Logout </a></li>
                 {% else %}
@@ -51,7 +51,7 @@
           </li>
 
           <li>
-            <a class="navbar-icon" href="#">
+            <a class="navbar-icon" href="{% url 'wishlist'%}">
               <iconify-icon icon="bi:heart"></iconify-icon>
             </a>
           </li>

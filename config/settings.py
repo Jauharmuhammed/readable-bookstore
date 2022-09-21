@@ -174,3 +174,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'readablebookstore@gmail.com'
 EMAIL_HOST_PASSWORD = 'yibbzvcvamodniia' 
 EMAIL_USE_TLS = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'

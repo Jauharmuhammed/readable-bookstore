@@ -85,34 +85,3 @@ $(document).ready(function () {
 
 });
 
-
-
-
-// "handler": function(responseb) {
-//   alert(responseb.razorpay_payment_id);
-//   data = {
-
-//     " fname ": fname,
-//     " Iname ": lname,
-//     " email ": email,
-//     " phone ": phone,
-//     " address ": address,
-//     " city ": city,
-//     " state ": state,
-//     " country ": country,
-//     " pincode ": pincode,
-//     " payment_mode ": " Paid by Razorpay ",
-//     " payment_id ": responseb.razorpay_payment_id,
-//     csrfmiddlewaretoken
-//   }
-//   $.ajax({
-//     method: " POST ",
-//     url: " / place - order ",
-//     data: data,
-//     success: function (responsec) {
-//       swal(" Congratulations ! ", responsec.status, " success ").then((value) => {
-//         window.location.href = ' / my - orders '
-//       });
-//     }
-//   });
-// }

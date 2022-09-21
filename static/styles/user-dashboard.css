@@ -1,0 +1,36 @@
+*{
+  border-radius: 0 !important;
+}
+
+.container-dashboard {
+  padding-top: 12rem !important;
+}
+
+.nav-pills .nav-link {
+  color: black !important;
+  border-radius: 0;
+}
+.nav-pills .nav-link.active {
+  border-radius: 0;
+  background-color: #8e8c6d0e!important;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #8e8c6d08 !important;
+}
+
+.sidebar{
+  background-color: #8e8c6d23;
+}
+
+.content .nav-link {
+  background-color: white !important;
+}
+.card-container .card:hover {
+  background-color: #8e8c6d15;
+}
+
+.card a {
+  color: inherit;
+  text-decoration: none !important;
+}

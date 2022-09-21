@@ -1,0 +1,88 @@
+{% extends 'administrator/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="d-flex justify-content-between ">
+    <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / </span>Product list </h6>
+    <a href="{% url 'add-product' %}">
+      <button type="button" class="btn btn-primary  align-items-center">
+        Add Product
+      </button>
+    </a>
+  </div>
+  <!-- Hoverable Table rows -->
+  <div class="card mt-5">
+    <h5 class="card-header">Products</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table " id="user_table">
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Title and Author</th>
+            <th>Price</th>
+            <th>Sub-Category</th>
+            <th>Stock</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if products %}
+          {% for product in products %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><span class="name"><strong>{{ product.name }}</strong></span><br>
+              <span class="email ">{{ product.author }}</span>
+            </td>
+            <td><span class="name">₹{{ product.price }}</span></td>
+            <td><span class="name">{{ product.sub_category }}</span></td>
+            <td><span class="name">{{ product.stock }}</span></td>
+            <td class="delete">
+              <div class="btn-group dropstart mx-3">
+                <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="{% url 'edit-product' pk=product.id %}">Edit Product</a></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'del-product' pk=product.id %}"
+                      onclick="deleteconfirm(event,'{{product.name}}')">
+                      Delete Product
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--/ Hoverable Table rows -->
+
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+
+
+
+{% endblock %}

@@ -70,18 +70,23 @@ def product_view(request, product_slug=None):
 
   in_cart = CartItem.objects.filter(cart__cart_id = _cart_id(request), product=product).exists()
 
-  if request.user.is_authenticated:
-    try:
-        is_ordered=OrderProduct.objects.filter(user=request.user, product_id=product.id).exists()
-    except:
-        is_ordered=None
+  try:
+      is_ordered=OrderProduct.objects.filter(user=request.user, product_id=product.id).exists()
+  except:
+      is_ordered=None
+
+  try:
+      is_already_reviewed=Review.objects.filter(user=request.user, product_id=product.id).exists()
+  except:
+      is_already_reviewed=None
 
   reviews = Review.objects.filter(product=product, status=True)
   context = {
     'product': product,
     'in_cart': in_cart,
     'is_ordered':is_ordered,
-    'reviews':reviews
+    'reviews':reviews,
+    'is_already_reviewed':is_already_reviewed,
   }
   return render(request, 'products/product-view.html', context)
 
@@ -131,3 +136,21 @@ def review(request,product_id):
         data.save()
         messages.success(request,'Thank You ! Your review has been Saved')
         return redirect(url)
+
+
+def delete_review(request, product_id):
+  url=request.META.get('HTTP_REFERER')
+  try:
+    del_review = Review.objects.get(user=request.user, product_id=product_id)
+  except:
+    pass
+  if del_review is not None:
+    del_review.delete()
+    messages.success(request,'Your review is deleted successfully')
+    return redirect(url)
+  else:
+    return redirect(url)
+
+
+
+

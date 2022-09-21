@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from accounts.models import CustomUser
 from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
+from orders.models import Order, OrderProduct
 
 from products.models import Products
 from products.forms import ProductCreationForm
@@ -27,7 +28,7 @@ def admin_login(request):
                 return redirect('dashboard')
             else:
                 messages.error(request, "Invalid login credentials")
-        return render(request, 'admin/admin-login.html')
+        return render(request, 'administrator/admin-login.html')
 
 
 @login_required(login_url='admin-login')
@@ -43,7 +44,7 @@ def dashboard(request):
     context = {
         'users' : users,
     }
-    return render(request, 'admin/index.html', context)
+    return render(request, 'administrator/index.html', context)
 
 
 @login_required(login_url='admin-login')
@@ -54,7 +55,7 @@ def user_management(request):
     context = {
         'users' : users,
     }
-    return render(request, 'admin/user-management.html', context)
+    return render(request, 'administrator/user-management.html', context)
 
   
 @login_required(login_url= 'admin-login')
@@ -125,7 +126,7 @@ def category_management(request):
       'sub_category_form' : sub_category_form,
       'language_form' : language_form,
     }
-    return render(request, 'admin/category-management.html', context)
+    return render(request, 'administrator/category-management.html', context)
 
 
 def del_category(request, pk):
@@ -152,7 +153,7 @@ def product_management(request):
     context = {
       'products' : products
     }
-    return render(request, 'admin/product-management.html', context)
+    return render(request, 'administrator/product-management.html', context)
 
 def add_product(request):
     form = ProductCreationForm()
@@ -169,7 +170,7 @@ def add_product(request):
     context = {
       'form':form
     }
-    return render(request, 'admin/add-product.html', context)
+    return render(request, 'administrator/add-product.html', context)
 
 def del_product(request, pk):
     product_del = Products.objects.filter(pk=pk)
@@ -194,4 +195,18 @@ def edit_product(request, pk):
       'product_id':product_edit,
       'product_name': product_name,
     }
-    return render(request, 'admin/edit-product.html', context)
+    return render(request, 'administrator/edit-product.html', context)
+
+
+def order_management(request):
+  orders = Order.objects.all().order_by('-created_date')
+  order_products = OrderProduct.objects.all().order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html')
+
+
+def payment_management(request):
+  return render(request, 'administrator/payment-management.html')

@@ -1,0 +1,23 @@
+.plus-button{
+  margin-left: -5px !important;
+}
+
+.new-box {
+  border-color: #8b8538 !important
+}
+
+.new-box:hover {
+  background: #f3f2e5
+}
+
+.new-address {
+  width: 100%;
+}
+
+.action-address {
+  cursor: pointer;
+}
+
+.modal-header {
+  border-bottom:none !important ;
+}

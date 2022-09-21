@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from orders.views import payment_method
 from .models import Order, Payment, OrderProduct
 
 class OrderProductInline(admin.TabularInline):

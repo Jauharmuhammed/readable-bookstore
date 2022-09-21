@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Cart</title>
+<link rel="stylesheet" href="{% static 'styles/wishlist.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+{% if request.user.is_authenticated %}
+{% if wishlist_items %}
+<div class="container mx-auto mb-5">
+    
+
+  {% if wishlist_items %}
+  <section class="gallery">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center mb-5">
+          <h4 class="heading fw-normal">WISHLIST</h4>
+          <p>( {{ wishlist_count }} {% if wishlist_count == 1 %} item {% else %} items {% endif %})</p>
+        </div>
+  
+      {% for wishlist_item in wishlist_items %}
+        <div class=" col-6 col-md-4 col-lg-3 mb-3 px-1">
+          <div class="card mx-3 disabled">
+            <div class="img-container">
+              <a href="{{ wishlist_item.product.get_url }}">
+                <img src='{{ wishlist_item.product.cover_image.url }}' alt="" class="image card-img-top px-5 pt-5">
+              </a>
+              <div class="overlay text-nowrap">
+                <a href="{{ wishlist_item.product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>
+                <a onclick="removeconfirm(event, '{{ wishlist_item.product.name }}')" href="{% url 'remove-from-wishlist' wishlist_item.product.id %}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="fas fa-trash"></i></a>
+              </div>
+            </div>
+            <div class="card-body text-center">
+              <a href="{{ wishlist_item.product.get_url }}">
+                <h6 class="card-title mb-1">{{ wishlist_item.product.name }}</h6>
+              </a>
+              <p class="mb-2"><small>{{ wishlist_item.product.author }}</small></p>
+  
+              <!-- Ratings -->
+              <div class="rating-star mb-3">
+                <span>
+                  <i class="fa fa-star{% if wishlist_item.product.average_review < 0.5 %}-o{% elif wishlist_item.product.average_review >= 0.5 and wishlist_item.product.average_review < 1 %}-half-o {% endif %}"
+                    aria-hidden="true"></i>
+                  <i class="fa fa-star{% if wishlist_item.product.average_review < 1.5 %}-o{% elif wishlist_item.product.average_review >= 1.5 and wishlist_item.product.average_review < 2 %}-half-o {% endif %}"
+                    aria-hidden="true"></i>
+                  <i class="fa fa-star{% if wishlist_item.product.average_review < 2.5 %}-o{% elif wishlist_item.product.average_review >= 2.5 and wishlist_item.product.average_review < 3 %}-half-o {% endif %}"
+                    aria-hidden="true"></i>
+                  <i class="fa fa-star{% if wishlist_item.product.average_review < 3.5 %}-o{% elif wishlist_item.product.average_review >= 3.5 and wishlist_item.product.average_review < 4 %}-half-o {% endif %}"
+                    aria-hidden="true"></i>
+                  <i class="fa fa-star{% if wishlist_item.product.average_review < 4.5 %}-o{% elif wishlist_item.product.average_review >= 4.5 and wishlist_item.product.average_review < 5 %}-half-o {% endif %}"
+                    aria-hidden="true"></i>
+                </span>
+                <small class="text-muted">
+                  ( {{ wishlist_item.product.review_count}} )
+                </small>
+              </div>
+  
+              <h6 class="card-subtitle mb-0 text-muted">&#8377;{{ wishlist_item.product.price }}</h6>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+  <div class="row d-flex justify-content-center border-top mt-5">
+    <div class="my-auto col-12 ">
+      <div class="row mt-4">
+
+        <div class=" px-0 align-self-center">
+          <div class=" d-flex justify-content-between">
+            <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
+            <a href="{% url 'cart' %}" class=" btn px-5 py-2 my-2  ">CART</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% else %}
+<div class="text-center empty-wishlist">
+  <div class="pt-5">YOUR WISHLIST IS EMPTY !</div>
+  <a href="{% url 'products' %}" class=" btn mt-4 px-3 py-2">CONTINUE SHOPPING</a>
+</div>
+{% endif %}
+
+{% else %}
+<div class="text-center empty-wishlist">
+  <h5 class="mb-4">PLEASE LOGIN</h5>
+  <div>Login to view items in your wishlist.</div>
+  <a href="{% url 'login' %}" class=" btn mt-4 px-5 py-2">LOGIN</a>
+</div>
+
+{% endif %}
+
+
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+  function removeconfirm(ev, name) {
+      ev.preventDefault();
+      var urlToRedirect = ev.currentTarget.getAttribute('href');
+      console.log(urlToRedirect);
+      swal({
+        title: "Are you sure?",
+        text: ("Are you sure that you want to remove " + name + " from your wishlist?"),
+        // icon: "warning",
+        className: 'swal-custom',
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            window.location.href = urlToRedirect;
+          }
+        });
+    }
+</script>
+
+{% endblock %}

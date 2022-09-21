@@ -1,6 +1,6 @@
-from pyexpat import model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, first_name, email,  password=None):
@@ -40,7 +40,7 @@ class CustomUser(AbstractBaseUser):
     last_name = models.CharField(max_length=50, blank=True)
     email = models.EmailField(max_length=50, unique=True)
     username = models.CharField(max_length=50, unique=True)
-    mobile_number = models.CharField(max_length=10)
+    mobile_number = models.CharField(max_length=10, unique=True)
 
     #required
 
@@ -67,6 +67,17 @@ class CustomUser(AbstractBaseUser):
     def has_module_perms(self, add_label):
         return True
 
+    
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(blank=True, upload_to='userprofile')
+    date_of_birth = models.DateField(blank=True)
+    location = models.CharField(blank=True, max_length=30)
+
+    def __str__(self) :
+       return self.user.first_name
+
 
 class Address(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
@@ -82,11 +93,13 @@ class Address(models.Model):
     country=models.CharField(max_length=50)
 
     date_added = models.DateTimeField(auto_now_add=True)
+    # is_active is used if the user is deleted an address that is used in an order, if the dont want to see or user the address again,
+    # he can delete it, but it cannot be deleted from the database. so is_active is set to false. which helps to filter address to show the user
+    is_active= models.BooleanField(default=True) 
 
     class Meta:
       verbose_name = 'Address'
       verbose_name_plural = 'Addresses'
-
 
     def __str__(self):
       return str(self.id)
@@ -99,6 +112,9 @@ class Address(models.Model):
 
     def details(self):
       return self.city + ', ' + self.pin_code  + ', ' + self.state  + ', ' + self.country
+
+    def __hash__(self):
+        return super().__hash__()
 
     def __eq__(self, other):
       if self.user == other.user \
@@ -115,3 +131,5 @@ class Address(models.Model):
           return True
       else:
           return False
+
+

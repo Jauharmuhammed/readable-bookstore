@@ -1,0 +1,175 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Orders</title>
+<link rel="stylesheet" href="{% static 'styles/user-dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'styles/user-profile.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class=" container container-dashboard  px-5 py-5 mx-auto">
+
+  <div class="container-fluid px-0">
+
+    <!-- form -->
+    <div class="container content">
+      <div class="row">
+        <div class=" col-12 col-lg-3 p-0 mb-5">
+          {% include 'include/sidebar-dashboard.html' %}
+        </div>
+        <div class=" col-12 col-lg-9 ps-lg-5 card-container ">
+
+
+          <div class="row row-cols-1 profile-header ps-4">
+            <div class="row row-cols-1">
+
+              <div class="border w-100 mb-4">
+                <form action="{% url 'edit-profile' %}" method="POST" enctype="multipart/form-data" >
+                  {% csrf_token %}
+                <header class="d-flex justify-content-between">
+                  <div class="d-flex justify-content-start">
+                    <div class="image my-4 ms-3">
+                      <a href="#">
+                        <img src="{{ user_profile.profile_picture.url }}" style="border-radius: 50% !important; width: 12rem; height:12rem ; object-fit: cover;">
+                      </a>
+                    </div>
+                    <div class="my-auto ms-4">
+                      <h5 class="mt-4 mb-1">
+                        {{request.user.full_name}}
+                      </h5>
+                      <p class="small mb-4 pb-2">{{ request.user.email }}</p>
+                    </div>
+                  </div>
+                  <div class="mt-auto mb-3">
+                    <input type="file" hidden name="profile_picture" id="profilePicture">
+                    <label for="profilePicture">
+                      <iconify-icon icon="clarity:note-edit-line" width="24" title="change your profile picture" style="color: black; cursor: pointer;"></iconify-icon>
+                    </label>
+                  </div>
+                </header>
+              </div>
+              <div class="border py-5  w-100 " style="padding-left: 20% ;padding-right: 20% ;">
+                
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control " name='first_name' value="{{ request.user.first_name }}" id="floatingFirstName"
+                      placeholder=" " required>
+                    <label for="floatingFirstName">First Name
+                      <span class="text-danger"><small> *</small></span>
+                    </label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control " name='last_name' value="{{ request.user.last_name }}" id="floatingLastName"
+                      placeholder=" ">
+                    <label for="floatingLastName">Last Name
+                    </label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control " name='mobile_number' value="{{ request.user.mobile_number }}" id="floatingMobileNumber"
+                      placeholder=" " required minlength="10" maxlength="10" pattern="\d{10}"
+                      title="Please enter a Valid 10 digit Mobile Number">
+                    <label for="floatingMobileNumber">Mobile Number
+                      <span class="text-danger"><small> *</small></span>
+                    </label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="date" class="form-control " name='date_of_birth' value="{{ user_profile.date_of_birth | date:'Y-m-d' }}" id="floatingDateOfBirth"
+                      placeholder=" ">
+                    <label for="floatingDateOfBirth">Date of Birth
+                    </label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control " name='location' value="{{ user_profile.location }}" id="floatingLocation"
+                      placeholder=" ">
+                    <label for="floatingLocation">Location
+                    </label>
+                  </div>
+                  
+                  
+                  
+                  <div class=" d-flex justify-content-center ">
+                    <div class=" col-12 ">
+                      <div class=" ">
+                        <div class=" px-0 align-self-center mb-5 ">
+                          <div class=" d-flex justify-content-center">
+                            <button type="submit" class=" btn w-100 py-2 my-2  ">SAVE</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+                      
+
+                    </div>
+                  </div>
+                  <div class=" d-flex justify-content-center">
+                    <button type="button" class=" btn btn-invert w-100 py-2 my-2" data-bs-toggle="modal" data-bs-target="#changePassword">CHANGE
+                      PASSWORD</button>
+                  </div>
+              </div>
+
+              </form>
+              
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="changePassword" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form action="{% url 'change-password' %}" method="POST" class=" w-100">
+      {% csrf_token %}
+      <div class="modal-content p-3">
+        <div class="modal-header border-none">
+          <h5 class="modal-title" id="staticBackdropLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control " name='current_password' id="currentPassword" placeholder=" " required>
+            <label for="currentPassword">Current Password
+            </label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control " name='new_password' id="newPassword" placeholder=" " required>
+            <label for="newPassword">New Password
+            </label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control " name='confirm_password' id="confirmPassword" placeholder=" " required>
+            <label for="confirmPassword">Confirm Password
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer border-none ">
+          <button type="button" class="btn btn-invert py-2" data-bs-dismiss="modal">CLOSE</button>
+          <button type="submit" class="btn py-2">CHANGE PASSWORD</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}

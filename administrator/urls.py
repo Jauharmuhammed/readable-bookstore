@@ -21,6 +21,9 @@ urlpatterns = [
     path('product-management/product/delete/<str:pk>/', views.del_product, name='del-product'),
     path('product-management/product/edit/<str:pk>/', views.edit_product, name='edit-product'),
 
+    path('order-management/', views.order_management, name='order-management'),
+    path('payment-management/', views.payment_management, name='payment-management'),
+
 
 
 ]

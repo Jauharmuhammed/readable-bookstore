@@ -62,7 +62,14 @@
           <div class="row ">
               <div class="col-8 d-flex justify-content-center ">
                 <div class="d-flex flex-column">
-                  <div class=" col-12 btn-invert quantity-box py-2 d-flex justify-content-between">
+
+                  <div class="py-3">
+                    <a href="{% url 'move-to-wishlist'  cart_item.product.id cart_item.id %}" class=" remove-btn">
+                      MOVE TO WISHLIST
+                    </a>
+                  </div>
+
+                  <div class=" col-12 btn-invert quantity-box py-2 d-flex justify-content-between align-self-center">
                     {% if cart_item.quantity == 1 %}
                     <span  class="py-2 px-3 disabled">-</span>
                     {% else %}
@@ -84,7 +91,7 @@
                     <a type="button" class=" remove-btn" data-bs-toggle="modal" data-bs-target="#cart-item-remove-confirmation-{{cart_item.product.id}}-{{item.variation_value}}">
                       REMOVE
                     </a>
-
+                    
                     <div class="modal fade" id="cart-item-remove-confirmation-{{cart_item.product.id}}-{{item.variation_value}}" tabindex="-1" role="dialog" aria-labelledby="CartItemRemoveConfirmationLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">

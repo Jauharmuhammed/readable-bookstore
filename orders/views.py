@@ -58,7 +58,7 @@ def save_address(request, sub_total=0, total=0, shipping_charge = 0, quantity=0)
         data.save()
 
 
-    addresses = Address.objects.filter(user=current_user).order_by('-date_added')
+    addresses = Address.objects.filter(user=current_user, is_active=True).order_by('-date_added')
 
     cart_items = CartItem.objects.filter(user=current_user)
     for cart_item in cart_items:

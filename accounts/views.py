@@ -9,10 +9,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage, send_mail
 
-from django.db.models import Count
+from django.db.models import Count, ProtectedError
 from django.http import HttpResponse
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from django.template.loader import render_to_string
 
@@ -24,6 +24,8 @@ from twilio.base.exceptions import TwilioRestException
 
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
+from orders.models import Order, OrderProduct
+from products.models import Wishlist
 
 from .models import *
 from .forms import *
@@ -250,7 +252,7 @@ def forgot_password(request):
       to_email = email
       send_mail(mail_subject, message, 'readablebookstore@gmail.com', [to_email], fail_silently=False)
 
-      messages.success(request, 'Password change email has been send successfully.')
+      messages.success(request, 'Password change email has been send to your email.')
       return redirect('login')
 
     else:
@@ -286,6 +288,7 @@ def reset_password(request):
       user.set_password(password)
       user.save()
       messages.success(request, 'Password changed successfully.')
+      print('Password changed successfully')
       return redirect('login')
     else:
       messages.error(request, 'Password do not match!')
@@ -294,3 +297,193 @@ def reset_password(request):
 
 
 
+def wishlist(request):
+  try:
+    wishlist_items = Wishlist.objects.filter(user=request.user).order_by('-created_date')
+    wishlist_count = wishlist_items.count()
+  except:
+    wishlist_items = None
+    wishlist_count= 0
+  context = {
+    'wishlist_items': wishlist_items,
+    'wishlist_count': wishlist_count
+  }
+
+  return render(request, 'accounts/wishlist.html', context)
+
+
+@login_required(login_url='login')
+def add_to_wishlist(request, product_id):
+  url=request.META.get('HTTP_REFERER')
+  in_wishlist = Wishlist.objects.filter(user=request.user, product_id= product_id).exists()
+  if in_wishlist:
+    return redirect(url)
+  else:
+    Wishlist.objects.create(
+      user = request.user,
+      product_id = product_id
+    )
+    return redirect(url)
+
+
+@login_required(login_url='login')
+def remove_from_wishlist(request, product_id):
+  in_wishlist = Wishlist.objects.filter(user=request.user, product_id= product_id).exists()
+  if in_wishlist:
+    wishlist_item = Wishlist.objects.get(user=request.user, product_id=product_id)
+    wishlist_item.delete()
+    return redirect('wishlist')
+  else:
+    return redirect('wishlist')
+
+
+@login_required(login_url='login')
+def dashboard(request):
+  orders_count = Order.objects.filter(user=request.user, is_ordered=True).count()
+  addresses_count = Address.objects.filter(user= request.user, is_active=True).count()
+  wishlist_count = Wishlist.objects.filter(user= request.user).count()
+  cart_item_count = CartItem.objects.filter(user= request.user).count()
+  context = { 
+    'orders_count':orders_count,
+    'addresses_count':addresses_count,
+    'wishlist_items_count':wishlist_count,
+    'cart_items_count':cart_item_count,
+  }
+  return render(request, 'accounts/dashboard.html', context)
+  
+
+@login_required(login_url='login')
+def user_profile(request):
+  user_profile =get_object_or_404(UserProfile, user=request.user)
+  change_password_form = ChangePasswordForm(user= request.user)
+  context = {
+    'user_profile' : user_profile,
+    'change_password_form':change_password_form
+  }
+  return render(request, 'accounts/profile.html', context)
+
+@login_required(login_url='login')
+def edit_profile(request):
+  user_profile =get_object_or_404(UserProfile, user=request.user)
+  if request.method == 'POST':
+    print('post')
+    user_form = UserForm(request.POST, instance=request.user)
+    user_profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+    if user_form.is_valid():
+      print('user_valid')
+      if user_profile_form.is_valid():
+        print('profile_valid')
+        user = UserForm()
+        user.first_name = user_form.cleaned_data['first_name']
+        user.last_name = user_form.cleaned_data['last_name']
+        user.mobile_number = user_form.cleaned_data['mobile_number']
+        profile = UserProfileForm()
+        profile.date_of_birth = user_profile_form.cleaned_data['date_of_birth']
+        profile.location = user_profile_form.cleaned_data['location']
+        profile.profile_picture = user_profile_form.cleaned_data['profile_picture']
+        user_form.save()
+        user_profile_form.save()
+        messages.success(request, 'Your Profile is updated successfuly')
+
+  return redirect('user-profile')
+
+
+@login_required(login_url='login')
+def change_password(request):
+  if request.method == 'POST':
+    current_password = request.POST['current_password']
+    new_password = request.POST['new_password']
+    confirm_password = request.POST['confirm_password']
+
+    check_current_password = request.user.check_password(current_password)
+    print(check_current_password)
+    if check_current_password:
+      if new_password != confirm_password:
+        messages.error(request, 'Passwords do not match!')
+      else:
+        try:
+          validate_password(new_password)
+          request.user.set_password(new_password)
+          request.user.save()
+          messages.success(request, 'Password changed successfully')
+          print('Password changed successfully')
+          return redirect('user-profile')
+
+        except ValidationError as e:
+          messages.error(request, str(e))
+          print(str(e))
+          return redirect('user-profile')
+    else:
+      messages.error(request, 'Make sure you entered old password correctly!')
+
+
+  return redirect('user-profile')
+
+
+
+@login_required(login_url='login')
+def orders(request):
+  orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
+  order_products = OrderProduct.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'accounts/orders.html', context)
+
+
+@login_required(login_url='login')
+def address(request):
+  addresses = Address.objects.filter(user= request.user, is_active=True).order_by('-date_added')
+  context = {
+    'addresses':addresses,
+  }
+  return render(request, 'accounts/address.html', context)
+
+@login_required(login_url='login')
+def add_new_address(request):
+  current_user = request.user
+  if request.method == 'POST':
+    form = AddressForm(request.POST)
+    if form.is_valid():
+      data = Address()
+      data.user = current_user
+      data.email = form.cleaned_data['email']
+      data.mobile = form.cleaned_data['mobile']
+      data.first_name = form.cleaned_data['first_name']
+      data.last_name = form.cleaned_data['last_name']
+      data.address = form.cleaned_data['address']
+      data.landmark = form.cleaned_data['landmark']
+      data.city = form.cleaned_data['city']
+      data.pin_code = form.cleaned_data['pin_code']
+      data.state = form.cleaned_data['state']
+      data.country = form.cleaned_data['country']
+
+      data.save()
+      messages.success(request, 'New address is saved successfully')
+
+  return redirect('user-address')
+
+@login_required(login_url='login')
+def delete_address(request, address_id):
+  try:
+    del_address = Address.objects.get(id = address_id)
+    del_address.delete()
+  except ProtectedError:
+    del_address.is_active = False
+    del_address.save()
+  return redirect('user-address')
+
+@login_required(login_url='login')
+def edit_address(request, address_id):
+  try:
+    edit_address = Address.objects.get(id = address_id)
+    if request.method == 'POST':
+      edit_form = AddressForm(request.POST, instance= edit_address)
+      if edit_form.is_valid():
+        edit_form.save()
+      else:
+        messages.error(request, 'Invalid details')
+  except:
+    pass
+  return redirect('user-address')
