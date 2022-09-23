@@ -11,6 +11,7 @@ class Payment(models.Model):
         ('Processing','Processing'),
         ('Failed','Failed'),
         ('Successful','Successful'),
+        ('Refunded','Refunded'),
     )
 
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
@@ -30,6 +31,7 @@ class Order(models.Model):
         ('Placed','Placed'),
         ('Failed','Failed'),
         ('Processing','Processing'),
+        ('Completed','Completed'),
         ('Closed','Closed'),
         ('Cancelled','Cancelled'),
     )
@@ -61,7 +63,8 @@ class OrderProduct(models.Model):
         ('Processing','Processing'),
         ('Shipped','Shipped'),
         ('Delivered','Delivered'),
-        ('Refunded','Refunded'),
+        ('Returned','Returned'),
+        ('Return Confirmed','Return Confirmed'),
         ('Cancelled','Cancelled'),
     )
     order=models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -72,7 +75,7 @@ class OrderProduct(models.Model):
     quantity=models.IntegerField()
     amount=models.FloatField()
     is_ordered=models.BooleanField(default=False)
-    status=models.CharField(max_length=10,choices=status,default='Processing')
+    status=models.CharField(max_length=20,choices=status,default='Processing')
     created_date=models.DateTimeField(auto_now_add=True)
     updated_date=models.DateTimeField(auto_now=True)
     

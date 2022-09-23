@@ -29,6 +29,10 @@
   <!-- Icons. Uncomment required icon fonts -->
   <link rel="stylesheet" href="{% static 'admin/assets/vendor/fonts/boxicons.css' %} " />
 
+  <script src="https://kit.fontawesome.com/636cd13699.js" crossorigin="anonymous"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
 
@@ -50,6 +54,12 @@
   <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="{% static 'admin/assets/js/config.js' %} "></script>
+
+
+  <!-- sweetalert -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
   {% block head %}
 
@@ -112,7 +122,7 @@
               </li>
             </ul>
           </li>
-          <li class="menu-item {% if request.resolver_match.view_name == 'order-management' or request.resolver_match.view_name == 'payment-management' %}active open{% endif %}">
+          <li class="menu-item {% if request.resolver_match.view_name == 'order-management' or request.resolver_match.view_name == 'payment-management' or request.resolver_match.view_name == 'placed-orders' or request.resolver_match.view_name == 'pending-orders' or request.resolver_match.view_name == 'cancelled-orders' or request.resolver_match.view_name == 'completed-orders' or request.resolver_match.view_name == 'closed-orders' %}active open{% endif %}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-layout"></i>
               <div data-i18n="Layouts">Order Management</div>
@@ -121,7 +131,32 @@
             <ul class="menu-sub">
               <li class="menu-item {% if request.resolver_match.view_name == 'order-management' %}active{% endif %}">
                 <a href="{% url 'order-management' %}" class="menu-link">
-                  <div >Orders</div>
+                  <div >All Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'placed-orders' %}active{% endif %}">
+                <a href="{% url 'placed-orders' %}" class="menu-link">
+                  <div >Placed Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'pending-orders' %}active{% endif %}">
+                <a href="{% url 'pending-orders' %}" class="menu-link">
+                  <div >Pending Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'cancelled-orders' %}active{% endif %}">
+                <a href="{% url 'cancelled-orders' %}" class="menu-link">
+                  <div >Cancelled Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'completed-orders' %}active{% endif %}">
+                <a href="{% url 'completed-orders' %}" class="menu-link">
+                  <div >Completed Orders</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.view_name == 'closed-orders' %}active{% endif %}">
+                <a href="{% url 'closed-orders' %}" class="menu-link">
+                  <div >Closed Orders</div>
                 </a>
               </li>
               <li class="menu-item {% if request.resolver_match.view_name == 'payment-management' %}active{% endif %}">

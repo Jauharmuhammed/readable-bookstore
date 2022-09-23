@@ -111,7 +111,7 @@ class Address(models.Model):
       return self.address + ', ' + self.landmark
 
     def details(self):
-      return self.city + ', ' + self.pin_code  + ', ' + self.state  + ', ' + self.country
+      return self.city + ', ' + str(self.pin_code)  + ', ' + self.state  + ', ' + self.country
 
     def __hash__(self):
         return super().__hash__()

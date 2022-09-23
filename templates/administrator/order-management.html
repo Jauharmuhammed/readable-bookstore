@@ -9,6 +9,22 @@
 
 {% block head %}
 
+<style>
+  ul li{
+    float: left;
+  }
+  .custom-align div{
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+  }
+  tbody td {
+    line-height: 2.4rem !important;
+  }
+  /* tbody tr[aria-expanded="true"] {
+    background-color: #697a8d45;
+  } */
+</style>
+
 {% endblock %}
 
 
@@ -17,153 +33,273 @@
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="d-flex justify-content-between ">
-    <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / </span>Product list </h6>
-    <a href="{% url 'add-product' %}">
-      <button type="button" class="btn btn-primary  align-items-center">
-        Add Product
-      </button>
-    </a>
+    <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Order Mangement / </span>
+      {% if request.path == '/administrator/order-management/' %} All Orders
+      {% elif 'placed-orders' in request.path %} Placed Orders
+      {% elif 'pending-orders' in request.path %} Pending Orders
+      {% elif 'cancelled-orders' in request.path %} Cancelled Orders 
+      {% elif 'completed-orders' in request.path %} Completed Orders
+      {% elif 'closed-orders' in request.path %} Closed Orders
+      {% endif %}
+    </h6>
   </div>
-  <!-- Hoverable Table rows -->
-  <!-- <div class="card mt-5">
-    <h5 class="card-header">Products</h5>
-    <div class="table-responsive text-nowrap">
-      <table class="table " id="user_table">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>User</th>
-            <th>Products</th>
-            <th>Total</th>
-            <th class="text-center">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span class="email ">f</span>
-            </td>
-            <td><span class="name">1</span></td>
-            <td><span class="name">g</span></td>
-            <td><span class="name">g</span></td>
-            <td class="delete"></td>
-          </tr>
 
+{% if orders %}
+  
+<div class="card mt-5">
+  <h5 class="card-header">
+    {% if request.path == '/administrator/order-management/' %} All Orders
+    {% elif 'placed-orders' in request.path %} Placed Orders
+    {% elif 'pending-orders' in request.path %} Pending Orders
+    {% elif 'cancelled-orders' in request.path %} Cancelled Orders 
+    {% elif 'completed-orders' in request.path %} Completed Orders
+    {% elif 'closed-orders' in request.path %} Closed Orders
+    {% endif %}
+    
+  </h5>
+  <div class="table-responsive text-nowrap">
+    <table class="table table-hover" id="user_table">
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Order ID</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="accordionExample">
+        {% for order in orders %}
 
-        </tbody>
-      </table>
-    </div>
-  </div> -->
+        <tr class="" data-bs-toggle="collapse" data-bs-target="#accordion-{{ order.order_id }}" aria-expanded="true"
+          aria-controls="accordion-{{ order.order_id }}">
+          <td><span class="name">{{ forloop.counter }}</span></td>
+          <td>
+            <span class="email ">{{ order.order_id }}</span>
+          </td>
+          <td><span class="name">{{ order.user.full_name }}</span></td>
+          <td><span class="name">{{ order.created_date }}</span></td>
+          <td><span class="name">{{ order.order_total }}</span></td>
+          <td>
+            <span
+              class="name {% if order.status == 'Placed' %} text-primary {% elif order.status == 'Pending' %} text-warning {% elif order.status == 'Cancelled' %} text-danger {% endif %}"
+              id="status-{{ order.id }}">{{ order.status }}
+            </span>
+            {% if order.status == 'Pending' %}
+            <button onclick="orderStatusUpdate(event, '{{ order.id }}')" value="{{ order.status }}" hidden
+              id="orderStatusUpdateButton-{{ order.id }}"></button>
+            <label for="orderStatusUpdateButton-{{ order.id }}" id="label-{{ order.id }}">
+              <iconify-icon icon="clarity:note-edit-line" width="16"></iconify-icon>
+            </label>
+            {% endif %}
+          </td>
+        </tr>
 
-  <div class="card mt-5">
-    <h5 class="card-header">Products</h5>
-    <div class="table-responsive text-nowrap">
-      <table class="table " id="outertable">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>User</th>
-            <th>Products</th>
-            <th>Total</th>
-            <th class="text-center">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <label for="accordion-test">
-            <tr>
-              <td>
-                <span class="email ">f</span>
-              </td>
-              <td><span class="name">1</span></td>
-              <td><span class="name">g</span></td>
-              <td><span class="name">g</span></td>
-              <td class="delete"></td>
-            </tr>
-          </label>
-          
-          <div class="accordion mt-3" id="accordionExample">
-            <div class="card accordion-item active">
-              <h2 class="accordion-header" id="headingOne">
-                <button type="button"  class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
-                  aria-expanded="true" aria-controls="accordionOne" id="accordion-test">
-                  Accordion Item 1
-                </button>
-                
-              </h2>
-          
-              <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-
-                  <table class="table " id="innertable">
-                    <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>User</th>
-                        <th>Products</th>
-                        <th>Total</th>
-                        <th class="text-center">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <span class="email ">f</span>
-                        </td>
-                        <td><span class="name">1</span></td>
-                        <td><span class="name">g</span></td>
-                        <td><span class="name">g</span></td>
-                        <td class="delete"></td>
-                      </tr>
-                    </tbody>
-                  </table>
+        <tr>
+          <td colspan="6" class="py-0 ">
+            <div id="accordion-{{ order.order_id }}" class="accordion-collapse collapse"
+              data-bs-parent="#accordionExample">
+              <div class=" border my-3 p-3">
+                <div class="d-flex justify-content-between">
+                  <h6>Order Details</h6>
                 </div>
+                {% for order_product in order_products %}
+                {% if order_product.order.id == order.id %}
+                <span class="custom-align list-unstyled list-inline d-flex justify-content-between my-2">
+                  <div class=" col-6 d-flex justify-content-start">
+                    <div>
+                      <span class="name me-3">
+                        <img src="{{ order_product.product.cover_image.url }}" alt="product image" height="75">
+                      </span>
+                    </div>
+                    <div>
+                      <span class="name ">Product ID : {{ order_product.product.id }}</span><br>
+                      <span class="name ">{{ order_product.product.name }}</span> <br>
+                      {% for item in order_product.variation.all %}
+                      <span class="name">{{ item.variation_value }}</span>
+                      {% endfor %}
+
+                    </div>
+                  </div>
+
+
+                  <div class="col-2 text-end"><span class="name">{{ order_product.quantity }} x {{ order_product.amount }}</span></div>
+                  <div class="col-2 text-end"><span class="name">{{ order_product.total_amount }}</span></div>
+                  <div class="col-2 text-end">
+                    <div class="name class-status-{{ order.id }} 
+                                        {% if order_product.status == 'Processing' %} text-secondary 
+                                        {% elif order_product.status == 'Shipped' %} text-primary 
+                                        {% elif order_product.status == 'Delivered' %} text-success 
+                                        {% elif order_product.status == 'Refunded' %} text-warning 
+                                        {% elif order_product.status == 'Cancelled' %} text-danger 
+                                        {% endif %}" id="status_show-{{ order_product.id }}" style="display: inline;">
+                      {{ order_product.status }}
+                    </div>
+
+                    {% if order.status == 'Placed' %}
+                    <button onclick="statusUpdate(event, '{{ order_product.id }}')" value="{{ order_product.status }}"
+                      hidden id="statusUpdateButton-{{ order_product.id }}"></button>
+                    <label for="statusUpdateButton-{{ order_product.id }}">
+                      <iconify-icon icon="clarity:note-edit-line" width="16"></iconify-icon>
+                    </label>
+                    {% endif %}
+
+                  </div>
+                </span>
+                {% endif %}
+                {% endfor %}
+              </div>
+              <div class="my-3 border p-3">
+                <h6>Shipping & Payment Details</h6>
+                <span class="custom-align list-unstyled list-inline d-flex justify-content-between my-2">
+                  <div class="d-flex justify-content-start">
+                    <div>
+                      <span class="name ">{{ order.address.full_name }}</span> <br>
+                      <span class="name ">{{ order.address.address }}</span><br>
+                      <span class="name ">{{ order.address.details }}</span> <br><br>
+                      <span class="name ">{{ order.shipping_method | capfirst }} Shipping</span>
+                    </div>
+                  </div>
+
+
+                  <div><span class="name">{{ order.payment.payment_method }}</span></div>
+                  <div><span class="name">{{ order.payment.payment_id }}</span></div>
+                  <div><span class="name">{{ order.payment.amount }}</span></div>
+                  <div><span class="name" id="payment-status-{{order.id}}">{{ order.payment.status }}</span></div>
+                </span>
               </div>
             </div>
-          </div>
+          </td>
+        </tr>
+
+        {% endfor %}
 
 
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
-  <!--/ Hoverable Table rows -->
+</div>
+  
+{% else %}
+
+<div class="card mt-5 py-5">
+  <h4 class="card-header text-center"> Empty!</h4>
+  <h5 class="card-header text-center"> No 
+      {% if 'placed-orders' in request.path %} Placed Orders
+      {% elif 'pending-orders' in request.path %} Pending Orders
+      {% elif 'cancelled-orders' in request.path %} Cancelled Orders 
+      {% elif 'completed-orders' in request.path %} Completed Orders 
+      {% elif 'closed-orders' in request.path %} Closed Orders 
+      {% endif %}
+
+  </h5>
+</div>
+
+{% endif %}
 
 </div>
-<!-- <div class="accordion mt-3" id="accordionExample">
-  <div class="card accordion-item active">
-    <h2 class="accordion-header" id="headingOne">
-      <button type="button" hidden class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
-        aria-expanded="true" aria-controls="accordionOne" id="accordion-test">
-        Accordion Item 1
-      </button>
-      <label for="accordion-test">
-        <tr>
-          <td>
-            <span class="email ">f</span>
-          </td>
-          <td><span class="name">1</span></td>
-          <td><span class="name">g</span></td>
-          <td><span class="name">g</span></td>
-          <td class="delete"></td>
-        </tr>
-      </label>
-    </h2>
 
-    <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        Lemon drops chocolate cake gummies carrot cake chupa chups muffin topping. Sesame snaps icing
-        marzipan gummi bears macaroon dragée danish caramels powder. Bear claw dragée pastry topping
-        soufflé. Wafer gummi bears marshmallow pastry pie.
-      </div>
-    </div>
-  </div>
-</div> -->
+
+
 {% endblock %}
 
 
 
 {% block script %}
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+  async function statusUpdate (ev, id){
+    const currentStatus = document.getElementById('status_show-'+id).innerText
+    var options = {};
+    if (currentStatus.trim() == 'Shipped'){
+      options['Delivered'] = 'Delivered';
+    } else if (currentStatus.trim() == 'Processing') {
+      options['Shipped'] = 'Shipped';
+    } else if (currentStatus.trim() == 'Returned') {
+      options['Return Confirmed'] = 'Return Confirmed';
+    };
+    console.log(options)
+    const { value: status } = await Swal.fire({
+      title: 'Select Order Status',
+      input: 'select',
+      inputOptions: options,
+      inputPlaceholder: 'Choose order status',
+      inputValue: currentStatus,
+      showCancelButton: true,
+    })
+
+    data = {
+      "order_status": status,
+    }
+    $.ajax({
+      method: "GET",
+      url: "/administrator/order-management/update-order-product-status/" +id,
+      data: data,
+      success: function (response) {
+
+        swal(response.status, {
+          timer: 3000,
+        }).then((value) => {
+          const statusDiv = document.getElementById('status_show-' +id);
+          statusDiv.textContent = status;
+          if (status.trim() == 'Delivered') {
+            const paymentDiv = document.getElementById('payment-status-' + id);
+            paymentDiv.textContent = 'Successful'
+          } else if (status.trim() == 'Returned') {
+            const paymentDiv = document.getElementById('payment-status-' + id);
+            paymentDiv.textContent = 'Refunded'
+          }
+          const orderStatusDiv = document.getElementById('status-' + id);
+          orderStatusDiv.textContent = response.order_status;
+        });
+      }
+    });
+  }
+
+
+  async function orderStatusUpdate(ev, id){
+    const div = document.getElementById('status-' + id)
+    const { value: status } = await Swal.fire({
+      title: 'Select Order Status',
+      input: 'select',
+      inputOptions: {
+        'Pending': 'Pending',
+        'Cancelled': 'Cancelled',
+      },
+      
+      inputPlaceholder: 'Choose order status',
+      inputValue: div.textContent,
+      showCancelButton: true,
+    })
+
+    data = {
+      "order_status": status,
+    }
+    $.ajax({
+      method: "GET",
+      url: "/administrator/order-management/update-order-status/cancel/" +id,
+      data: data,
+      success: function (response) {
+
+        swal(response.status, {
+          timer: 3000,
+        }).then((value) => {
+          const statusDiv = document.getElementById('status-' +id);
+          statusDiv.textContent = status;
+          const label = document.getElementById('label-' +id);
+          label.setAttribute("hidden", true);
+          const productStatus = document.getElementsByClassName('class-status-' +id);
+          for (var i in productStatus) {
+            productStatus[i].textContent = status;
+          }
+        });
+      }
+    });
+  }
+
+</script>
 
 {% endblock %}

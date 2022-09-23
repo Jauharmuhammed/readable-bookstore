@@ -85,3 +85,21 @@ p, body, html {
 .swal-icon--success__ring {
   border-radius: 50% !important;
 }
+
+.swal-footer,
+.swal2-footer {
+  margin-top: 2px;
+  padding: 6px 16px;
+}
+
+.swal-title,
+.swal2-title
+ {
+  padding: 0px 16px;
+  font-size: 1.5rem !important;
+}
+
+.swal-text,
+.swal2-text {
+  text-align: center !important;
+}

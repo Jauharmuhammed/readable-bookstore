@@ -20,6 +20,11 @@ class PaymentAdmin(admin.ModelAdmin):
     search_fields=['payment_id']
     list_per_page=20
 
+class OrderProductAdmin(admin.ModelAdmin):
+    list_display=['user','amount','status','created_date']
+    list_filter=['status']
+    list_per_page=20
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Payment, PaymentAdmin)
-admin.site.register(OrderProduct)
+admin.site.register(OrderProduct, OrderProductAdmin)

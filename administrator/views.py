@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -8,10 +9,13 @@ from django.shortcuts import render, redirect
 from accounts.models import CustomUser
 from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
-from orders.models import Order, OrderProduct
+from orders.models import Order, OrderProduct, Payment
+from orders.views import payment
 
 from products.models import Products
 from products.forms import ProductCreationForm
+
+from django.http import JsonResponse, HttpResponse
 
 
 def admin_login(request):
@@ -199,14 +203,158 @@ def edit_product(request, pk):
 
 
 def order_management(request):
-  orders = Order.objects.all().order_by('-created_date')
-  order_products = OrderProduct.objects.all().order_by('-created_date')
+  orders = Order.objects.filter(is_ordered=True).order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
   context = {
     'order_products':order_products,
     'orders':orders,
   }
-  return render(request, 'administrator/order-management.html')
+  return render(request, 'administrator/order-management.html', context)
+
+
+def placed_orders(request):
+  orders = Order.objects.filter(is_ordered=True, status = 'Placed').order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html', context)
+
+def pending_orders(request):
+  orders = Order.objects.filter(is_ordered=True, status = 'Pending').order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html', context)
+
+
+def cancelled_orders(request):
+  orders = Order.objects.filter(is_ordered=True, status = 'Cancelled').order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html', context)
+
+
+def completed_orders(request):
+  orders = Order.objects.filter(is_ordered=True, status = 'Completed').order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html', context)
+
+
+def closed_orders(request):
+  orders = Order.objects.filter(is_ordered=True, status = 'Closed').order_by('-created_date')
+  order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
+  context = {
+    'order_products':order_products,
+    'orders':orders,
+  }
+  return render(request, 'administrator/order-management.html', context)
+
+
+# function to cancel pending orders
+def update_order_status_cancel(request, order_id):
+  order_status = request.GET.get('order_status')
+  print(order_status)
+  if order_status is not None:
+    order = Order.objects.get(id=order_id)
+    order.status = order_status
+    order.save()
+    if order_status == 'Cancelled':
+      order_products = OrderProduct.objects.filter(order=order.id)
+      for order_product in order_products:
+        product = Products.objects.get(id=order_product.product_id)
+        product.stock += order_product.quantity
+        product.save()
+
+        order_product.status = 'Cancelled'
+        order_product.save()
+        
+    return JsonResponse({
+      'status' : 'Order status updated successfully'
+    })
+  else:
+    return HttpResponse()
+
+
+def update_order_product_status(request, order_product_id):
+  order_status = request.GET.get('order_status')
+  new_order_status = 'Placed'
+  print(order_status)
+  if order_status is not None:
+    order_product = OrderProduct.objects.get(id=order_product_id)
+    order_product.status = order_status
+    order_product.save()
+    if order_status == 'Delivered' and order_product.payment.payment_method == 'payOnDelivery':
+      payment = Payment.objects.get(id=order_product.payment.id)
+      payment.status = 'Successful'
+      payment.save()
+
+      other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
+      for other_product in other_products_in_order:
+        if other_product.status == 'Delivered' or other_product.status == 'Return Confirmed':
+          flag = True
+        else:
+          flag = False
+          break
+      
+      print(flag)
+      if flag:
+        order = Order.objects.get(id=order_product.order.id)
+        order.status = 'Completed'
+        order.save()
+        new_order_status = order.status
+
+
+    if order_status == 'Return Confirmed':
+      payment = Payment.objects.get(id=order_product.payment.id)
+      payment.status = 'Refunded'
+      payment.save()
+
+      # increase the inventory stock if the product is returned
+      product = Products.objects.get(id=order_product.product_id)
+      product.stock += order_product.quantity
+      product.save()
+
+      other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
+      for other_product in other_products_in_order:
+        if other_product.status == 'Return Confirmed':
+          flag = True
+        else:
+          flag = False
+          break
+      
+      if flag:
+        order = Order.objects.get(id=order_product.order.id)
+        order.status = 'Closed'
+        order.save()
+        new_order_status = order.status
+
+
+
+    order_product.save()
+    return JsonResponse({
+      'status' : 'Order status updated successfully',
+      'order_status': new_order_status,
+    })
+  else:
+    return HttpResponse()
 
 
 def payment_management(request):
-  return render(request, 'administrator/payment-management.html')
+  payments = Payment.objects.all().order_by('-created_date')
+  orders = Order.objects.filter(is_ordered=True)
+  context = {
+    'payments':payments,
+    'orders':orders,
+  }
+  return render(request, 'administrator/payment-management.html', context)

@@ -215,16 +215,7 @@ def place_order(request, sub_total=0, total=0, shipping_charge = 0, quantity=0):
     
     order = Order.objects.get(user=current_user, is_ordered=False, order_id=order_id)
 
-    context = {
-      'order' : order,
-      'payment_method' : payment_method,
-      'shipping_method' : shipping_method,
-      'cart_items' : cart_items,
-      'sub_total': sub_total,
-      'shipping_charge': shipping_charge,
-      'total' : total,
-      'quantity' : quantity
-    }
+    
 
     if payment_method == 'payOnDelivery':
       order.is_ordered = True
@@ -282,10 +273,6 @@ def place_order(request, sub_total=0, total=0, shipping_charge = 0, quantity=0):
           'user' : request.user,
           'product': order_products,
           'amount': order.order_total,
-          # 'full_name': address.full_name,
-          # 'full_address': address.full_address,
-          # 'details': address.details,
-          # 'mobile': address.mobile,
           'address': address,
           'order_id': order.order_id,
           'order_date':order.updated_date,
@@ -297,6 +284,58 @@ def place_order(request, sub_total=0, total=0, shipping_charge = 0, quantity=0):
       return redirect('/orders/order-success/' +'?order_id='+order.order_id)
 
     elif payment_method == 'razorpay':
+      order.is_ordered = True
+
+      order.status = 'Pending'
+      order.save()
+
+      order_products=[]
+      for item in cart_items:
+        orderproduct=OrderProduct()
+        orderproduct.order = order
+        orderproduct.user=request.user
+        orderproduct.product=item.product
+        orderproduct.quantity=item.quantity
+        orderproduct.amount=item.product.price
+        orderproduct.is_ordered=True
+        orderproduct.save()
+
+        cart_item=CartItem.objects.get(id=item.id)
+        product_variation=cart_item.variation.all()
+        orderproduct=OrderProduct.objects.get(id=orderproduct.id)
+        orderproduct.variation.set(product_variation)
+        orderproduct.save()
+
+        order_products.append(orderproduct.product.name)
+        
+        #reduce the quantity of ordered product from stock
+        product = Products.objects.get(id=item.product_id)
+        product.stock -= item.quantity
+        product.save()
+
+      #clear the cart items of the user
+      CartItem.objects.filter(user=current_user).delete()
+
+      order_products = OrderProduct.objects.filter(order = order.id)
+      for order_product in order_products:
+        if order_product is None:
+          order = Order.objects.get(id= order_product.order.id)
+          order.is_ordered = False
+          order.save()
+
+
+
+      context = {
+        'order' : order,
+        'payment_method' : payment_method,
+        'shipping_method' : order.shipping_method,
+        'order_products' : order_products,
+        'sub_total': sub_total,
+        'shipping_charge': shipping_charge,
+        'total' : order.order_total,
+        'quantity' : quantity
+      }
+
       return render(request, 'orders/payment.html', context)
 
 
@@ -320,7 +359,6 @@ def payment(request):
     payment_id = request.POST.get('payment_id')
     amount = request.POST['payment_amount']
 
-    order.is_ordered = True
     payment= Payment()
     payment.payment_method = payment_method
     payment.user = request.user
@@ -335,35 +373,12 @@ def payment(request):
     order.status = 'Placed'
     order.save()
 
-    cart_items = CartItem.objects.filter(user=request.user)
+    order_products = CartItem.objects.filter(user=request.user)
 
-    order_products =[]
-    for item in cart_items:
-      orderproduct=OrderProduct()
-      orderproduct.order = order
+    for orderproduct in order_products:
       orderproduct.payment=payment
-      orderproduct.user=request.user
-      orderproduct.product=item.product
-      orderproduct.quantity=item.quantity
-      orderproduct.amount=item.product.price
-      orderproduct.is_ordered=True
       orderproduct.save()
 
-      cart_item=CartItem.objects.get(id=item.id)
-      product_variation=cart_item.variation.all()
-      orderproduct=OrderProduct.objects.get(id=orderproduct.id)
-      orderproduct.variation.set(product_variation)
-      orderproduct.save()
-
-      order_products.append(orderproduct.product.name)
-      
-      #reduce the quantity of ordered product from stock
-      product = Products.objects.get(id=item.product_id)
-      product.stock -= item.quantity
-      product.save()
-
-    #clear the cart items of the user
-    CartItem.objects.filter(user=request.user).delete()
 
     # Send order recieved email to to the customer
     mail_subject = 'Your order has been successfully placed'

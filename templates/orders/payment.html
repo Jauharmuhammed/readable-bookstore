@@ -134,24 +134,24 @@
         <div class="order-summery">
           <div class="h5 pb-3">Order Summary</div>
           <div class="summary-3">
-            {% for cart_item in cart_items %}
+            {% for order_product in order_products %}
             <div class="d-flex justify-content-between py-3">
               <div class="d-flex justify-content-start col-10">
                 <div class="book">
                   <a href="#">
-                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                    <img src="{{ order_product.product.cover_image.url }}" class="book-img">
                   </a>
                 </div>
                 <div class="ps-2 my-auto flex-column d-flex">
-                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
-                  {% for item in cart_item.variation.all %}
+                  <h6 class="mb-0 ">{{ order_product.product.name }}</h6>
+                  {% for item in order_product.variation.all %}
                   <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
                   {% endfor %}
-                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                  <p class=" pt-2">{{ order_product.quantity }} x ₹ {{order_product.product.price}} </p>
                 </div>
               </div>
               <div class="my-auto">
-                <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
+                <h6 class=" pt-2">₹&nbsp;{{order_product.total_amount}}</h6>
               </div>
             </div>
             {% endfor %}
