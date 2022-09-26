@@ -62,8 +62,13 @@
                   ( {{ wishlist_item.product.review_count}} )
                 </small>
               </div>
-  
-              <h6 class="card-subtitle mb-0 text-muted">&#8377;{{ wishlist_item.product.price }}</h6>
+              {% if wishlist_item.product.offer_price %}
+              <span class="h6 card-subtitle mb-0">&#8377;{{ wishlist_item.product.offer_price }}</span>
+              <span class="small card-subtitle mb-0 text-muted" style="text-decoration: line-through;">&#8377;{{ wishlist_item.product.price }}</span>
+              <span class="small card-subtitle mb-0 text-success"> ( {{ wishlist_item.product.offer }}% OFF )</span>
+              {% else %}
+              <span class="h6 card-subtitle mb-0">&#8377;{{ wishlist_item.product.price }}</span>
+              {% endif %}
             </div>
           </div>
         </div>

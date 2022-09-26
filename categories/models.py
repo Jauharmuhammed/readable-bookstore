@@ -6,7 +6,8 @@ from autoslug import AutoSlugField
 class Category(models.Model):
   category_name = models.CharField(max_length=50, unique=True)
   slug = AutoSlugField(populate_from='category_name', max_length=100, unique=True,)
-  description = models.TextField(max_length=255, blank=True)
+  tagline = models.TextField(max_length=255, blank=True)
+  description = models.TextField(max_length=1255, blank=True)
   image = models.ImageField(upload_to='images/categories', blank=True)
 
   class Meta:
@@ -23,9 +24,11 @@ class Category(models.Model):
 class SubCategory(models.Model):
   subcategory_name = models.CharField(max_length=50, unique=True)
   slug = AutoSlugField(populate_from='subcategory_name', max_length=100, unique=True,)
-  category = models.ForeignKey('Category', on_delete=models.CASCADE) 
-  description = models.TextField(max_length=255, blank=True)
+  category = models.ForeignKey('Category', on_delete=models.CASCADE)
+  tagline = models.TextField(max_length=255, blank=True)
+  description = models.TextField(max_length=1255, blank=True)
   image = models.ImageField(upload_to='images/subcategories', blank=True)
+  discount = models.PositiveIntegerField(blank=True)
 
   class Meta:
     verbose_name = 'sub category'

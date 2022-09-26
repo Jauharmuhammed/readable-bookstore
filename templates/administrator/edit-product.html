@@ -18,7 +18,7 @@
 
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
-  <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / </span> Edit Product</h6>
+  <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Product Mangement / Edit Product / </span> {{ product_name }}</h6>
 
   <!-- Hoverable Table rows -->
   <div class="col-xxl">
@@ -234,10 +234,49 @@
               </div>
             </div>
           </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Format</label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <div class="form-check mt-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="paperback" id="paperback"
+                  {% for item in product_id.variation_set.all %}
+                  {% if item.variation_value == 'paperback'  %} checked 
+                  {% endif %}
+                  {% endfor %}/>
+                  <label class="form-check-label" for="paperback"> Paperback </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="hardcover" id="hardcover" 
+                  {% for item in product_id.variation_set.all %}
+                  {% if item.variation_value == 'hardcover'  %} checked 
+                  {% endif %}
+                  {% endfor %}/>
+                  <label class="form-check-label" for="hardcover"> Hardcover </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="ebook" id="ebook" 
+                  {% for item in product_id.variation_set.all %}
+                  {% if item.variation_value == 'ebook'  %} checked 
+                  {% endif %}
+                  {% endfor %}/>
+                  <label class="form-check-label" for="ebook"> Ebook </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="audiobook" id="audiobook" 
+                  {% for item in product_id.variation_set.all %}
+                  {% if item.variation_value == 'audiobook'  %} checked 
+                  {% endif %}
+                  {% endfor %}/>
+                  <label class="form-check-label" for="audiobook"> Audiobook </label>
+                </div>
+              </div>
+            </div>
+          </div>
           {% if messages %}
           {% for message in messages %}
-          <p {% if message.tags %} class="text-{{ message.tags }} text-center pb-3" {% endif %} id="message">{{ message
-            }}</p>
+          <p {% if message.tags %} class="text-{{ message.tags }} text-center pb-3" {% endif %} id="message">
+            {{ message }}</p>
           {% endfor %}
           {% endif %}
 
@@ -261,7 +300,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                   </div>
                   <div class="toast-body">
-                    Fruitcake chocolate bar tootsie roll gummies gummies jelly beans cake.
+                    hi
                   </div>
                 </div>
               </div>

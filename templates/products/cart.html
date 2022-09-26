@@ -41,7 +41,12 @@
           <div class="d-flex justify-content-start">
               <div class="book">
                   <a href="{{ cart_item.product.get_url }}">
+                    
+                    {% if cart_item.quantity > cart_item.product.stock %}
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img" style="opacity: .5;">
+                    {% else %}
                     <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                    {% endif %}
                   </a>
               </div>
               <div class="my-auto flex-column d-flex">
@@ -54,7 +59,20 @@
                   <p class="pt-2"><small>{{ item.variation_value | capfirst}}</small></p>
                   {% endfor %}
                   {% endif %}
+
+                  {% if cart_item.product.offer_price %}
+                  <div class="pt-1">
+                    <span class="h6 ">₹ {{ cart_item.product.offer_price }}</span>
+                    <span class=" small text-decoration-line-through ">₹ {{ cart_item.product.price }}</span>
+                    <span class="small text-success">( {{ cart_item.product.offer }}% OFF ) </span>
+                  </div>
+                  {% else %}
                   <h6 class=" pt-1">₹ {{ cart_item.product.price }}</h6>
+                  {% endif %}
+
+                  {% if cart_item.quantity > cart_item.product.stock %}
+                  <div class="h6 text-danger  py-1  ">Out of Stock</div>
+                  {% endif %}
               </div>
           </div>
       </div>
@@ -70,19 +88,21 @@
                   </div>
 
                   <div class=" col-12 btn-invert quantity-box py-2 d-flex justify-content-between align-self-center">
-                    {% if cart_item.quantity == 1 %}
-                    <span  class="py-2 px-3 disabled">-</span>
+
+                    {% if cart_item.quantity <= 1 %}
+                    <button class="quantity-button py-2 px-3 disabled">-</button>
                     {% else %}
-                    <a href="{% url 'remove-from-cart' cart_item.product.id cart_item.id %}" class="py-2 px-3">-</a>
+                    <a href="{% url 'remove-from-cart' cart_item.product.id cart_item.id %}" id="removeFromCartButton" product_id="{{cart_item.product.id}}" cart_item_id="{{cart_item.id}}" class=" py-2 px-3">-</a>
                     {% endif %}
-                    <span class="p-2">{{ cart_item.quantity }}</span>
+
+                    <span class="p-2" id="cartItemQuantity">{{ cart_item.quantity }}</span>
                     
-                    <form action="{% url 'add-to-cart' cart_item.product.id %}" method="POST">
+                    <form action="" method="POST">
                       {% csrf_token %}
                       {% for item in cart_item.variation.all %}
                         <input type="hidden" name="{{ item.variation_category | lower }}" value="{{ item.variation_value | capfirst }}">
+                        <button type="submit" id="addToCartButton" cart_item_id="{{cart_item.product.id}}" variation="{{ item.variation_value }}" class=" quantity-button py-2 px-3">+</a>
                       {% endfor %}
-                        <button type="submit" class=" quantity-button py-2 px-3">+</a>
                     </form>
 
                   </div>
@@ -128,11 +148,18 @@
           <div class="row mt-4">
 
               <div class=" px-0 align-self-center">
-                  <h6 class=" text-end ">TOTAL : ₹ {{ sub_total }}.00</h6>
+                  <h6 class=" text-end ">TOTAL : ₹ <span id="subTotal">{{ sub_total }}</span>.00</h6>
                   <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
+                    
+
+                    {% if out_of_stock_item %}
+                    <button class=" btn px-5 py-2 my-2 disabled" style="background-color: rgb(142, 140,109);">CHECKOUT</button>
+                    {% else %}
                     <a href="{% url 'checkout' %}" class=" btn px-5 py-2 my-2  ">CHECKOUT</a>
+                    {% endif %}
+
                   </div>
 
               </div>
@@ -156,5 +183,37 @@
 {% block script %}
 
 <script src="{% static 'scripts/cart.js'%}"></script>
+
+<script>
+
+  $(document).ready(function () {
+
+    $('#addToCartButton').click(function (e) {
+      e.preventDefault();
+
+      var format = $(this).attr('variation');
+      var cart_item_id = $(this).attr('cart_item_id');
+
+      $.ajax({
+        method: "POST",
+        url: "/cart/add-to-cart/" + cart_item_id +'/',
+        data: {
+          'format': format,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function (response) {
+          window.location.reload()
+          
+        }
+      });
+    });
+  });
+
+
+
+  
+
+</script>
 
 {% endblock %}

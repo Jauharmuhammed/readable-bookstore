@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage, send_mail
 
 from django.db.models import Count, ProtectedError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import redirect, render, get_object_or_404
 
@@ -314,16 +314,16 @@ def wishlist(request):
 
 @login_required(login_url='login')
 def add_to_wishlist(request, product_id):
-  url=request.META.get('HTTP_REFERER')
   in_wishlist = Wishlist.objects.filter(user=request.user, product_id= product_id).exists()
   if in_wishlist:
-    return redirect(url)
+    return JsonResponse({ 'message': 'Item is already in wishlist'})
   else:
     Wishlist.objects.create(
       user = request.user,
       product_id = product_id
     )
-    return redirect(url)
+    return JsonResponse({ 'message': 'Item added to your wishlist'})
+
 
 
 @login_required(login_url='login')

@@ -20,7 +20,17 @@ class CartItem(models.Model):
   created_date = models.DateTimeField(auto_now_add=True)
 
   def item_total(self):
-    return self.product.price * self.quantity
+    if self.product.offer_price():
+      total =  self.product.offer_price() * self.quantity
+    else:
+      total =  self.product.price * self.quantity
+    return total
     
   def __str__(self):
     return self.product.name
+
+
+class ShippingCharge(models.Model):
+    range_upto = models.PositiveIntegerField()
+    shipping_charge = models.PositiveIntegerField()
+

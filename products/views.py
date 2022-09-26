@@ -34,7 +34,7 @@ def products(request, category_slug=None, sub_category_slug= None):
       # products = Products.objects.filter(sub_category__category__slug=category_slug)
 
   else:
-    products = Products.objects.all().filter(is_available=True).order_by('-modified_date')
+    products = Products.objects.filter(is_available=True).order_by('-modified_date')
 
   product_count = products.count()
 

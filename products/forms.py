@@ -1,5 +1,5 @@
 from django import forms
-from .models import Products, Review
+from .models import Products, Review, Variation
 
 class ProductCreationForm(forms.ModelForm):
 
@@ -16,8 +16,8 @@ class ProductCreationForm(forms.ModelForm):
               'author': forms.TextInput(attrs={'class':"form-control", 'placeholder':"Author"}),
               'Publisher': forms.TextInput(attrs={'class':"form-control", 'placeholder':"Publisher"}),
               'release_date': forms.DateInput(attrs={'class':"form-control", 'type':"date", 'value':"YYYY-MM-DD", 'id':"html5-date-input"}),
-              'price': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Price"}),
-              'stock': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Stock"}),
+              'price': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Price", 'min':'0',}),
+              'stock': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Stock", 'min':'0'}),
               'is_available': forms.CheckboxInput(),
               'cover_image' : forms.ClearableFileInput(),
               'image1' : forms.ClearableFileInput(),

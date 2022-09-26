@@ -19,8 +19,11 @@ class Products(models.Model):
   author = models.CharField(max_length=100)
   Publisher = models.CharField(max_length=100, blank=True, default=None)
   release_date = models.DateField(blank=True, null=True, default=None)
-  price = models.IntegerField(default=None)
-  stock = models.IntegerField(default=None)
+
+  price = models.PositiveIntegerField(default=None)
+  discount = models.PositiveBigIntegerField(blank=True)
+
+  stock = models.PositiveIntegerField(default=None)
   is_available = models.BooleanField(default=True)
 
   cover_image = models.ImageField(upload_to='images/products')
@@ -61,6 +64,23 @@ class Products(models.Model):
         count=int(reviews['count'])
     return count
 
+  def offer_price(self):
+    category_offer_discount = self.price * self.sub_category.discount / 100
+    price = self.price - category_offer_discount
+    product_discount = self.price * self.discount / 100
+    price = price - product_discount
+    if price > 0 and price < self.price :
+      return round(price)
+    else:
+      return None
+
+  def offer(self):
+    offer = self.discount + self.sub_category.discount 
+    if offer > 0 and offer <100:
+      return offer
+    else: 
+      return None
+
   def __str__(self):
     return self.name
 
@@ -81,6 +101,8 @@ class Variation(models.Model):
   variation_value_choice = (
     ('paperback', 'Paperback'),
     ('hardcover','Hard Cover'),
+    ('ebook','Ebook'),
+    ('audiobook','Audiobook'),
   )
 
   product = models.ForeignKey(Products, on_delete=models.CASCADE)

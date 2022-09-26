@@ -103,3 +103,9 @@ p, body, html {
 .swal2-text {
   text-align: center !important;
 }
+
+
+table {
+  table-layout: initial !important;
+  width: 100% !important;
+}

@@ -84,3 +84,8 @@ class OrderProduct(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+# class ShippingCharge(models.Model):
+#     shipping = models.PositiveIntegerField()
+#     shipping_charge = models.PositiveIntegerField()

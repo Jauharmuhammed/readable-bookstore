@@ -1,8 +1,232 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap");
 
 
-.navbar{
-    border-bottom: 1px solid lightgray;
-    padding-top: 4px !important;
-    padding-bottom: 1px !important;
+:root {
+  --italic-font: "EB Garamond", serif;
+}
 
+
+
+.book-see {
+  border-radius: none !important;
+}
+
+/* 
+.img-large {
+  display: block;
+}
+.img-small {
+  display: none;
+}
+
+.img-large, .img-small {
+  max-height: 85vh;
+  object-fit: cover;
+} */
+
+.banner-homepage {
+  background-image: url('../../static/images/thought-catalog-o0Qqw21-0NI-unsplash-large.jpeg');
+  background-size: cover;
+  min-height: 600px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+
+@media (max-width:480px) {
+  .banner-homepage {
+    height: 300px !important;
+    background-position: center center;
+  }
+}
+
+.banner-title {
+  margin-top: 9rem;
+  font-family: var(--italic-font);
+}
+
+.banner-subtitle {
+  margin-top: 1.5rem;
+}
+
+@media (max-width:480px) {
+
+  .banner-title {
+    margin-top: 7rem;
+    font-size: 2rem;
+  }
+
+  .banner-subtitle {
+    margin-top: 1rem;
+    font-weight: 400;
+  }
+}
+
+.banner-buttons {
+  margin: 13% 14%;
+}
+
+.banner-buttons button,
+.banner-buttons button:hover {
+  background-color: transparent !important;
+  width: 9rem;
+}
+
+@media (max-width:480px) {
+
+  .banner-buttons {
+    margin: 65% 10%;
+  }
+
+  .banner-buttons button,
+  .banner-buttons button:hover {
+    display: block;
+    background-color: transparent !important;
+    width: 9rem;
+  }
+}
+
+.title-featured {
+  font-weight: 600;
+  letter-spacing: 4px;
+}
+
+
+.choice-div{
+  background-color: #8e8c6d23 !important;
+}
+
+@media (min-width:991px){
+  .choice-of-the-week {
+      margin: 0 200px !important;
+    }
+}
+
+
+.choice-of-the-week .content-wrapper::before {
+  content: none;
+}
+
+/* book-open-hover */
+
+.book-open-hover::after,
+.book-open-hover::before,
+.book-open-hover img,
+.book-open-hover {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.book-open-hover-container ul {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.list-inline {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-inline>li {
+  display: inline-block;
+  margin-left: 2em;
+}
+
+.list-inline>li:first-child {
+  margin-left: 0;
+}
+
+.book-open-hover {
+  cursor: pointer;
+  display: block;
+  width: 150px;
+  height: 220px;
+  position: relative;
+  background: white;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 9px 20px 0 rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  transition: box-shadow 0.3s linear;
+}
+
+.book-open-hover img {
+  width: inherit;
+  height: inherit;
+  transform-origin: 0 50%;
+  transform: rotateY(0);
+  transition: all 0.45s ease;
+}
+
+.book-open-hover:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25), 0 9px 20px 0 rgba(0, 0, 0, 0.45);
+}
+
+.book-open-hover:hover img {
+  transform: rotateY(-25deg);
+  box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.book-open-hover::after,
+.book-open-hover::before {
+  content: "";
+  display: block;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  background: white;
+  border: 1px solid #d9d9d9;
+}
+
+.book-open-hover::before {
+  left: -3px;
+}
+
+.book-open-hover::after {
+  left: -6px;
+}
+
+.quote-section div {
+  line-height: 1.7rem;
+}
+
+
+.book-open-hover-div {
+  float: left;
+}
+/* card */
+
+
+.overlay {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.card {
+  transition: .3s transform cubic-bezier(.155, 1.105, .295, 1.12), .3s box-shadow, .3s -webkit-transform cubic-bezier(.155, 1.105, .295, 1.12);
+  cursor: pointer;
+
+}
+
+.card:hover {
+  transform: scale(1.05);
+  transition-duration: .5s;
+}
+
+
+.book-card-container .card {
+  box-shadow: none ;
+  border: none ;
+}
+
+.container {
+  max-height: max-content !important;
+  overflow-y: hidden;
 }

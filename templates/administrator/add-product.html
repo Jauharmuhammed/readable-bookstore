@@ -22,14 +22,14 @@
   <div class="col-xxl">
     <div class="card mb-4">
       <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Add a new Produt</h5>
+        <h5 class="mb-0">Add a new Product</h5>
         <small class="text-muted float-end">Fill details</small>
       </div>
       <div class="card-body">
         <form method="POST" action="" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> Title</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> Title <span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> {{ form.isbn.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname"> {{ form.isbn.label }} <span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.sub_category.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.sub_category.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.language.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.language.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -71,7 +71,7 @@
           <br>
           <br>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.author.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.author.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -103,7 +103,7 @@
           <br>
           <br>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.price.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.price.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -113,7 +113,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.stock.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.stock.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
@@ -123,7 +123,7 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.is_available.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.is_available.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge mt-2">
                 {{ form.is_available }}
@@ -133,7 +133,7 @@
           </div>
           <br>
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.cover_image.label }}</label>
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.cover_image.label }}<span class="text-danger"><small> *</small></span></label>
             <div class="col-sm-10">
               <div class="input-group input-group-merge">
                 {{ form.cover_image }}
@@ -226,6 +226,31 @@
               </div>
             </div>
           </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Format<span class="text-danger"><small> *</small></span></label>
+            <div class="col-sm-10">
+              <div class="input-group input-group-merge">
+                <div class="form-check mt-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="paperback" id="paperback" />
+                  <label class="form-check-label" for="paperback"> Paperback </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="hardcover" id="hardcover"/>
+                  <label class="form-check-label" for="hardcover"> Hardcover </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="ebook" id="ebook"/>
+                  <label class="form-check-label" for="ebook"> Ebook </label>
+                </div>
+                <div class="form-check mt-2 ms-2">
+                  <input class="form-check-input" name="format[]" type="checkbox" value="audiobook" id="audiobook"/>
+                  <label class="form-check-label" for="audiobook"> Audiobook </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {% if messages %}
               {% for message in messages %}
                   <p {% if message.tags %}

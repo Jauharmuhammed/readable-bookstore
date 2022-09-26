@@ -24,14 +24,62 @@
 {% else %}
 
 <section class="gallery">
-  <div class="container">
-      <div class="row">
+  <div class="container mx-md-5 px-md-4" >
+      <div class="row ">
         {% if 'search' in request.path %}
             <div class="col-12 text-center mb-5">
               <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
               <p class="text-muted">{{ product_count }} items found for keyword '{{ keyword }}'</p>
             </div>
         {% endif %}
+
+          <!-- <div class="book-cards">
+          {% for product in products %}
+            <div class="book-card">
+              <div class="content-wrapper">
+                <img
+                  src="{{ product.cover_image.url }}"
+                  alt="" class="book-card-img">
+                <div class="card-content d-flex flex-column justify-content-between ">
+                  <div>
+                    <div class="book-name">{{ product.name }}</div>
+                    <div class="book-by">by {{ product.author }}</div>
+                    <div class="rating-star my-3">
+                      <span>
+                        <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half-o {% endif %}"
+                          aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half-o {% endif %}"
+                          aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half-o {% endif %}"
+                          aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half-o {% endif %}"
+                          aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half-o {% endif %}"
+                          aria-hidden="true"></i>
+                      </span>
+                      <small class="text-muted">
+                        ( {{ product.review_count}} )
+                      </small>
+                    </div>
+                    {% if product.offer_price %}
+                    <div>
+                      <span class="h6">₹ {{product.offer_price}} </span>
+                      <span class="text-muted small" style="text-decoration: line-through;">₹ {{product.price}}</span>
+                      <span class="text-success small"> ( {{ product.offer }}% OFF ) </span>
+                    </div>
+                    {% else %}
+                    <h6>₹ {{product.price}}</h6>
+                    {% endif %}
+                  </div>
+                  <div class="">
+                    <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn-outline-secondary btn-sm btn-invert w-100">Add to wishlist</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div> -->
+
 
           {% for product in products %}
           <div class=" col-6 col-md-4 col-lg-3 mb-3 px-1">
@@ -42,7 +90,7 @@
                     </a>
                     <div class="overlay text-nowrap">
                         <a href="{{ product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>
-                        <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-heart"></i></a>
+                        <button product_id="{{ product.id }}" class="btn btn-outline-secondary btn-sm btn-invert addToWishlistButton"><i class="far fa-heart"></i></button>
                     </div>
                   </div>
                   <div class="card-body text-center">
@@ -51,7 +99,6 @@
                       </a>
                       <p class="mb-2"><small>{{ product.author }}</small></p>
 
-                      <!-- Ratings -->
                       <div class="rating-star mb-3">
                         <span>
                           <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half-o {% endif %}"
@@ -70,7 +117,15 @@
                         </small>
                       </div>
 
-                      <h6 class="card-subtitle mb-0 text-muted">&#8377;{{ product.price }}</h6>
+                      {% if product.offer_price %}
+                      <div>
+                        <span class="h6">₹ {{product.offer_price}} </span>
+                        <span class="text-muted small" style="text-decoration: line-through;">₹ {{product.price}}</span>
+                        <span class="text-success small"> ( {{ product.offer }}% OFF ) </span>
+                      </div>
+                      {% else %}
+                      <h6>₹ {{product.price}}</h6>
+                      {% endif %}
                   </div>
               </div>
           </div>
@@ -82,5 +137,27 @@
 {% endif %}
 
 
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+  $(document).ready(function () {
+    $('.addToWishlistButton').click(function (e) {
+      e.preventDefault();
+
+      var product_id = $(this).attr('product_id');
+
+      $.ajax({
+        method: "GET",
+        url: "/account/wislist/add-to-wislist/" + product_id ,
+        dataType: "json",
+        success: function (response) {
+        }
+      });
+    });
+  });
+</script>
 
 {% endblock %}

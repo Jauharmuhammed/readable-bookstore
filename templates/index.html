@@ -3,10 +3,19 @@
 
 {% block head %}
 
-<title>Home</title>
+<title>Readable Bookstore</title>
+
+
+<!-- boostore UI -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css">
+
+
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+
 <link rel="stylesheet" href="{% static 'styles/home.css' %}">
-
-
+<link rel="stylesheet" href="{% static 'styles/bookstore.css' %}">
+<link rel="stylesheet" href="{% static 'styles/slider.css' %}">
 
 {% endblock %}
 
@@ -15,9 +24,334 @@
 
 
 
-<div class="container vh-100 ">
-  <h1 style="padding-top: 250px;" class="text-center">Home Page</h1>
+
+<div>
+  <!-- slide -->
+
+  <div class="mySwiper px-5">
+    <div class="main-wrapper swiper-wrapper mt-0">
+
+      {% for category in display_categories %}
+      <div class="main swiper-slide" id="beach">
+        <div class="left-side">
+          <div class="main-wrapper d-flex flex-column ">
+            <h4 class="main-header">Categories</h4>
+            <h2 class="main-title">{{ category.subcategory_name }}</h2>
+            <h4 class="main-subtitle">{{ category.category }}</h4>
+          </div>
+          <div class="main-content">
+            <div class="main-content__title">{{ category.category.tagline }}</div>
+            <div class="main-content__subtitle" style="white-space: pre-wrap;">{{ category.category.description }}</div>
+            <a href="{{ category.get_url }}" class="no-decoration">
+              <div class="more-menu">
+                Shop Now
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <line x1="-5" y1="12" x2="19" y2="12" />
+                  <line x1="15" y1="16" x2="19" y2="12" />
+                  <line x1="15" y1="8" x2="19" y2="12" />
+                </svg>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="center">
+          <div class="right-side__img">
+            <img class="bottle-bg" src="{{ category.image.url }}" alt="">
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  <div class="button-wrapper">
+    <div class="swiper-button swiper-prev-button">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </div>
+    <div class="swiper-button swiper-next-button">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </div>
+  </div>
+  <div class="swiper-pagination mt-5"></div>
+  <!-- /slide -->
+
+  <div class="row g-0">
+    <div class="banner-homepage ">
+      <h1 class="text-center banner-title">If you can’t find it at the library, WE HAVE IT!</h1>
+      <h6 class="text-center banner-subtitle">Your one stop shop for all your reading needs.</h6>
+      <div class="banner-buttons d-flex justify-content-between ">
+        {% if request.user.is_authenticated %}
+        <a href=""><button class="btn btn-invert py-2 ">SEARCH</button></a>
+        <a href="{% url 'products'%}"><button class="btn btn-invert py-2 ">VIEW ALL</button></a>
+        {% else %}
+        <a href="{% url 'register'%}"><button class="btn btn-invert py-2 ">REGISTER</button></a>
+        <a href="{% url 'login'%}"><button class="btn btn-invert py-2 ">LOGIN</button></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-0 py-5">
+    <h5 class="text-center text-uppercase title-featured">
+      Featured Books
+    </h5>
+  </div>
+
+
+  <div class="book-store " style="height: fit-content;">
+    <div class="book-slide">
+      <div class="book js-flickity " data-flickity-options='{ "wrapAround": true }'>
+        {% for product in slide_products %}
+        <div class="book-cell" style="margin-bottom: 10rem;">
+          <div class="book-img">
+            <a href="{{ product.get_url }}"><img src="{{ product.cover_image.url }}" alt="" class="book-photo"></a>
+          </div>
+          <div class="book-content">
+            <div class="book-title">{{ product.name }}</div>
+            <div class="book-author">by {{ product.author}}</div>
+            <div class="rating-star my-2">
+              <span>
+                <i class="fa fa-star{% if product.average_review < 0.5 %}-o{% elif product.average_review >= 0.5 and product.average_review < 1 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.average_review < 1.5 %}-o{% elif product.average_review >= 1.5 and product.average_review < 2 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.average_review < 2.5 %}-o{% elif product.average_review >= 2.5 and product.average_review < 3 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.average_review < 3.5 %}-o{% elif product.average_review >= 3.5 and product.average_review < 4 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if product.average_review < 4.5 %}-o{% elif product.average_review >= 4.5 and product.average_review < 5 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+              </span>
+              <small class="">
+                ( {{ product.review_count}} {% if product.review_count == 1 %} Rating {% else %} Ratings {% endif %} )
+              </small>
+            </div>
+            <div class="book-sum mt-3">{{ product.description | slice:":255"}}
+
+            </div><a href="{{ product.get_url }}" class="no-decoration">
+              <div class="book-see">See The Book</div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-0  d-flex justify-content-center mb-5 mx-3 mx-md-5"  >
+      <div class="main-content col-lg-8 align-self-center quote-section">
+        <h5 class=" text-center title-featured text-uppercase"  >You may just find your new favourite book. </h5>
+        <div class="main-content__subtitle text-center  mb-1 " style="white-space: pre-wrap;">
+There’s no better feeling than finding a new favourite book. Whether it’s a heart-wrenching tale of love and loss or a light-hearted romantic comedy, there’s nothing like getting lost in a great story.
+If you’re looking for your next favourite book, look no further than Readable. With a wide variety of genres, authors, and titles to choose from, you’re sure to find something you’ll love. 
+
+Who knows? You may just find your new favourite book.
+        </div>
+      </div>
+      <a href="{% url 'products'%}" class="d-flex justify-content-center "><button class="btn btn-invert py-2 ">VIEW ALL</button></a>
+  </div>
+
+  <!-- choice of the week -->
+
+  <div class="choice-div pt-5 mb-3 mb-lg-3">
+    <div class="row g-0 pb-5 ">
+      <h5 class="text-center text-uppercase title-featured">
+        choice of the week
+      </h5>
+    </div>
+    <div class="book-card choice-of-the-week ">
+      <a href="{{ choice_of_the_week.get_url }}">
+        <div class="content-wrapper">
+          <img src="{{ choice_of_the_week.cover_image.url }}" alt="" class="book-card-img">
+          <div class="card-content">
+            <div class="book-name">{{ choice_of_the_week.name }}</div>
+            <div class="book-by">by {{ choice_of_the_week.author}}</div>
+            <div class="rating-star my-2">
+              <span>
+                <i class="fa fa-star{% if choice_of_the_week.average_review < 0.5 %}-o{% elif choice_of_the_week.average_review >= 0.5 and choice_of_the_week.average_review < 1 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if choice_of_the_week.average_review < 1.5 %}-o{% elif choice_of_the_week.average_review >= 1.5 and choice_of_the_week.average_review < 2 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if choice_of_the_week.average_review < 2.5 %}-o{% elif choice_of_the_week.average_review >= 2.5 and choice_of_the_week.average_review < 3 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if choice_of_the_week.average_review < 3.5 %}-o{% elif choice_of_the_week.average_review >= 3.5 and choice_of_the_week.average_review < 4 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+                <i class="fa fa-star{% if choice_of_the_week.average_review < 4.5 %}-o{% elif choice_of_the_week.average_review >= 4.5 and choice_of_the_week.average_review < 5 %}-half-o {% endif %}"
+                  aria-hidden="true"></i>
+              </span>
+              <small class="">
+                ( {{ choice_of_the_week.review_count}} {% if choice_of_the_week.review_count == 1 %} Rating {% else %}
+                Ratings {% endif %} )
+              </small>
+            </div>
+            <div class="book-sum card-sum">
+              {{ choice_of_the_week.description | slice:253 }}... </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="row g-0  d-flex justify-content-center my-5 mx-3 mx-md-5 pt-4 pb-5">
+      <div class="main-content col-lg-8 align-self-center quote-section">
+        <h5 class=" text-center title-featured text-uppercase" >Don’t know where to start?</h5>
+        <div class="main-content__subtitle text-center" style="white-space: pre-wrap;">
+Don’t know where to start? Ask us for recommendations, or browse Readable for something that catches your eye. Once you find a book you’re interested in, take it home and settle in for a good read.
+The stories worth living. These are the books that inspire us to do more, be more, and fight for what’s right. They’re the ones that teach us about ourselves and the world around us. They’re the ones that change the way we think, feel, and act.</div>
+      </div>
+      <a href="{% url 'products'%}" class="d-flex justify-content-center mt-2"><button class="btn btn-invert py-2 ">VIEW
+          ALL</button></a>
+    </div>
+  </div>
+
+
+
+  <section class="gallery pt-5">
+    <div class="container">
+      <div class="row pt-3 pb-5">
+        {% for product in slide_products %}
+        <div class="book-card-container col-lg-2 col-md-3 col-sm-4 col-6 mb-3 px-2">
+          <div class="card">
+            <div class="book-open-hover ">
+              <a href="{{ product.get_url }}"><img src='{{ product.cover_image.url}}' /></a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
 </div>
+
+
+
+{% endblock %}
+
+{% block script %}
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    navigation: {
+      nextEl: ".swiper-next-button",
+      prevEl: ".swiper-prev-button"
+    },
+    effect: "fade",
+    loop: "infinite",
+    pagination: {
+      el: ".swiper-pagination",
+      type: "fraction",
+    }
+  });
+
+  swiper.on('slideChange', function (sld) {
+    document.body.setAttribute('data-sld', sld.realIndex);
+  })
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.pkgd.js"></script>
+
+<!-- reveal text -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.3/ScrollTrigger.min.js"></script>
+<script>
+
+  window.addEventListener("load", function () {
+    let splitWords = function (selector) {
+      var elements = document.querySelectorAll(selector);
+
+      elements.forEach(function (el) {
+        el.dataset.splitText = el.textContent;
+        el.innerHTML = el.textContent
+          .split(/\s/)
+          .map(function (word) {
+            return word
+              .split("-")
+              .map(function (word) {
+                return '<span class="word">' + word + "</span>";
+              })
+              .join('<span class="hyphen">-</span>');
+          })
+          .join('<span class="whitespace"> </span>');
+      });
+    };
+
+    let splitLines = function (selector) {
+      var elements = document.querySelectorAll(selector);
+
+      splitWords(selector);
+
+      elements.forEach(function (el) {
+        var lines = getLines(el);
+
+        var wrappedLines = "";
+        lines.forEach(function (wordsArr) {
+          wrappedLines += '<span class="line"><span class="words">';
+          wordsArr.forEach(function (word) {
+            wrappedLines += word.outerHTML;
+          });
+          wrappedLines += "</span></span>";
+        });
+        el.innerHTML = wrappedLines;
+      });
+    };
+
+    let getLines = function (el) {
+      var lines = [];
+      var line;
+      var words = el.querySelectorAll("span");
+      var lastTop;
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i];
+        if (word.offsetTop != lastTop) {
+          // Don't start with whitespace
+          if (!word.classList.contains("whitespace")) {
+            lastTop = word.offsetTop;
+
+            line = [];
+            lines.push(line);
+          }
+        }
+        line.push(word);
+      }
+      return lines;
+    };
+
+    splitLines(".reveal-text");
+
+    let revealText = document.querySelectorAll(".reveal-text");
+
+    gsap.registerPlugin(ScrollTrigger);
+    let revealLines = revealText.forEach((element) => {
+      const lines = element.querySelectorAll(".words");
+
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: element,
+          toggleActions: "restart none none reset"
+        }
+      });
+      tl.set(element, { autoAlpha: 1 });
+      tl.from(lines, 1, {
+        yPercent: 100,
+        ease: Power3.out,
+        stagger: 0.25,
+        delay: 0.2
+      });
+    });
+  });
+
+</script>
 
 
 {% endblock %}

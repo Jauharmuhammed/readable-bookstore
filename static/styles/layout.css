@@ -320,3 +320,11 @@ input:active
       border-right: 1px solid black;
     }
 }
+
+
+.notification {
+  position: absolute;
+  top: 5rem;
+  right: 1rem;
+  z-index: 9999;
+}

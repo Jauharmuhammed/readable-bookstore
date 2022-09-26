@@ -53,8 +53,7 @@
         </div>
       </div>
       <div class="col-md-9 ">
-        <form action="{% url 'add-to-cart' product_id=product.id %}" method="POST" class="h-100">
-          {% csrf_token %}
+        <!-- <form action="{% url 'add-to-cart' product_id=product.id %}" method="POST" class="h-100"> -->
           <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-4">
             <div class="content-top d-flex flex-column justify-content-start h-100">
               <div class="d-flex justify-content-between align-items-center">
@@ -89,7 +88,7 @@
               <div class="varitaion-group my-3 d-flex justify-content-start">
                 {% for i in product.variation_set.all %}
                 <div class="form-variation me-2">
-                  <input type="radio" class="btn-check" name="variation-option" id="{{ i.variation_value }}" required
+                  <input type="radio" class="btn-check variation-option" name="variation-option" id="{{ i.variation_value }}" required
                     value="{{ i.variation_value }}" autocomplete="off" {% if forloop.counter == 1 %} checked {% endif %}>
                   <label class=" btn btn-outline-secondary " for="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</label>
                 </div>
@@ -98,7 +97,15 @@
             </div>
 
             <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
-              <h4>₹{{product.price}}</h4>
+              {% if product.offer_price %}
+              <div>
+                <span class="h4">₹ {{product.offer_price}} </span>
+                <span class="text-muted" style="text-decoration: line-through;">₹ {{product.price}}</span>
+                <span class="text-success">&nbsp; ( {{ product.offer }}% OFF) </span>
+              </div>
+              {% else %}
+              <h4>₹ {{product.price}}</h4>
+              {% endif %}
 
               {% if product.stock > 0 %}
 
@@ -125,16 +132,15 @@
                     {% if product.stock < 1 or not product.is_available %} 
                       <button class="btn disabled"> Add to Cart</button>
                     {% else %}
-                      <button type="submit" class="btn">
+                      <button type="submit" class="btn" id="addToCartButton" >
                         Add to Cart
                       </button>
                     {% endif %}
 
-                      <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn-invert" style="padding-top: .68rem !important;" >Add to Wishlist</a>
+                      <button id="addToWishlistButton" class="btn btn-invert" >Add to Wishlist</button>
                   </div>
 
             </div>
-        </form>
       </div>
     </div>
   </div>
@@ -382,6 +388,52 @@
           }
         });
     }
+
+
+
+  $(document).ready(function () {
+
+    $('#addToCartButton').click(function (e) {
+      e.preventDefault();
+
+      var format = $(".variation-option:checked").val();
+
+      $.ajax({
+        method: "POST",
+        url: "{% url 'add-to-cart' product.id %}",
+        data: {
+          'format' : format,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        },
+        dataType: "json",
+        success: function (response) {
+            current_cart_count = $('#cartCountBadge').text()
+            new_cart_count = parseInt(current_cart_count) + 1
+            document.getElementById('cartCountBadge').innerHTML = new_cart_count
+        }
+      });
+    });
+
+    
+  });
+  
+
+  $(document).ready(function () {
+    $('#addToWishlistButton').click(function (e) {
+      e.preventDefault();
+
+      $.ajax({
+        method: "GET",
+        url: "{% url 'add-to-wishlist' product.id %}",
+        dataType: "json",
+        success: function (response) {
+        }
+      });
+    });
+    
+  });
+  
+
 </script>
 
 <!-- drift script -->

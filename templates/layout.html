@@ -36,7 +36,12 @@
 
 <body>
 
+
+  <!-- messages alerts -->
+  <!-- {% include 'include/messages.html' %}  -->
+
   <!-- preloader -->
+
   <!-- <div class="loader-wrapper">
     <span class="loader"><span class="loader-inner"></span></span>
   </div> -->
@@ -55,14 +60,17 @@
   <!-- footer -->
   {% include 'include/footer.html' %}
 
+
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 
   <script>
     $(window).on("load", function () {
       $(".loader-wrapper").fadeOut(1000);
     });
+
   </script>
 
   {% block script %}

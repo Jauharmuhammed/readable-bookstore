@@ -1,3 +1,4 @@
+
 .img-container{
   position: relative;
 }
@@ -70,3 +71,197 @@
   color: #0f7da9;
 }
 
+
+
+/* card */
+
+.book-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 2rem;
+  grid-row-gap: 3.5rem;
+  padding-top: 40px;
+  position: relative;
+}
+
+.book-card {
+  margin-top: 20px;
+  background-color: #fff;
+  height: 230px;
+  box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 0 0 20px 20px;
+  color: var(--body-color-light);
+}
+
+.book-card-img {
+  width: 160px;
+  margin-top: -35px;
+  border-radius: 2px;
+  box-shadow: 0px 1px 7px 2px #c7c9d3;
+  border-bottom: 1px solid #dcddde;
+  object-fit: cover;
+  margin-bottom: 20px;
+  transition: 0.3s ease;
+}
+
+.book-card-img:hover {
+  transform: scale(1.04);
+}
+
+.card-content {
+  color: var(--body-color);
+  padding: 30px 15px;
+  overflow: hidden;
+  position: relative;
+  height: max-content;
+}
+
+.book-name {
+  font-weight: 500;
+}
+
+.book-by {
+  font-size: 13px;
+  color: var(--body-color-light);
+  margin-top: 4px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.book-rate>label {
+  color: #cccccc;
+}
+
+.rate {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.book-rate>input:checked~label,
+.book-rate:not(:checked)>label:hover,
+.book-rate:not(:checked)>label:hover~label {
+  color: #ff9700;
+}
+
+.book-rate>input:checked+label:hover,
+.book-rate>input:checked~label:hover,
+.book-rate>label:hover~input:checked~label,
+.book-rate>input:checked~label:hover~label {
+  color: #ff9700;
+}
+
+.card-vote {
+  color: var(--body-color-light);
+}
+
+.card-sum {
+  color: var(--body-color-light);
+  font-size: 13px;
+  line-height: 1.6em;
+  -webkit-line-clamp: 4;
+  margin-top: 15px;
+}
+
+.content-wrapper {
+  display: flex;
+  position: relative;
+}
+
+
+@media (max-width: 1103px) {
+  .book-cell {
+    width: 60%;
+  }
+}
+
+@media (max-width: 765px) {
+  .book-cell {
+    width: 80%;
+  }
+}
+
+@media (max-width: 575px) {
+  .book-cell {
+    width: 100%;
+  }
+}
+
+@media (max-width: 458px) {
+  .book-photo {
+    width: 180px;
+  }
+
+  .book-voters {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .book-see {
+    width: 120px;
+    font-size: 13px;
+  }
+
+  .book-photo {
+    width: 130px;
+  }
+
+  .main-wrapper {
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 360px) {
+  .rating>label:before {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 1220px) {
+  .card-vote {
+    display: none;
+  }
+}
+
+@media (max-width: 1085px) {
+  .book-rate>label {
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 1045px) {
+  .books-of {
+    display: none;
+  }
+}
+
+@media (max-width: 725px) {
+
+  .browse-category,
+  .search-bar {
+    display: none;
+  }
+
+  .header-title {
+    margin-right: auto;
+  }
+
+  .book-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .book-types {
+    display: none;
+  }
+}
+
+@media (max-width: 372px) {
+  .card-content {
+    padding: 20px;
+  }
+}

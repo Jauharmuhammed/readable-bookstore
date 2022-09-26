@@ -42,15 +42,17 @@
         <tbody>
           {% if products %}
           {% for product in products %}
-          <tr>
-            <td>{{ forloop.counter }}</td>
-            <td><span class="name"><strong>{{ product.name }}</strong></span><br>
-              <span class="email ">{{ product.author }}</span>
+          <tr> 
+            <td class="col-1">{{ forloop.counter }}</td>
+            <td class="col-3"><span class="name overflow-auto"><strong>{{ product.name }}</strong></span><br>
+              {% for item in product.variation_set.all %}
+              <span class="email "> {{ item.variation_value | capfirst }}  </span>
+              {% endfor %}
             </td>
-            <td><span class="name">₹{{ product.price }}</span></td>
-            <td><span class="name">{{ product.sub_category }}</span></td>
-            <td><span class="name">{{ product.stock }}</span></td>
-            <td class="delete">
+            <td class="col-1"><span class="name">₹{{ product.price }}</span></td>
+            <td class="col-2"><span class="name">{{ product.sub_category }}</span></td>
+            <td class="col-1"><span class="name">{{ product.stock }}</span></td>
+            <td class="delete col-1" >
               <div class="btn-group dropstart mx-3">
                 <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
                   data-bs-toggle="dropdown" aria-expanded="false">

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from accounts.models import Address
 from products.models import Products, Variation
 
-from carts.models import CartItem
+from carts.models import CartItem, ShippingCharge
 from orders.models import Order, Payment, OrderProduct
 from .forms import OrderForm
 
@@ -62,19 +62,23 @@ def save_address(request, sub_total=0, total=0, shipping_charge = 0, quantity=0)
 
     cart_items = CartItem.objects.filter(user=current_user)
     for cart_item in cart_items:
-      sub_total += (cart_item.product.price * cart_item.quantity)
+      sub_total += cart_item.item_total()
       quantity += cart_item.quantity
 
-    if sub_total < 499:
-      shipping_charge = 99
-    total = sub_total + shipping_charge
+
+    shipping_charge = ShippingCharge.objects.first()
+    shipping_cost = 0
+    if sub_total <= shipping_charge.range_upto:
+      shipping_cost = shipping_charge.shipping_charge
+
+    total = sub_total + shipping_cost
 
 
     context = {
       'cart_items' : cart_items,
       'addresses': addresses,
       'sub_total': sub_total,
-      'shipping_charge': shipping_charge,
+      'shipping_charge': shipping_cost,
       'total' : total,
       'quantity' : quantity
     }
@@ -98,12 +102,16 @@ def shipping_method(request, sub_total=0, total=0, shipping_charge = 0, quantity
     address_id = request.POST.get('address')
 
     for cart_item in cart_items:
-      sub_total += (cart_item.product.price * cart_item.quantity)
+      sub_total += cart_item.item_total()
       quantity += cart_item.quantity
 
-    if sub_total < 499:
-      shipping_charge = 99
-    total = sub_total + shipping_charge
+
+    shipping_charge = ShippingCharge.objects.first()
+    shipping_cost = 0
+    if sub_total <= shipping_charge.range_upto:
+      shipping_cost = shipping_charge.shipping_charge
+
+    total = sub_total + shipping_cost
 
     address = Address.objects.get(user=current_user, id=int(address_id))
 
@@ -112,7 +120,7 @@ def shipping_method(request, sub_total=0, total=0, shipping_charge = 0, quantity
       'cart_items' : cart_items,
       'address': address,
       'sub_total': sub_total,
-      'shipping_charge': shipping_charge,
+      'shipping_charge': shipping_cost,
       'total' : total,
       'quantity' : quantity
     }

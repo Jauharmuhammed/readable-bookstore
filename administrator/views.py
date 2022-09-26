@@ -12,7 +12,7 @@ from categories.forms import CategoryCreationForm, SubCategoryCreationForm, Lang
 from orders.models import Order, OrderProduct, Payment
 from orders.views import payment
 
-from products.models import Products
+from products.models import Products, Variation
 from products.forms import ProductCreationForm
 
 from django.http import JsonResponse, HttpResponse
@@ -154,8 +154,10 @@ def del_language(request, pk):
 
 def product_management(request):
     products = Products.objects.all().order_by('-modified_date')
+    variations = Variation.objects.all()
     context = {
-      'products' : products
+      'products' : products,
+      'variations': variations,
     }
     return render(request, 'administrator/product-management.html', context)
 
@@ -165,6 +167,18 @@ def add_product(request):
         form = ProductCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
+            name = form.cleaned_data['name']
+            product = Products.objects.get(name=name)
+
+            format_list = request.POST.getlist('format[]')
+            for format in format_list:
+              Variation.objects.create(
+                product = product,
+                variation_category = 'format',
+                variation_value = format
+              )
+
             return redirect('product-management')
 
         else:
@@ -183,12 +197,35 @@ def del_product(request, pk):
 
 def edit_product(request, pk):
     product_edit = Products.objects.get(pk=pk)
+    print(product_edit, type(product_edit))
     product_name = product_edit.name
     edit_form = ProductCreationForm(instance=product_edit)
     if request.method == 'POST':
         edit_form = ProductCreationForm(request.POST, request.FILES, instance=product_edit)
         if edit_form.is_valid():
             edit_form.save()
+
+            format_list = request.POST.getlist('format[]')
+
+            existing_variations_list = []
+            existing_variations = Variation.objects.filter(product=product_edit)
+            for existing_variation in existing_variations:
+              variation = existing_variation.variation_value
+              existing_variations_list.append(variation)
+
+            for format in format_list:
+              if format not in existing_variations_list:
+                Variation.objects.create(
+                  product = product_edit,
+                  variation_category = 'format',
+                  variation_value = format
+                )
+            for existing_variation_item in existing_variations_list:
+              if existing_variation_item not in format_list:
+                variation = Variation.objects.get(product = product_edit, variation_value = existing_variation_item)
+                print(variation)
+                variation.delete()
+
             return redirect('product-management')
         else:
             messages.error(request, 'Invalid details')

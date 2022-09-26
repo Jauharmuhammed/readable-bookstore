@@ -1,12 +1,15 @@
+import imp
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from accounts.models import Address
 
 from products.models import Products, Variation, Wishlist
-from .models import Cart, CartItem
+from .models import Cart, CartItem, ShippingCharge
 
 from django.core.exceptions import ObjectDoesNotExist
+
+from django.http import JsonResponse
 
 
 def _cart_id(request):
@@ -15,8 +18,47 @@ def _cart_id(request):
     car_id = request.session.create()
   return cart_id
 
+
+
+def cart(request, cart_items=None, sub_total=0, total=0, shipping_cost = 0, quantity=0):
+  try:
+    if request.user.is_authenticated:
+      cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
+    else:
+      cart = Cart.objects.get(cart_id = _cart_id(request))
+      cart_items = CartItem.objects.filter(cart=cart, is_active =True).order_by('-created_date')
+
+    for cart_item in cart_items:
+      sub_total += cart_item.item_total()
+      quantity += cart_item.quantity
+
+    shipping_charge = ShippingCharge.objects.first()
+    if sub_total <= shipping_charge.range_upto:
+      shipping_cost = shipping_charge.shipping_charge
+
+    total = sub_total + shipping_cost
+
+    out_of_stock_item = None
+    for cart_item in cart_items:
+      if cart_item.quantity > cart_item.product.stock:
+        out_of_stock_item = True
+        break
+        
+  except ObjectDoesNotExist:
+    pass
+
+  context = {
+    'cart_items' : cart_items,
+    'sub_total': sub_total,
+    'shipping_charge': shipping_cost,
+    'total' : total,
+    'quantity' : quantity,
+    'out_of_stock_item':out_of_stock_item
+  }
+  return render(request, 'products/cart.html', context)
+
+
 def add_to_cart(request, product_id):
-  url=request.META.get('HTTP_REFERER')
   user = request.user
   product = Products.objects.get(id=product_id)
   if user.is_authenticated:
@@ -140,7 +182,7 @@ def add_to_cart(request, product_id):
         cart_item.variation.add(*product_variation)
         cart_item.save()
     
-  return redirect(url)
+  return JsonResponse({ 'message': 'Item added to cart successfull'})
 
 
     
@@ -174,35 +216,6 @@ def remove_cart_item(request, product_id, cart_item_id):
   return redirect('cart')
 
 
-def cart(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, quantity=0):
-  try:
-    if request.user.is_authenticated:
-      cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
-    else:
-      cart = Cart.objects.get(cart_id = _cart_id(request))
-      cart_items = CartItem.objects.filter(cart=cart, is_active =True).order_by('-created_date')
-
-    for cart_item in cart_items:
-      sub_total += (cart_item.product.price * cart_item.quantity)
-      quantity += cart_item.quantity
-
-
-    if sub_total < 499:
-      shipping_charge = 99
-    total = sub_total + shipping_charge
-  except ObjectDoesNotExist:
-    pass
-
-  context = {
-    'cart_items' : cart_items,
-    'sub_total': sub_total,
-    'shipping_charge': shipping_charge,
-    'total' : total,
-    'quantity' : quantity
-  }
-  return render(request, 'products/cart.html', context)
-
-
 
 @login_required(login_url='login')
 def move_to_wishlist(request, product_id, cart_item_id):
@@ -233,13 +246,16 @@ def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0
   try:
     cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
     for cart_item in cart_items:
-      sub_total += (cart_item.product.price * cart_item.quantity)
+      sub_total += cart_item.item_total()
       quantity += cart_item.quantity
 
 
-    if sub_total < 499:
-      shipping_charge = 99
-    total = sub_total + shipping_charge
+    shipping_charge = ShippingCharge.objects.first()
+    shipping_cost = 0
+    if sub_total <= shipping_charge.range_upto:
+      shipping_cost = shipping_charge.shipping_charge
+
+    total = sub_total + shipping_cost
 
     addresses = Address.objects.filter(user=request.user, is_active=True).order_by('-date_added')
   except ObjectDoesNotExist:
@@ -248,7 +264,7 @@ def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0
   context = {
     'cart_items' : cart_items,
     'sub_total': sub_total,
-    'shipping_charge': shipping_charge,
+    'shipping_charge': shipping_cost,
     'total' : total,
     'quantity' : quantity,
     'addresses': addresses

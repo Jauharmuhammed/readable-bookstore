@@ -149,6 +149,18 @@ a:focus-within {
   z-index: 1100 !important;
 }
 
+.dropdown-menu li {
+  width: 100%;
+}
+.dropdown-menu-user  {
+  width: 13rem !important;
+}
+
+.dropdown-menu-end[data-bs-popper] {
+  right: -87px;
+  left: auto;
+}
+
 
 
 @media (max-width :575px) {

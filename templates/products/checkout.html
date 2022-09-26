@@ -185,7 +185,13 @@
                   {% for item in cart_item.variation.all %}
                   <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
                   {% endfor %}
-                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ 
+                    {% if cart_item.product.offer_price %}
+                      {{cart_item.product.offer_price }} 
+                    {% else %}
+                      {{cart_item.product.price }} 
+                    {% endif %}
+                  </p>
                 </div>
               </div>
               <div class="my-auto">

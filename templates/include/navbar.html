@@ -29,7 +29,86 @@
             </a>
             
           </li>
-          <li class="dropdown">
+          <li class="nav-item navbar-dropdown dropdown-user dropdown mx-4">
+            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+              <div class="avatar avatar-online">
+                <iconify-icon icon="simple-line-icons:user"></iconify-icon>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-user mt-0 p-0">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0 ms-2 me-3">
+                      <div class="avatar avatar-online">
+                        {% if profile_picture %}
+                        <img src="{% static '{{ profile_picture }}' %} "  style="width:3rem;" alt class="w-px-40 h-auto rounded-circle" />
+                        {% else %}
+                        <img src="{% static 'images/avatar-basic-user.png' %} "  style="width:3rem !important;" alt class="w-px-40 h-auto rounded-circle" />
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 my-auto">
+                      <span class="fw-semibold d-block ">{{ request.user.first_name }}</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider my-0"></div>
+              </li>
+              {% if user.is_authenticated %}
+              <li>
+                <a class="dropdown-item" href="{% url 'user-dashboard' %}">
+                  <i class="bx bx-user me-2"></i>
+                  <span class="align-middle">My Profile</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bx bx-cog me-2"></i>
+                  <span class="align-middle">Settings</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'wishlist' %}">
+                  <i class="bx bx-home me-2"></i>
+                  <span class="align-middle">Wishlist</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'user-orders' %}">
+                  <i class="bx bx-home me-2"></i>
+                  <span class="align-middle">Orders</span>
+                </a>
+              </li>
+              
+              <li>
+                <div class="dropdown-divider my-0"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                  <i class="bx bx-power-off me-2"></i>
+                  <span class="align-middle">Log Out</span>
+                </a>
+              </li>
+              {% else %}
+              <li>
+                <a class="dropdown-item" href="{% url 'login' %}">
+                  <i class="bx bx-cog me-2"></i>
+                  <span class="align-middle">Login</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'register' %}">
+                  <i class="bx bx-home me-2"></i>
+                  <span class="align-middle">Register</span>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+          </li>
+          <!-- <li class="dropdown">
             <a class="navbar-icon dropdown-toggle active" href="#" data-bs-toggle="dropdown">
               <iconify-icon icon="simple-line-icons:user"></iconify-icon>
             </a>
@@ -48,7 +127,7 @@
                 {% endif %}
               </ul>
             </div>
-          </li>
+          </li> -->
 
           <li>
             <a class="navbar-icon" href="{% url 'wishlist'%}">
@@ -59,9 +138,9 @@
             <a class="navbar-icon position-relative" href="{% url 'cart' %}">
               <iconify-icon icon="bi:bag"></iconify-icon>
               {% if cart_count > 0 %}
-              <span class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge">
+              <span class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge" id="cartCountBadge">
                 {{ cart_count }}
-                <span class="visually-hidden">Cart item count</span>
+                <span class="visually-hidden"></span>
                 {% endif %}
               </span>
             </a>
