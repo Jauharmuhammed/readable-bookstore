@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from .models import Order, Payment, OrderProduct
+from .models import Coupon, CouponCheck, Order, Payment, OrderProduct, ShippingMethod
 class OrderProductInline(admin.TabularInline):
     model= OrderProduct
-    readonly_fields=('payment','user','product','quantity','amount','order')
+    list_display=['order','product','variation','price','quantity','gross_amount', 'discount', 'total']
+    readonly_fields=('payment','user','product','quantity','total','order')
     extra=0
 
 class OrderAdmin(admin.ModelAdmin):
@@ -20,10 +21,15 @@ class PaymentAdmin(admin.ModelAdmin):
     list_per_page=20
 
 class OrderProductAdmin(admin.ModelAdmin):
-    list_display=['user','amount','status','created_date']
-    list_filter=['status']
+    list_display=['order','product','price','quantity','gross_amount', 'discount', 'total']
     list_per_page=20
+
+class ShippingMethodAdmin(admin.ModelAdmin):
+  list_display=['shipping_method','charge','is_active']
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(OrderProduct, OrderProductAdmin)
+admin.site.register(Coupon)
+admin.site.register(CouponCheck)
+admin.site.register(ShippingMethod, ShippingMethodAdmin)

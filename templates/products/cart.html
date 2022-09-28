@@ -101,7 +101,7 @@
                       {% csrf_token %}
                       {% for item in cart_item.variation.all %}
                         <input type="hidden" name="{{ item.variation_category | lower }}" value="{{ item.variation_value | capfirst }}">
-                        <button type="submit" id="addToCartButton" cart_item_id="{{cart_item.product.id}}" variation="{{ item.variation_value }}" class=" quantity-button py-2 px-3">+</a>
+                        <button type="submit" cart_item_id="{{cart_item.product.id}}" variation="{{ item.variation_value }}" class="addToCartButton quantity-button py-2 px-3">+</a>
                       {% endfor %}
                     </form>
 
@@ -136,7 +136,12 @@
                 </div>
               </div>
               <div class="col-4 px-0 text-end align-self-center">
-                  <h6 class="mob-text">₹ {{ cart_item.item_total }}.00</h6>
+                {% if cart_item.item_total == cart_item.item_total_mrp %}
+                <h6 class="mob-text">₹ {{ cart_item.item_total_mrp }}.00</h6>
+                {% else %}
+                <h6 class="mob-text">₹ {{ cart_item.item_total }}.00</h6>
+                <h6 class="mob-text small text-muted text-decoration-line-through fw-lighter">₹ {{ cart_item.item_total_mrp }}.00</h6>
+                {% endif %}
               </div>
           </div>
       </div>
@@ -148,7 +153,9 @@
           <div class="row mt-4">
 
               <div class=" px-0 align-self-center">
-                  <h6 class=" text-end ">TOTAL : ₹ <span id="subTotal">{{ sub_total }}</span>.00</h6>
+                  <h6 class=" text-end fw-lighter small">TOTAL MRP :&nbsp;&nbsp; ₹ <span id="subTotal">{{ sub_total_mrp }}</span>.00</h6>
+                  <h6 class=" text-end fw-lighter small">DISCOUNT MRP :&nbsp;&nbsp; ₹ <span id="subTotal">{{ discount_mrp }}</span>.00</h6> <br>
+                  <h6 class=" text-end ">TOTAL :&nbsp;&nbsp; ₹ <span id="subTotal">{{ sub_total }}</span>.00</h6>
                   <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
@@ -188,7 +195,7 @@
 
   $(document).ready(function () {
 
-    $('#addToCartButton').click(function (e) {
+    $('.addToCartButton').click(function (e) {
       e.preventDefault();
 
       var format = $(this).attr('variation');
@@ -204,15 +211,11 @@
         dataType: "json",
         success: function (response) {
           window.location.reload()
-          
         }
       });
     });
   });
 
-
-
-  
 
 </script>
 

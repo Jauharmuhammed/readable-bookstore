@@ -46,17 +46,17 @@
         <div class="col-12 pb-4">
           <div>
             <div class="address border p-3 ">
-              {% if order.address %}
+              {% if address %}
               <div>
-                <h6 class="pb-0">{{ order.address.full_name }}</h6 class="mb-2">
-                {{ order.address.address }},
-                {{ order.address.landmark }} <br>
-                {{ order.address.city }},
-                {{ order.address.pin_code }},
-                {{ order.address.state }},
-                {{ order.address.country }} <br> <br>
-                Mobile : {{ order.address.mobile }} <br>
-                Email : {{ order.address.email }}
+                <h6 class="pb-0">{{ address.full_name }}</h6 class="mb-2">
+                {{ address.address }},
+                {{ address.landmark }} <br>
+                {{ address.city }},
+                {{ address.pin_code }},
+                {{ address.state }},
+                {{ address.country }} <br> <br>
+                Mobile : {{ address.mobile }} <br>
+                Email : {{ address.email }}
               </div>
               {% endif %}
             </div>
@@ -67,27 +67,15 @@
         <div class="col-12 pb-4">
           <div>
             <div class="shipping border p-3 ">
-              {% if shipping_method == 'standard' %}
               <div class="shipping-method">
                 <span class="subject d-flex justify-content-between w-100">
                   <p>
-                    <strong>Standard</strong><br>
-                    International Free Shipping Tracked USPS First Class (3-4 Weeks)
+                    <strong>{{ shipping_method.shipping_method }}</strong><br>
+                    {{ shipping_method.description }}
                   </p>
-                  <p>Free</p>
+                  <p>{% if shipping_method.charge == 0 %} Free {% else %}₹ {{ shipping_method.charge }}.00 {% endif %}</p>
                 </span>
               </div>
-              {% elif shipping_method == 'express' %}
-              <div class="course">
-                <span class="subject d-flex justify-content-between w-100">
-                  <p>
-                    <strong>Express</strong><br>
-                    FedEx International Priority (3-4 business days)
-                  </p>
-                  <p>₹ 249.00</p>
-                </span>
-              </div>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -133,25 +121,31 @@
       <div class=" col-12 col-lg-5 ps-lg-5 ">
         <div class="order-summery">
           <div class="h5 pb-3">Order Summary</div>
-          <div class="summary-3">
-            {% for order_product in order_products %}
-            <div class="d-flex justify-content-between py-3">
-              <div class="d-flex justify-content-start col-10">
-                <div class="book">
+          <div class="summary">
+            {% for cart_item in cart_items %}
+            <div class="d-flex justify-content-between py-3 col-12">
+              <div class="d-flex justify-content-start col-10 ">
+                <div class="book col-3 ">
                   <a href="#">
-                    <img src="{{ order_product.product.cover_image.url }}" class="book-img">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
                   </a>
                 </div>
-                <div class="ps-2 my-auto flex-column d-flex">
-                  <h6 class="mb-0 ">{{ order_product.product.name }}</h6>
-                  {% for item in order_product.variation.all %}
+                <div class="ps-2 my-auto flex-column d-flex col-9">
+                  <span class=" h6 mb-0 overflow-ellipsis">{{ cart_item.product.name }}</span>
+                  {% for item in cart_item.variation.all %}
                   <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
                   {% endfor %}
-                  <p class=" pt-2">{{ order_product.quantity }} x ₹ {{order_product.product.price}} </p>
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹
+                    {% if cart_item.product.offer_price %}
+                    {{cart_item.product.offer_price }}
+                    {% else %}
+                    {{cart_item.product.price }}
+                    {% endif %}
+                  </p>
                 </div>
               </div>
               <div class="my-auto">
-                <h6 class=" pt-2">₹&nbsp;{{order_product.total_amount}}</h6>
+                <h6 class=" pt-2">₹&nbsp;{{cart_item.item_total}}</h6>
               </div>
             </div>
             {% endfor %}
@@ -159,15 +153,23 @@
 
           <div class="border-top py-3">
             <div class="d-flex justify-content-between pb-2">
-              <p>Subtotal</p>
-              <p>₹ {{ sub_total }}.00</p>
+              <p>Subtotal MRP</p>
+              <p>₹ {{ sub_total_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Discount on MRP</p>
+              <p class="text-success">- ₹ {{ discount_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Coupen Discount</p>
+              <p class="text-success">- ₹ {{ coupon_discount }}.00</p>
             </div>
             <div class="d-flex justify-content-between">
               <p>Shipping and Handling</p>
-              {% if shipping_charge %}
-              <p>₹ {{shipping_charge}}.00</p>
-              {% else %}
+              {% if total_shipping_charge == 0 %}
               <p class="text-success">Free Delivery</p>
+              {% else %}
+              <p>₹ {{total_shipping_charge}}.00</p>
               {% endif %}
             </div>
           </div>

@@ -14,11 +14,11 @@
 }
 
 .book {
-  width: 15%;
+  width: 15% !important;
 }
 
-.book img{
-  width: 100%;
+.book-img{
+  width: 100% !important;
 }
 
 header {

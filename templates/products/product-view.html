@@ -371,23 +371,23 @@
   });
 
   function deleteReview(ev, name) {
-      ev.preventDefault();
-      var urlToRedirect = ev.currentTarget.getAttribute('href');
-      console.log(urlToRedirect);
-      swal({
-        title: "Are you sure?",
-        text: ("Are you sure that you want to delete your review of " + name + " ? You cannot undo this later!"),
-        // icon: "warning",
-        className: 'swal-custom',
-        buttons: true,
-        dangerMode: true,
-      })
-        .then((willDelete) => {
-          if (willDelete) {
-            window.location.href = urlToRedirect;
-          }
-        });
-    }
+    ev.preventDefault();
+    var urlToRedirect = ev.currentTarget.getAttribute('href');
+    console.log(urlToRedirect);
+    swal({
+      title: "Are you sure?",
+      text: ("Are you sure that you want to delete your review of " + name + " ? You cannot undo this later!"),
+      // icon: "warning",
+      className: 'swal-custom',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          window.location.href = urlToRedirect;
+        }
+      });
+  }
 
 
 

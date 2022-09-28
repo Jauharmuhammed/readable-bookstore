@@ -16,7 +16,7 @@
 <div class="container-checkout  px-5 py-5 mx-auto">
 
 
-  <header class="mb-5">
+  <header class="mb-4">
     <div class="d-flex justify-content-center align-items-center pb-3 ">
       <div class="px-sm-5 px-2 active">CART
         <span class="fas fa-check"></span>
@@ -170,18 +170,18 @@
       </div>
       <div class=" col-12 col-lg-5 ps-lg-5 ">
         <div class="order-summery">
-          <div class="h5 pb-3">Order Summary</div>
+          <div class="h5 pb-2">Order Summary</div>
           <div class="summary">
             {% for cart_item in cart_items %}
-            <div class="d-flex justify-content-between py-3 ">
-              <div class="d-flex justify-content-start col-10">
-                <div class="book">
+            <div class="d-flex justify-content-between py-3 col-12">
+              <div class="d-flex justify-content-start col-10 ">
+                <div class="book col-3 ">
                   <a href="#">
                     <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
                   </a>
                 </div>
-                <div class="ps-2 my-auto flex-column d-flex">
-                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                <div class="ps-2 my-auto flex-column d-flex col-9">
+                  <span class=" h6 mb-0 overflow-ellipsis">{{ cart_item.product.name }}</span>
                   {% for item in cart_item.variation.all %}
                   <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
                   {% endfor %}
@@ -201,19 +201,28 @@
             {% endfor %}
           </div>
           <div class="border-top py-3">
-            <div class=" d-flex justify-content-between">
-              <div class="form-floating col-9 pe-3">
-                <input type="text" class="form-control " name='coupon' id="floatingCoupon" placeholder=" " required>
-                <label for="floatingCoupon">Dicount coupon
-                </label>
+            <form action="">
+              <div class=" d-flex justify-content-between">
+                <div class="form-floating col-9 pe-3">
+                  <input type="text" class="form-control " name='coupon' id="inputCoupon" placeholder=" " required />
+                  <label for="floatingCoupon">Dicount coupon</label>
+                </div>
+                <button type="submit" id="couponApplyButton" class="btn-float-input btn btn-invert col-3 ">Apply</button>
               </div>
-              <a href="" class="btn-float-input btn btn-invert col-3 ">Apply</a>
-            </div>
+            </form>
           </div>
           <div class="border-top py-3">
             <div class="d-flex justify-content-between pb-2">
-              <p>Subtotal</p>
-              <p>₹ {{ sub_total }}.00</p>
+              <p>Subtotal MRP</p>
+              <p>₹ {{ sub_total_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Discount on MRP</p>
+              <p class="text-success">- ₹ {{ discount_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Coupen Discount</p>
+              <p class="text-success">- ₹ {{ coupon_discount }}.00</p>
             </div>
             <div class="d-flex justify-content-between">
               <p>Shipping and Handling</p>
@@ -245,6 +254,32 @@
 
 {% block script %}
 
+<script>
+  
+  $(document).ready(function () {
+
+    $('#couponApplyButton').click(function (e) {
+      e.preventDefault();
+
+      var coupon_code = $('#inputCoupon').val();
+      console.log(coupon_code)
+
+      $.ajax({
+        method: "GET",
+        url: "/orders/coupon/apply-coupon/",
+        data: {
+          'coupon_code': coupon_code,
+        },
+        success: function (response) {
+          console.log(response.discount_percentage)
+          window.location.reload()
+        }
+      });
+    });
+  });
+
+
+</script>
 
 {% endblock %}
 

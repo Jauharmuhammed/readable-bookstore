@@ -19,12 +19,20 @@ class CartItem(models.Model):
   is_active = models.BooleanField(default=True)
   created_date = models.DateTimeField(auto_now_add=True)
 
+  def item_total_mrp(self):
+    return self.product.price * self.quantity
+
+  
+
   def item_total(self):
     if self.product.offer_price():
       total =  self.product.offer_price() * self.quantity
     else:
       total =  self.product.price * self.quantity
     return total
+
+  def item_discount(self):
+    return self.item_total_mrp() - self.item_total() 
     
   def __str__(self):
     return self.product.name

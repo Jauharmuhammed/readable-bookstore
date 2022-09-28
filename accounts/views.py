@@ -316,12 +316,14 @@ def wishlist(request):
 def add_to_wishlist(request, product_id):
   in_wishlist = Wishlist.objects.filter(user=request.user, product_id= product_id).exists()
   if in_wishlist:
+    messages.warning(request, 'Item is already in wishlist')
     return JsonResponse({ 'message': 'Item is already in wishlist'})
   else:
     Wishlist.objects.create(
       user = request.user,
       product_id = product_id
     )
+    messages.success(request, 'Item added to your wishlist')
     return JsonResponse({ 'message': 'Item added to your wishlist'})
 
 

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from accounts.models import Address
+from orders.models import Coupon
 
 from products.models import Products, Variation, Wishlist
 from .models import Cart, CartItem, ShippingCharge
@@ -20,7 +21,10 @@ def _cart_id(request):
 
 
 
-def cart(request, cart_items=None, sub_total=0, total=0, shipping_cost = 0, quantity=0):
+def cart(request, cart_items=None, sub_total=0, sub_total_mrp=0, discount_mrp=0, total=0, shipping_cost = 0, quantity=0):
+  if 'coupon_id' in request.session:
+    del request.session['coupon_id']
+
   try:
     if request.user.is_authenticated:
       cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
@@ -30,7 +34,10 @@ def cart(request, cart_items=None, sub_total=0, total=0, shipping_cost = 0, quan
 
     for cart_item in cart_items:
       sub_total += cart_item.item_total()
+      sub_total_mrp += cart_item.item_total_mrp()
       quantity += cart_item.quantity
+
+    discount_mrp= sub_total_mrp - sub_total
 
     shipping_charge = ShippingCharge.objects.first()
     if sub_total <= shipping_charge.range_upto:
@@ -50,6 +57,8 @@ def cart(request, cart_items=None, sub_total=0, total=0, shipping_cost = 0, quan
   context = {
     'cart_items' : cart_items,
     'sub_total': sub_total,
+    'sub_total_mrp':sub_total_mrp,
+    'discount_mrp':discount_mrp,
     'shipping_charge': shipping_cost,
     'total' : total,
     'quantity' : quantity,
@@ -242,21 +251,28 @@ def move_to_wishlist(request, product_id, cart_item_id):
 
 
 @login_required(login_url='login')
-def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0, quantity=0):
+def checkout(request, cart_items=None, sub_total=0, sub_total_mrp=0, shipping_cost=0, discount_mrp=0, total=0, shipping_charge = 0, quantity=0, coupon_discount=0):
   try:
     cart_items = CartItem.objects.filter(user=request.user, is_active =True).order_by('-created_date')
     for cart_item in cart_items:
       sub_total += cart_item.item_total()
+      sub_total_mrp += cart_item.item_total_mrp()
       quantity += cart_item.quantity
 
+    discount_mrp= sub_total_mrp - sub_total
 
     shipping_charge = ShippingCharge.objects.first()
-    shipping_cost = 0
     if sub_total <= shipping_charge.range_upto:
       shipping_cost = shipping_charge.shipping_charge
 
-    total = sub_total + shipping_cost
+    if 'coupon_id' in request.session:
+      coupon_id = request.session['coupon_id']
+      coupon_discount_percentage= Coupon.objects.get(id = coupon_id).coupon_discount
+      coupon_discount = sub_total * int(coupon_discount_percentage) / 100
+      sub_total = sub_total - coupon_discount
 
+    total = sub_total + shipping_cost
+  
     addresses = Address.objects.filter(user=request.user, is_active=True).order_by('-date_added')
   except ObjectDoesNotExist:
     pass
@@ -264,8 +280,11 @@ def checkout(request, cart_items=None, sub_total=0, total=0, shipping_charge = 0
   context = {
     'cart_items' : cart_items,
     'sub_total': sub_total,
+    'sub_total_mrp':sub_total_mrp,
+    'discount_mrp':discount_mrp,
+    'coupon_discount': round(coupon_discount),
     'shipping_charge': shipping_cost,
-    'total' : total,
+    'total' : round(total),
     'quantity' : quantity,
     'addresses': addresses
   }

@@ -66,36 +66,23 @@
           {% csrf_token %}
 
           <!-- address -->
-          <input type="hidden" name="address" value="{{address.id}}">
           <div class="col-12 pb-4">
+            {% for shipping_method in shipping_methods %}
             <div class="form-shipping">
-              <input type="radio" name="shipping-method" id="standard" value="standard" checked >
-              <label for="standard" class="box first">
+              <input type="radio" name="shipping-method" id="{{shipping_method.shipping_method}}" value="{{shipping_method.shipping_method}}" {% if forloop.counter == 1 %} checked {% endif %}>
+              <label for="{{shipping_method.shipping_method}}" class="box first">
                 <div class="course"> <span class="circle"></span>
                   <span class="subject d-flex justify-content-between w-100">
                     <p>
-                      <strong>Standard</strong><br>
-                      International Free Shipping Tracked USPS First Class (3-4 Weeks)
+                      <strong>{{shipping_method.shipping_method}}</strong><br>
+                      {{shipping_method.description}}
                     </p>
-                    <p>Free</p>
+                    <p>{% if shipping_method.charge == 0 %} Free {% else %}₹ {{ shipping_method.charge }}.00 {% endif %}</p>
                   </span>
                 </div>
               </label>
             </div>
-            <div class="form-shipping">
-              <input type="radio" name="shipping-method" id="express" value="express">
-              <label for="express" class="box first">
-                <div class="course"> <span class="circle"></span>
-                  <span class="subject d-flex justify-content-between w-100">
-                    <p>
-                      <strong>Express</strong><br>
-                      FedEx International Priority (3-4 business days)
-                    </p>
-                    <p>₹ 249.00</p>
-                  </span>
-                </div>
-              </label>
-            </div>
+            {% endfor %}
           </div>
           
           <div class=" d-flex justify-content-center ">
@@ -116,21 +103,27 @@
       <div class=" col-12 col-lg-5 ps-lg-5 ">
         <div class="order-summery">
           <div class="h5 pb-3">Order Summary</div>
-          <div class="summary-3">
+          <div class="summary">
             {% for cart_item in cart_items %}
-            <div class="d-flex justify-content-between py-3">
-              <div class="d-flex justify-content-start col-10">
-                <div class="book">
+            <div class="d-flex justify-content-between py-3 col-12">
+              <div class="d-flex justify-content-start col-10 ">
+                <div class="book col-3 ">
                   <a href="#">
                     <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
                   </a>
                 </div>
-                <div class="ps-2 my-auto flex-column d-flex">
-                  <h6 class="mb-0 ">{{ cart_item.product.name }}</h6>
+                <div class="ps-2 my-auto flex-column d-flex col-9">
+                  <span class=" h6 mb-0 overflow-ellipsis">{{ cart_item.product.name }}</span>
                   {% for item in cart_item.variation.all %}
                   <p class=""><small>{{ item.variation_value | capfirst }} </small></p>
                   {% endfor %}
-                  <p class=" pt-2">{{ cart_item.quantity }} x ₹ {{cart_item.product.price}} </p>
+                  <p class=" pt-2">{{ cart_item.quantity }} x ₹
+                    {% if cart_item.product.offer_price %}
+                    {{cart_item.product.offer_price }}
+                    {% else %}
+                    {{cart_item.product.price }}
+                    {% endif %}
+                  </p>
                 </div>
               </div>
               <div class="my-auto">
@@ -142,8 +135,16 @@
           
           <div class="border-top py-3">
             <div class="d-flex justify-content-between pb-2">
-              <p>Subtotal</p>
-              <p>₹ {{ sub_total }}.00</p>
+              <p>Subtotal MRP</p>
+              <p>₹ {{ sub_total_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Discount on MRP</p>
+              <p class="text-success">- ₹ {{ discount_mrp }}.00</p>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+              <p>Coupen Discount</p>
+              <p class="text-success">- ₹ {{ coupon_discount }}.00</p>
             </div>
             <div class="d-flex justify-content-between">
               <p>Shipping and Handling</p>

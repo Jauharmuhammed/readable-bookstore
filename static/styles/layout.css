@@ -323,8 +323,8 @@ input:active
 
 
 .notification {
-  position: absolute;
-  top: 5rem;
+  position: fixed;
+  bottom: 5rem;
   right: 1rem;
-  z-index: 9999;
+  z-index: 999999;
 }

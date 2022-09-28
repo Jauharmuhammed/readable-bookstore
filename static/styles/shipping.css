@@ -108,13 +108,12 @@ label.box {
   border: 1px solid #ddd
 }
 
-#standard:checked~label.first, 
-#express:checked~label.first {
+input[type="radio"]:checked~label.first
+{
   border-color: #8b8538
 }
 
-#standard:checked~label.first .circle,
-#express:checked~label.first .circle
+input[type="radio"]:checked~label.first .circle
 {
   border: 6px solid #8e8c6d;
   background-color: #fff
