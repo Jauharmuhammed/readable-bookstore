@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.db.models import Avg, Count
 from accounts.models import CustomUser
@@ -21,7 +22,7 @@ class Products(models.Model):
   release_date = models.DateField(blank=True, null=True, default=None)
 
   price = models.PositiveIntegerField(default=None)
-  discount = models.PositiveBigIntegerField(blank=True)
+  discount = models.PositiveBigIntegerField(blank=True, default=0)
 
   stock = models.PositiveIntegerField(default=None)
   is_available = models.BooleanField(default=True)
@@ -72,7 +73,7 @@ class Products(models.Model):
     if price > 0 and price < self.price :
       return round(price)
     else:
-      return None
+      return self.price
 
   def offer(self):
     offer = self.discount + self.sub_category.discount 
@@ -85,11 +86,6 @@ class Products(models.Model):
     return self.name
 
 
-
-
-# class VariationManager(models.Manager):
-#     def formats(self):
-#         return super(VariationManager,self).filter(variation_category='format',product=self.product)
 
 
 
@@ -110,8 +106,6 @@ class Variation(models.Model):
   variation_value = models.CharField(max_length=100, choices=variation_value_choice)
   is_available = models.BooleanField(default=True)  
   date_added = models.DateTimeField(auto_now_add=True)
-
-  # objects = VariationManager()
 
   def __str__(self):
     return self.variation_value

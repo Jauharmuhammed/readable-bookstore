@@ -116,6 +116,7 @@ def add_to_cart(request, product_id):
           item.variation.clear()
           item.variation.add(*product_variation)
           item.save()
+          messages.success(request, 'Item added to your cart')
 
 
           
@@ -129,6 +130,8 @@ def add_to_cart(request, product_id):
         cart_item.variation.clear()
         cart_item.variation.add(*product_variation)
         cart_item.save()
+        messages.success(request, 'Item added to your cart')
+
 
   else:
 
@@ -178,6 +181,7 @@ def add_to_cart(request, product_id):
           item.variation.clear()
           item.variation.add(*product_variation)
           item.save()
+          messages.success(request, 'Item added to your cart')
 
 
           
@@ -190,7 +194,9 @@ def add_to_cart(request, product_id):
         cart_item.variation.clear()
         cart_item.variation.add(*product_variation)
         cart_item.save()
-    
+        messages.success(request, 'Item added to your cart')
+
+      
   return JsonResponse({ 'message': 'Item added to cart successfull'})
 
 
@@ -220,6 +226,7 @@ def remove_cart_item(request, product_id, cart_item_id):
       cart = Cart.objects.get(cart_id = _cart_id(request))
       cart_item = CartItem.objects.get(product=product, cart=cart, id= cart_item_id)
     cart_item.delete()
+    messages.success(request, 'Item removed from your cart')
   except:
     pass
   return redirect('cart')

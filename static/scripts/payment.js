@@ -36,7 +36,7 @@ $(document).ready(function () {
           "currency": "INR",
           "name": "Readable Bookstore",
           "description": "Thank You for Shopping with us.",
-          "image": "https://example.com/your_logo",
+          "image": "/Users/Jauhar/Web development/django/ecom project/static/images/readable-icon-black-1.jpg",
           // "order_id": responsedata.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
           "handler": function (response_razorpay) {
 

@@ -324,7 +324,9 @@ input:active
 
 .notification {
   position: fixed;
-  bottom: 5rem;
-  right: 1rem;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: none !important;
   z-index: 999999;
 }

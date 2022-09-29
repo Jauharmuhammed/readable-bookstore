@@ -24,20 +24,47 @@
         <div class=" col-12 col-lg-3 p-0 mb-5">
           {% include 'include/sidebar-dashboard.html' %}
         </div>
-        <div class=" col-12 col-lg-9 ps-lg-5 card-container ">
+        <div class=" col-12 col-lg-9 ps-lg-5 card-container px-0">
 
           
-          <div class="row row-cols-1 profile-header ps-4">
-            <div class="row row-cols-1">
+          <div class="row row-cols-1 profile-header ps-md-4">
+            <div class="row-cols-1">
+
+              {% if orders %}
               {% for order in orders %}
 
               {% if order_products %}
                 <p class="text-muted small ps-0 mb-2">Order ID : {{ order.order_id}}</p>
-                <div class="border mb-4 order-box">
+                <div class="border mb-4">
+                  <a href="{% url 'user-order-details' order.order_id %}">
+                    <div class="d-flex justify-content-center px-4 py-4 main-order-box">
+                      <div class="col-6 px-0 my-auto">
+                        <div class="d-flex justify-content-start">
+                          <div class="my-auto ">
+                            <span class="h6 mob-text">Order {{ order.status }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-3 px-0 my-auto">
+                        <div class="d-flex justify-content-start">
+                          <div class="my-auto ">
+                            <span class="h6 pt-1">₹ {{ order.order_total }}0</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="my-auto col-3 ">
+                        <div class="row ">
+                          <div class="col-12 px-0 text-end align-self-center">
+                            <iconify-icon icon="ep:arrow-right" width="24"></iconify-icon>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
                   {% for order_product in order_products %}
                   {% if order_product.order.id == order.id %}
-                  <div class="row d-flex justify-content-center border-top px-4">
-                    <div class="col-9 px-0">
+                  <div class="d-flex justify-content-center border-top px-4">
+                    <div class="col-12 px-0">
                       <div class="d-flex justify-content-start">
                         <div class="book">
                           <a href="#">
@@ -57,19 +84,26 @@
                         </div>
                       </div>
                     </div>
-                    <div class="my-auto col-3 ">
+                    <!-- <div class="my-auto col-3 ">
                       <div class="row ">
                         <div class="col-12 px-0 text-end align-self-center">
-                          <h6 class="mob-text">{{ order_product.status }}</h6>
+                          <h6 class="mob-text">{{ order.status }}</h6>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   {% endif %}
                   {% endfor %}
                 </div>
               {% endif %}
               {% endfor %}
+
+              {% else %}
+                <div class="text-center my-5 py-5">
+                  <div class="pt-5">YOU HAVE NO ORDERS!</div>
+                  <a href="{% url 'products' %}" class=" btn mt-4 px-3 py-2">CONTINUE SHOPPING</a>
+                </div>
+              {% endif %}
 
             </div>
           </div>

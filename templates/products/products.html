@@ -70,14 +70,14 @@
                         </small>
                       </div>
 
-                      {% if product.offer_price %}
+                      {% if product.offer_price == product.price %}
+                      <h6>₹ {{product.price}}</h6>
+                      {% else %}
                       <div>
                         <span class="h6">₹ {{product.offer_price}} </span>
                         <span class="text-muted small" style="text-decoration: line-through;">₹ {{product.price}}</span>
                         <span class="text-success small"> ( {{ product.offer }}% OFF ) </span>
                       </div>
-                      {% else %}
-                      <h6>₹ {{product.price}}</h6>
                       {% endif %}
                   </div>
               </div>
@@ -102,16 +102,17 @@
 
       var product_id = $(this).attr('product_id');
 
+      '{% if request.user.is_authenticated %}'
       $.ajax({
         method: "GET",
-        url: "/account/wislist/add-to-wislist/" + product_id ,
+          url: "/account/wislist/add-to-wislist/" + product_id,
         dataType: "json",
         success: function (response) {
-
-          $('.toast').toast('show');
-          
         }
       });
+      '{% else %}'
+      window.location.href = '{% url "login" %}'
+      '{% endif %}'
     });
   });
 </script>

@@ -44,24 +44,13 @@
               </a>
               <p class="mb-2"><small>{{ wishlist_item.product.author }}</small></p>
   
-              <!-- Ratings -->
-              <div class="rating-star mb-3">
-                <span>
-                  <i class="fa fa-star{% if wishlist_item.product.average_review < 0.5 %}-o{% elif wishlist_item.product.average_review >= 0.5 and wishlist_item.product.average_review < 1 %}-half-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if wishlist_item.product.average_review < 1.5 %}-o{% elif wishlist_item.product.average_review >= 1.5 and wishlist_item.product.average_review < 2 %}-half-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if wishlist_item.product.average_review < 2.5 %}-o{% elif wishlist_item.product.average_review >= 2.5 and wishlist_item.product.average_review < 3 %}-half-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if wishlist_item.product.average_review < 3.5 %}-o{% elif wishlist_item.product.average_review >= 3.5 and wishlist_item.product.average_review < 4 %}-half-o {% endif %}"
-                    aria-hidden="true"></i>
-                  <i class="fa fa-star{% if wishlist_item.product.average_review < 4.5 %}-o{% elif wishlist_item.product.average_review >= 4.5 and wishlist_item.product.average_review < 5 %}-half-o {% endif %}"
-                    aria-hidden="true"></i>
-                </span>
-                <small class="text-muted">
-                  ( {{ wishlist_item.product.review_count}} )
-                </small>
-              </div>
+              
+              {% if wishlist_item.product.stock < 1 %} 
+              <h6 class='text-danger mt-2'>
+                Out of Stock
+              </h6>
+              {% endif %}
+
               {% if wishlist_item.product.offer_price %}
               <span class="h6 card-subtitle mb-0">&#8377;{{ wishlist_item.product.offer_price }}</span>
               <span class="small card-subtitle mb-0 text-muted" style="text-decoration: line-through;">&#8377;{{ wishlist_item.product.price }}</span>

@@ -34,3 +34,31 @@
   color: inherit;
   text-decoration: none !important;
 }
+
+.profile-image {
+  border-radius: 50% !important;
+  width: 12rem;
+  height: 12rem;
+  object-fit: cover;
+}
+
+.profile-details {
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+@media screen and (max-width: 768px) {
+  .profile-image {
+    width: 5rem;
+    height: 5rem;
+  }
+  .profile-details {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  .container {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+  
+}

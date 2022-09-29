@@ -427,11 +427,28 @@ def change_password(request):
 def orders(request):
   orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
   order_products = OrderProduct.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
+  print(orders)
   context = {
     'order_products':order_products,
     'orders':orders,
   }
   return render(request, 'accounts/orders.html', context)
+
+@login_required(login_url='login')
+def order_details(request, order_id):
+  order = None
+  order_products =None
+  try:
+    order = get_object_or_404(Order, user=request.user,order_id=order_id, is_ordered=True)
+    order_products = OrderProduct.objects.filter(user=request.user, order_id=order, is_ordered=True)
+  except (Order.DoesNotExist or OrderProduct.DoesNotExist):
+    order = None
+    order_products =None
+  context = {
+    'order_products':order_products,
+    'order':order,
+  }
+  return render(request, 'accounts/order-details.html', context)
 
 
 @login_required(login_url='login')

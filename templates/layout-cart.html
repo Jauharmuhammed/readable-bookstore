@@ -36,6 +36,10 @@
 
 <body>
 
+
+  <!-- messages alerts -->
+  {% include 'include/messages.html' %}
+
   <!-- preloader -->
   <!-- <div class="loader-wrapper">
     <span class="loader"><span class="loader-inner"></span></span>
@@ -63,6 +67,17 @@
       $(".loader-wrapper").fadeOut(1000);
     });
   </script>
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>
+    $(document).ready(function () {
+      $('.toast').toast('show');
+    });
+  </script>
+  {% endfor %}
+  {% endif %}
+
 
   {% block script %}
 

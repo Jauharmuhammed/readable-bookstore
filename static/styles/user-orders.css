@@ -71,9 +71,7 @@ a {
 
 @media screen and (max-width: 768px) {
 
-  .container {
-    padding: 0 2rem !important;
-  }
+ 
 
   .book,
   .book-img {
@@ -89,4 +87,8 @@ a {
   .pad-left {
     padding-left: 20px;
   }
+}
+
+.main-order-box:hover{
+  background-color: #8e8c6d15;
 }

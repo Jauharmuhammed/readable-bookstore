@@ -22,7 +22,6 @@ class CartItem(models.Model):
   def item_total_mrp(self):
     return self.product.price * self.quantity
 
-  
 
   def item_total(self):
     if self.product.offer_price():

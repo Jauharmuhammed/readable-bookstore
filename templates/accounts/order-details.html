@@ -1,0 +1,181 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Orders</title>
+<link rel="stylesheet" href="{% static 'styles/user-dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'styles/user-orders.css' %}">
+
+
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class=" container container-dashboard  px-5 py-5 mx-auto">
+
+  <div class="container-fluid px-0">
+
+    <!-- form -->
+    <div class="container content">
+      <div class="row">
+        <div class=" col-12 col-lg-3 p-0 mb-5">
+          {% include 'include/sidebar-dashboard.html' %}
+        </div>
+        <div class=" col-12 col-lg-9 ps-lg-5 card-container px-0">
+
+
+          <div class="row row-cols-1 profile-header ps-md-4">
+            <div class=" row-cols-1">
+
+              {% if order_products %}
+              <p class="text-muted small ps-0 mb-2">Order ID : {{ order.order_id}}</p>
+              <div class="border mb-4 order-box">
+                <div class="d-flex justify-content-center px-4 py-4">
+                  <div class="col-8 px-0 ">
+                    <div class="d-flex justify-content-start">
+                      <div class="my-auto ">
+                        <h6 class=" mb-4 text-uppercase">Delivery Address</h6>
+                        <h6 class="pb-0">{{ order.address.full_name }}</h6 class="mb-2">
+                        {{ order.address.address }},
+                        {{ order.address.landmark }} <br>
+                        {{ order.address.city }},
+                        {{ order.address.pin_code }},
+                        {{ order.address.state }},
+                        {{ order.address.country }} <br> <br>
+                        +91 {{ order.address.mobile }}&nbsp; &nbsp;|&nbsp;&nbsp; {{ order.address.email }} <br>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4 px-0">
+                    <div class="d-flex justify-content-end">
+                      <div class="my-auto">
+                          <h6 class=" mb-4 text-uppercase">Order Status</h6>
+                          <p class="text-end"><strong>{{ order.status }}</strong></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row g-0 d-flex justify-content-center px-4 py-4 border-top">
+                  <div class=" col-12 px-0 ">
+                    <div class="d-flex justify-content-start">
+                      <div class="">
+                        <h6 class=" mb-4 text-uppercase">Order Details</h6>
+                        <p class="pb-0 mb-2">Order ID : {{ order.order_id }}</p>
+                        <p class="pb-0 mb-2">Placed Date : {{ order.created_date | date}}</p>
+                        <p class="pb-0 mb-2">Shipping Method : {{ order.shipping_method }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class=" col-12 px-0 ">
+                    <div class="d-flex justify-content-start">
+                      <div class="pt-5">
+                        <h6 class=" mb-4 text-uppercase">Payment Details</h6>
+                        <p class="pb-0 mb-2">Payment Method : {% if order.payment.payment_method == 'payOnDelivery' %} Pay On Delivery {% elif order.payment.payment_method == 'razorpay' %} Razorpay {% endif %}</p>
+                        <p class="pb-0 mb-2">Payment Status : {{ order.payment.status }}</p>
+                      </div> 
+                    </div>
+                  </div>
+
+                  <div class="col-12 px-0">
+                    <div class="d-flex justify-content-start">
+                      <div class=" pt-5 w-100">
+                        <div class="py-2">
+                          <div class="d-flex justify-content-between pb-2">
+                            <p>Subtotal MRP</p>
+                            <p>₹ {{ order.gross_amount }}.00</p>
+                          </div>
+                          <div class="d-flex justify-content-between pb-2">
+                            <p>Discount on MRP</p>
+                            <p class="text-success">- ₹ {{ order.discount }}.00</p>
+                          </div>
+                          <div class="d-flex justify-content-between pb-2">
+                            <p>Coupen Discount</p>
+                            <p class="text-success">- ₹ {{ order.coupon_discount }}.00</p>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <p>Shipping and Handling</p>
+                            {% if order.shipping_charge %}
+                            <p>₹ {{order.shipping_charge}}.00</p>
+                            {% else %}
+                            <p class="text-success">Free Delivery</p>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="border-top border-bottom py-3 mt-3">
+                          <div class="d-flex justify-content-between">
+                            <h6>TOTAL</h6>
+                            <h6>₹ {{order.order_total}}0</h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                        
+                <h6 class="px-4 my-4 text-uppercase">Product Details</h6>
+
+                {% for order_product in order_products %}
+                <div class=" d-flex justify-content-center border-top px-4">
+                  <div class="col-9 px-0">
+                    <div class="d-flex justify-content-start">
+                      <div class="book">
+                        <a href="{{ order_product.product.get_url }}">
+                          <img src="{{ order_product.product.cover_image.url }}" class="book-img">
+                        </a>
+                      </div>
+                      <div class="my-auto flex-column d-flex">
+                        <a href="{{ order_product.product.get_url }}">
+                          <h6 class="mb-0 ">{{ order_product.product.name }}</h6>
+                        </a>
+                        {% if order_product.variation.all %}
+                        {% for item in order_product.variation.all %}
+                        <p class="pt-2"><small>{{ order_product.quantity }} x 
+                          {{ item.variation_value | capfirst}}</small></p>
+                        {% endfor %}
+                        {% endif %}
+                        <h6 class=" pt-1">₹ {{ order_product.total }}0</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-auto col-3 ">
+                    <div class="row ">
+                      <div class="col-12 px-0 text-end align-self-center">
+                        <a href="{{ order_product.product.get_url }}#reviewRating">
+                          <h6 class="mob-text me-3"><i class="fa fa-star-o"></i> &nbsp; Rate this Product</h6>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+{% endblock %}

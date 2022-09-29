@@ -109,6 +109,12 @@ body {
   color: var(--color-light) !important;
 }
 
+.btn-check:checked+.btn-invert {
+  background-color: var(--primary-2) !important;
+  color: var(--color-light) !important;
+  outline: none !important;
+}
+
 
 
 
@@ -217,4 +223,10 @@ label:hover~input:checked~label {
   }
 }
 
-/* drift */
+.anchor {
+  display: block;
+  height: 10rem;
+  margin-top: -10rem;
+  visibility: hidden;
+}
+

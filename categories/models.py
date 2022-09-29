@@ -28,7 +28,7 @@ class SubCategory(models.Model):
   tagline = models.TextField(max_length=255, blank=True)
   description = models.TextField(max_length=1255, blank=True)
   image = models.ImageField(upload_to='images/subcategories', blank=True)
-  discount = models.PositiveIntegerField(blank=True)
+  discount = models.PositiveIntegerField(blank=True, default=0)
 
   class Meta:
     verbose_name = 'sub category'

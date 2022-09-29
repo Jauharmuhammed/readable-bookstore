@@ -79,14 +79,14 @@
             <span class="email ">{{ order.order_id }}</span>
           </td>
           <td><span class="name">{{ order.user.full_name }}</span></td>
-          <td><span class="name">{{ order.created_date }}</span></td>
-          <td><span class="name">{{ order.order_total }}</span></td>
+          <td><span class="name">{{ order.created_date | date}}</span></td>
+          <td><span class="name">{{ order.order_total}}0</span></td>
           <td>
             <span
-              class="name {% if order.status == 'Placed' %} text-primary {% elif order.status == 'Pending' %} text-warning {% elif order.status == 'Cancelled' %} text-danger {% endif %}"
+              class="name {% if order.status == 'Placed' %} text-primary {% elif order.status == 'Pending' or order.status == 'Returned'%} text-warning {% elif order.status == 'Cancelled' %}  text-danger {% elif order.status == 'Delivered' or order.status == 'Return Confirmed' %} text-success {% endif %}"
               id="status-{{ order.id }}">{{ order.status }}
             </span>
-            {% if order.status == 'Pending' %}
+            {% if order.status == 'Pending' or order.status == 'Placed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Returned' %}
             <button onclick="orderStatusUpdate(event, '{{ order.id }}')" value="{{ order.status }}" hidden
               id="orderStatusUpdateButton-{{ order.id }}"></button>
             <label for="orderStatusUpdateButton-{{ order.id }}" id="label-{{ order.id }}">
@@ -102,12 +102,12 @@
               data-bs-parent="#accordionExample">
               <div class=" border my-3 p-3">
                 <div class="d-flex justify-content-between">
-                  <h6>Order Details</h6>
+                  <h6 class="text-uppercase">Order Details</h6>
                 </div>
                 {% for order_product in order_products %}
                 {% if order_product.order.id == order.id %}
                 <span class="custom-align list-unstyled list-inline d-flex justify-content-between my-2">
-                  <div class=" col-6 d-flex justify-content-start">
+                  <div class=" col-8 d-flex justify-content-start">
                     <div>
                       <span class="name me-3">
                         <img src="{{ order_product.product.cover_image.url }}" alt="product image" height="75">
@@ -124,34 +124,15 @@
                   </div>
 
 
-                  <div class="col-2 text-end"><span class="name">{{ order_product.quantity }} x {{ order_product.amount }}</span></div>
-                  <div class="col-2 text-end"><span class="name">{{ order_product.total_amount }}</span></div>
-                  <div class="col-2 text-end">
-                    <div class="name class-status-{{ order.id }} 
-                                        {% if order_product.status == 'Processing' %} text-secondary 
-                                        {% elif order_product.status == 'Shipped' %} text-primary 
-                                        {% elif order_product.status == 'Delivered' %} text-success 
-                                        {% elif order_product.status == 'Refunded' %} text-warning 
-                                        {% elif order_product.status == 'Cancelled' %} text-danger 
-                                        {% endif %}" id="status_show-{{ order_product.id }}" style="display: inline;">
-                      {{ order_product.status }}
-                    </div>
-
-                    {% if order.status == 'Placed' %}
-                    <button onclick="statusUpdate(event, '{{ order_product.id }}')" value="{{ order_product.status }}"
-                      hidden id="statusUpdateButton-{{ order_product.id }}"></button>
-                    <label for="statusUpdateButton-{{ order_product.id }}">
-                      <iconify-icon icon="clarity:note-edit-line" width="16"></iconify-icon>
-                    </label>
-                    {% endif %}
-
-                  </div>
+                  <div class="col-2 text-end"><span class="name">{{ order_product.quantity }} x {{ order_product.offer_price }}</span></div>
+                  <div class="col-2 text-end"><span class="name">{{ order_product.total }}0</span></div>
+                  
                 </span>
                 {% endif %}
                 {% endfor %}
               </div>
               <div class="my-3 border p-3">
-                <h6>Shipping & Payment Details</h6>
+                <h6 class="text-uppercase">Shipping & Payment Details</h6>
                 <span class="custom-align list-unstyled list-inline d-flex justify-content-between my-2">
                   <div class="d-flex justify-content-start">
                     <div>
@@ -168,6 +149,40 @@
                   <div><span class="name">{{ order.payment.amount }}</span></div>
                   <div><span class="name" id="payment-status-{{order.id}}">{{ order.payment.status }}</span></div>
                 </span>
+                <div class="col-12 px-0">
+                  <div class="d-flex justify-content-start">
+                    <div class=" pt-5 w-100">
+                      <div class="pt-2">
+                        <div class="d-flex justify-content-between">
+                          <p>Subtotal MRP</p>
+                          <p>₹ {{ order.gross_amount }}.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <p>Discount on MRP</p>
+                          <p class="text-success">- ₹ {{ order.discount }}.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <p>Coupen Discount</p>
+                          <p class="text-success">- ₹ {{ order.coupon_discount }}.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <p>Shipping and Handling</p>
+                          {% if order.shipping_charge %}
+                          <p>₹ {{order.shipping_charge}}.00</p>
+                          {% else %}
+                          <p class="text-success">Free Delivery</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="border-top pt-3 mt-2">
+                        <div class="d-flex justify-content-between">
+                          <h6 class="mb-0">TOTAL</h6>
+                          <h6 class="mb-0">₹ {{order.order_total}}0</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </td>
@@ -211,13 +226,19 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  async function statusUpdate (ev, id){
-    const currentStatus = document.getElementById('status_show-'+id).innerText
+  async function orderStatusUpdate(ev, id){
+    const currentStatus = document.getElementById('status-' + id).innerText
+
     var options = {};
-    if (currentStatus.trim() == 'Shipped'){
-      options['Delivered'] = 'Delivered';
+    if (currentStatus.trim() == 'Pending') {
+      options['Cancelled'] = 'Cancelled';
+    } else if (currentStatus.trim() == 'Placed') {
+      options['Processing'] = 'Processing';
+      options['Shipped'] = 'Shipped';
     } else if (currentStatus.trim() == 'Processing') {
       options['Shipped'] = 'Shipped';
+    } else if (currentStatus.trim() == 'Shipped') {
+      options['Delivered'] = 'Delivered';
     } else if (currentStatus.trim() == 'Returned') {
       options['Return Confirmed'] = 'Return Confirmed';
     };
@@ -226,7 +247,6 @@
       title: 'Select Order Status',
       input: 'select',
       inputOptions: options,
-      inputPlaceholder: 'Choose order status',
       inputValue: currentStatus,
       showCancelButton: true,
     })
@@ -236,51 +256,7 @@
     }
     $.ajax({
       method: "GET",
-      url: "/administrator/order-management/update-order-product-status/" +id,
-      data: data,
-      success: function (response) {
-
-        swal(response.status, {
-          timer: 3000,
-        }).then((value) => {
-          const statusDiv = document.getElementById('status_show-' +id);
-          statusDiv.textContent = status;
-          if (status.trim() == 'Delivered') {
-            const paymentDiv = document.getElementById('payment-status-' + id);
-            paymentDiv.textContent = 'Successful'
-          } else if (status.trim() == 'Returned') {
-            const paymentDiv = document.getElementById('payment-status-' + id);
-            paymentDiv.textContent = 'Refunded'
-          }
-          const orderStatusDiv = document.getElementById('status-' + id);
-          orderStatusDiv.textContent = response.order_status;
-        });
-      }
-    });
-  }
-
-
-  async function orderStatusUpdate(ev, id){
-    const div = document.getElementById('status-' + id)
-    const { value: status } = await Swal.fire({
-      title: 'Select Order Status',
-      input: 'select',
-      inputOptions: {
-        'Pending': 'Pending',
-        'Cancelled': 'Cancelled',
-      },
-      
-      inputPlaceholder: 'Choose order status',
-      inputValue: div.textContent,
-      showCancelButton: true,
-    })
-
-    data = {
-      "order_status": status,
-    }
-    $.ajax({
-      method: "GET",
-      url: "/administrator/order-management/update-order-status/cancel/" +id,
+      url: "/administrator/order-management/update-order-status/" +id,
       data: data,
       success: function (response) {
 
@@ -291,7 +267,7 @@
           statusDiv.textContent = status;
           const label = document.getElementById('label-' +id);
           label.setAttribute("hidden", true);
-          const productStatus = document.getElementsByClassName('class-status-' +id);
+          const productStatus = document.a('class-status-' +id);
           for (var i in productStatus) {
             productStatus[i].textContent = status;
           }
@@ -299,6 +275,47 @@
       }
     });
   }
+
+
+  // async function orderStatusUpdate(ev, id){
+  //   const div = document.getElementById('status-' + id)
+  //   const { value: status } = await Swal.fire({
+  //     title: 'Select Order Status',
+  //     input: 'select',
+  //     inputOptions: {
+  //       'Pending': 'Pending',
+  //       'Cancelled': 'Cancelled',
+  //     },
+      
+  //     inputPlaceholder: 'Choose order status',
+  //     inputValue: div.textContent,
+  //     showCancelButton: true,
+  //   })
+
+  //   data = {
+  //     "order_status": status,
+  //   }
+  //   $.ajax({
+  //     method: "GET",
+  //     url: "/administrator/order-management/update-order-status/cancel/" +id,
+  //     data: data,
+  //     success: function (response) {
+
+  //       swal(response.status, {
+  //         timer: 3000,
+  //       }).then((value) => {
+  //         const statusDiv = document.getElementById('status-' +id);
+  //         statusDiv.textContent = status;
+  //         const label = document.getElementById('label-' +id);
+  //         label.setAttribute("hidden", true);
+  //         const productStatus = document.getElementsByClassName('class-status-' +id);
+  //         for (var i in productStatus) {
+  //           productStatus[i].textContent = status;
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
 </script>
 

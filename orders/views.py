@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from accounts.models import Address
 from products.models import Products, Variation
 
+from django.contrib import messages
+
 from carts.models import CartItem, ShippingCharge
 from orders.models import Coupon, CouponCheck, Order, Payment, OrderProduct, ShippingMethod
 from .forms import OrderForm
@@ -24,19 +26,26 @@ def unique_id(size):
 def applyCoupon(request):
   coupon_code = request.GET['coupon_code']
   print(coupon_code)
+
+  if 'coupon_id' in request.session:
+    del request.session['coupon_id']
+    
   is_coupon_code_exists = Coupon.objects.filter(coupon_code= coupon_code).exists()
   if is_coupon_code_exists:
     coupon_id = Coupon.objects.get(coupon_code=coupon_code).id
     is_expired = CouponCheck.objects.filter(user=request.user, coupon=coupon_id).exists()
     if is_expired:
+      messages.error(request, 'Coupon is already used!')
       return JsonResponse({ 'message':'Coupon is already used!'})
     else:
       coupon = Coupon.objects.get(coupon_code= coupon_code)
       discount_percentage = coupon.coupon_discount
       request.session['coupon_id'] = coupon_id
+      messages.success(request, 'Coupon Applied successfully')
       return JsonResponse( { 'discount_percentage': discount_percentage})
 
   else:
+    messages.error(request, 'Coupon does not exists!')
     return JsonResponse({'message':'Coupon does not exists!'})
 
 
@@ -62,7 +71,7 @@ def save_address(request, sub_total=0, total=0, sub_total_mrp=0, shipping_cost=0
       existing_addresses = Address.objects.filter(user=current_user).order_by('-date_added')
       if existing_addresses is not None:
         for existing_address in existing_addresses:
-          if data.__eq__(existing_address):
+          if data.__equal__(existing_address):
             print('Found Address in Existing address list')
             address = existing_address
             break
@@ -356,6 +365,7 @@ def place_order(request, sub_total=0, total=0, sub_total_mrp=0, shipping_cost=0,
         orderproduct.product=item.product
         orderproduct.quantity=item.quantity
         orderproduct.price=item.product.price
+        orderproduct.offer_price=item.product.offer_price()
         orderproduct.gross_amount=item.item_total_mrp()
         orderproduct.discount=item.item_discount()
         orderproduct.total=item.item_total()
@@ -381,9 +391,12 @@ def place_order(request, sub_total=0, total=0, sub_total_mrp=0, shipping_cost=0,
       # delete data from session
       if request.session['order_id']:
         del request.session['order_id']
-        del request.session['coupon_discount']
         del request.session['address_id']
         del request.session['shipping_method_id']
+        
+      if request.session['coupon_discount']:
+        del request.session['coupon_discount']
+
 
 
       # Send order recieved email to to the customer
@@ -481,6 +494,7 @@ def payment(request):
       orderproduct.product=item.product
       orderproduct.quantity=item.quantity
       orderproduct.price=item.product.price
+      orderproduct.offer_price=item.product.offer_price()
       orderproduct.gross_amount=item.item_total_mrp()
       orderproduct.discount=item.item_discount()
       orderproduct.total=item.item_total()
@@ -504,11 +518,15 @@ def payment(request):
     CartItem.objects.filter(user=current_user).delete()
 
     # delete data from session
-    if request.session['order_id']:
+    if order_id in request.session:
       del request.session['order_id']
-      del request.session['coupon_discount']
       del request.session['address_id']
       del request.session['shipping_method_id']
+
+    if 'coupon_discount' in request.session:
+      del request.session['coupon_discount']
+
+    
 
 
     # Send order recieved email to to the customer

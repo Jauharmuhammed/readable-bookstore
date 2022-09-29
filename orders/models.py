@@ -33,6 +33,9 @@ class ShippingMethod(models.Model):
     charge = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+      return self.shipping_method
+
 
 class Order(models.Model):
     status=(
@@ -47,7 +50,7 @@ class Order(models.Model):
     )
 
     user=models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
-    payment=models.ForeignKey(Payment, on_delete=models.DO_NOTHING, blank=True)
+    payment=models.ForeignKey(Payment, on_delete=models.DO_NOTHING, blank=True, null=True)
     order_id=models.CharField(max_length=20)
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     gross_amount = models.PositiveIntegerField()
@@ -75,6 +78,7 @@ class OrderProduct(models.Model):
     variation=models.ManyToManyField(Variation, blank=True)
     quantity=models.IntegerField()
     price = models.PositiveIntegerField()
+    offer_price = models.PositiveIntegerField()
     gross_amount = models.PositiveIntegerField()
     discount = models.PositiveIntegerField()
     total=models.FloatField()

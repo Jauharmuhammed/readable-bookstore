@@ -299,7 +299,7 @@ def closed_orders(request):
 
 
 # function to cancel pending orders
-def update_order_status_cancel(request, order_id):
+def update_order_status(request, order_id):
   order_status = request.GET.get('order_status')
   print(order_status)
   if order_status is not None:
@@ -312,9 +312,25 @@ def update_order_status_cancel(request, order_id):
         product = Products.objects.get(id=order_product.product_id)
         product.stock += order_product.quantity
         product.save()
+        
+    if order_status == 'Delivered' and order_product.payment.payment_method == 'payOnDelivery':
 
-        order_product.status = 'Cancelled'
-        order_product.save()
+      payment = Payment.objects.get(id=order.payment.id)
+      payment.status = 'Successful'
+      payment.save()
+
+    if order_status == 'Return Confirmed':
+
+      payment = Payment.objects.get(id=order.payment.id)
+      payment.status = 'Refunded'
+      payment.save()
+
+      # increase the inventory stock if the product is returned
+      order_products = OrderProduct.objects.filter(order=order.id)
+      for order_product in order_products:
+        product = Products.objects.get(id=order_product.product_id)
+        product.stock += order_product.quantity
+        product.save()
         
     return JsonResponse({
       'status' : 'Order status updated successfully'
@@ -323,68 +339,68 @@ def update_order_status_cancel(request, order_id):
     return HttpResponse()
 
 
-def update_order_product_status(request, order_product_id):
-  order_status = request.GET.get('order_status')
-  new_order_status = 'Placed'
-  print(order_status)
-  if order_status is not None:
-    order_product = OrderProduct.objects.get(id=order_product_id)
-    order_product.status = order_status
-    order_product.save()
-    if order_status == 'Delivered' and order_product.payment.payment_method == 'payOnDelivery':
-      payment = Payment.objects.get(id=order_product.payment.id)
-      payment.status = 'Successful'
-      payment.save()
+# def update_order_product_status(request, order_product_id):
+#   order_status = request.GET.get('order_status')
+#   new_order_status = 'Placed'
+#   print(order_status)
+#   if order_status is not None:
+#     order_product = OrderProduct.objects.get(id=order_product_id)
+#     order_product.status = order_status
+#     order_product.save()
+#     if order_status == 'Delivered' and order_product.payment.payment_method == 'payOnDelivery':
+#       payment = Payment.objects.get(id=order_product.payment.id)
+#       payment.status = 'Successful'
+#       payment.save()
 
-      other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
-      for other_product in other_products_in_order:
-        if other_product.status == 'Delivered' or other_product.status == 'Return Confirmed':
-          flag = True
-        else:
-          flag = False
-          break
+#       other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
+#       for other_product in other_products_in_order:
+#         if other_product.status == 'Delivered' or other_product.status == 'Return Confirmed':
+#           flag = True
+#         else:
+#           flag = False
+#           break
       
-      print(flag)
-      if flag:
-        order = Order.objects.get(id=order_product.order.id)
-        order.status = 'Completed'
-        order.save()
-        new_order_status = order.status
+#       print(flag)
+#       if flag:
+#         order = Order.objects.get(id=order_product.order.id)
+#         order.status = 'Completed'
+#         order.save()
+#         new_order_status = order.status
 
 
-    if order_status == 'Return Confirmed':
-      payment = Payment.objects.get(id=order_product.payment.id)
-      payment.status = 'Refunded'
-      payment.save()
+#     if order_status == 'Return Confirmed':
+#       payment = Payment.objects.get(id=order_product.payment.id)
+#       payment.status = 'Refunded'
+#       payment.save()
 
-      # increase the inventory stock if the product is returned
-      product = Products.objects.get(id=order_product.product_id)
-      product.stock += order_product.quantity
-      product.save()
+#       # increase the inventory stock if the product is returned
+#       product = Products.objects.get(id=order_product.product_id)
+#       product.stock += order_product.quantity
+#       product.save()
 
-      other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
-      for other_product in other_products_in_order:
-        if other_product.status == 'Return Confirmed':
-          flag = True
-        else:
-          flag = False
-          break
+#       other_products_in_order = OrderProduct.objects.filter(order_id=order_product.order.id)
+#       for other_product in other_products_in_order:
+#         if other_product.status == 'Return Confirmed':
+#           flag = True
+#         else:
+#           flag = False
+#           break
       
-      if flag:
-        order = Order.objects.get(id=order_product.order.id)
-        order.status = 'Closed'
-        order.save()
-        new_order_status = order.status
+#       if flag:
+#         order = Order.objects.get(id=order_product.order.id)
+#         order.status = 'Closed'
+#         order.save()
+#         new_order_status = order.status
 
 
 
-    order_product.save()
-    return JsonResponse({
-      'status' : 'Order status updated successfully',
-      'order_status': new_order_status,
-    })
-  else:
-    return HttpResponse()
+#     order_product.save()
+#     return JsonResponse({
+#       'status' : 'Order status updated successfully',
+#       'order_status': new_order_status,
+#     })
+#   else:
+#     return HttpResponse()
 
 
 def payment_management(request):

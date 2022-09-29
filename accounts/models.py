@@ -116,20 +116,24 @@ class Address(models.Model):
     def __hash__(self):
         return super().__hash__()
 
-    def __eq__(self, other):
-      if self.user == other.user \
-      and self.mobile == other.mobile \
-      and self.email == other.email \
-      and self.first_name == other.first_name \
-      and self.last_name == other.last_name \
-      and self.address == other.address \
-      and self.landmark == other.landmark \
-      and self.pin_code == other.pin_code \
-      and self.city == other.city \
-      and self.state == other.state \
-      and self.country == other.country:
-          return True
+    def __equal__(self, other):
+      if other is not None and self is not None:
+        if self.user == other.user \
+        and self.mobile == other.mobile \
+        and self.email == other.email \
+        and self.first_name == other.first_name \
+        and self.last_name == other.last_name \
+        and self.address == other.address \
+        and self.landmark == other.landmark \
+        and self.pin_code == other.pin_code \
+        and self.city == other.city \
+        and self.state == other.state \
+        and self.country == other.country:
+            return True
+        else:
+            return False
+
       else:
-          return False
+        return False
 
 

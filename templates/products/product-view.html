@@ -90,21 +90,21 @@
                 <div class="form-variation me-2">
                   <input type="radio" class="btn-check variation-option" name="variation-option" id="{{ i.variation_value }}" required
                     value="{{ i.variation_value }}" autocomplete="off" {% if forloop.counter == 1 %} checked {% endif %}>
-                  <label class=" btn btn-outline-secondary " for="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</label>
+                  <label class=" btn btn-outline-secondary btn-invert" for="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst }}</label>
                 </div>
                 {% endfor %}
               </div>
             </div>
 
             <div class="content-bottom d-flex flex-column justify-content-end h-100 ">
-              {% if product.offer_price %}
+              {% if product.offer_price == product.price %}
+              <h4>₹ {{product.price}}</h4>
+              {% else %}
               <div>
                 <span class="h4">₹ {{product.offer_price}} </span>
-                <span class="text-muted" style="text-decoration: line-through;">₹ {{product.price}}</span>
-                <span class="text-success">&nbsp; ( {{ product.offer }}% OFF) </span>
+                <span class="text-muted small" style="text-decoration: line-through;">₹ {{product.price}}</span>
+                <span class="text-success small"> ( {{ product.offer }}% OFF ) </span>
               </div>
-              {% else %}
-              <h4>₹ {{product.price}}</h4>
               {% endif %}
 
               {% if product.stock > 0 %}
@@ -215,11 +215,12 @@
   </div>
 
     <!-- review and ratings -->
-  <div class="row">
+  <span class="anchor" id="reviewRating"></span>
+  <div class="row" >
     <div class="col-md-12 my-4 reivew">
       
       
-      <div class="col-12 col-md-6 write-review">
+      <div class="col-12 col-md-6 write-review" >
         <form action="{% url 'review' product.id %}" method="POST">
           {% csrf_token %}
           <h5>Write Your Review</h5>
@@ -309,7 +310,7 @@
             <div class="text">
               <div class="d-flex justify-content-between">
                 <div class="h6 mb-1">{{review.user.full_name}} </div>
-                <div class="date text-muted ">{{review.updated_date}}</div>
+                <div class="date text-muted ">{{review.updated_date | date }}</div>
               </div>
               <div class="d-flex justify-content-between">
                 <div class="rating-star">
@@ -407,9 +408,13 @@
         },
         dataType: "json",
         success: function (response) {
-            current_cart_count = $('#cartCountBadge').text()
-            new_cart_count = parseInt(current_cart_count) + 1
-            document.getElementById('cartCountBadge').innerHTML = new_cart_count
+          current_cart_count = $('#cartCountBadge').text()
+          new_cart_count = parseInt(current_cart_count) + 1
+          document.getElementById('cartCountBadge').innerHTML = new_cart_count
+
+          $(document).ready(function () {
+          $('.toast').toast('show');
+          });
         }
       });
     });
@@ -422,13 +427,20 @@
     $('#addToWishlistButton').click(function (e) {
       e.preventDefault();
 
-      $.ajax({
-        method: "GET",
-        url: "{% url 'add-to-wishlist' product.id %}",
-        dataType: "json",
-        success: function (response) {
-        }
-      });
+      '{% if request.user.is_authenticated %}'
+        $.ajax({
+          method: "GET",
+          url: "{% url 'add-to-wishlist' product.id %}",
+          dataType: "json",
+          success: function (response) {
+            $(document).ready(function () {
+              $('.toast').toast('show');
+            });
+          }
+        });
+      '{% else %}'
+        window.location.href = '{% url "login" %}'
+      '{% endif %}'
     });
     
   });

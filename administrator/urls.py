@@ -27,8 +27,9 @@ urlpatterns = [
     path('order-management/cancelled-orders/', views.cancelled_orders, name='cancelled-orders'),
     path('order-management/completed-orders/', views.completed_orders, name='completed-orders'),
     path('order-management/closed-orders/', views.closed_orders, name='closed-orders'),
-    path('order-management/update-order-product-status/<int:order_product_id>/', views.update_order_product_status, name='update-order-product-status'),
-    path('order-management/update-order-status/cancel/<int:order_id>/', views.update_order_status_cancel, name='update-order-status-cancel'),
+
+    # path('order-management/update-order-product-status/<int:order_product_id>/', views.update_order_product_status, name='update-order-product-status'),
+    path('order-management/update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
     path('payment-management/', views.payment_management, name='payment-management'),
 
 

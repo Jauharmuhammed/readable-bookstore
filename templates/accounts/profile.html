@@ -24,11 +24,11 @@
         <div class=" col-12 col-lg-3 p-0 mb-5">
           {% include 'include/sidebar-dashboard.html' %}
         </div>
-        <div class=" col-12 col-lg-9 ps-lg-5 card-container ">
+        <div class=" col-12 col-lg-9 ps-lg-5 card-container ps-0">
 
 
-          <div class="row row-cols-1 profile-header ps-4">
-            <div class="row row-cols-1">
+          <div class="row row-cols-1 profile-header ps-md-4">
+            <div class=" row-cols-1">
 
               <div class="border w-100 mb-4">
                 <form action="{% url 'edit-profile' %}" method="POST" enctype="multipart/form-data" >
@@ -37,7 +37,7 @@
                   <div class="d-flex justify-content-start">
                     <div class="image my-4 ms-3">
                       <a href="#">
-                        <img src="{{ user_profile.profile_picture.url }}" style="border-radius: 50% !important; width: 12rem; height:12rem ; object-fit: cover;">
+                        <img class="profile-image" src="{{ user_profile.profile_picture.url }}" >
                       </a>
                     </div>
                     <div class="my-auto ms-4">
@@ -47,7 +47,7 @@
                       <p class="small mb-4 pb-2">{{ request.user.email }}</p>
                     </div>
                   </div>
-                  <div class="mt-auto mb-3">
+                  <div class="mt-auto mb-0">
                     <input type="file" hidden name="profile_picture" id="profilePicture">
                     <label for="profilePicture">
                       <iconify-icon icon="clarity:note-edit-line" width="24" title="change your profile picture" style="color: black; cursor: pointer;"></iconify-icon>
@@ -55,7 +55,7 @@
                   </div>
                 </header>
               </div>
-              <div class="border py-5  w-100 " style="padding-left: 20% ;padding-right: 20% ;">
+              <div class="border py-5  w-100  profile-details">
                 
                   <div class="form-floating mb-3">
                     <input type="text" class="form-control " name='first_name' value="{{ request.user.first_name }}" id="floatingFirstName"

@@ -204,10 +204,10 @@
             <form action="">
               <div class=" d-flex justify-content-between">
                 <div class="form-floating col-9 pe-3">
-                  <input type="text" class="form-control " name='coupon' id="inputCoupon" placeholder=" " required />
+                  <input type="text" class="form-control" name='coupon' id="inputCoupon" placeholder=" " required="required" />
                   <label for="floatingCoupon">Dicount coupon</label>
                 </div>
-                <button type="submit" id="couponApplyButton" class="btn-float-input btn btn-invert col-3 ">Apply</button>
+                <button type="submit" onclick="applyCoupon(event)" id="couponApplyButton" class="btn-float-input btn btn-invert col-3 ">Apply</button>
               </div>
             </form>
           </div>
@@ -256,9 +256,30 @@
 
 <script>
   
-  $(document).ready(function () {
+  // $(document).ready(function () {
 
-    $('#couponApplyButton').click(function (e) {
+  //   $('#couponApplyButton').click(function (e) {
+  //     e.preventDefault();
+
+  //     var coupon_code = $('#inputCoupon').val();
+  //     console.log(coupon_code)
+
+  //     $.ajax({
+  //       method: "GET",
+  //       url: "/orders/coupon/apply-coupon/",
+  //       data: {
+  //         'coupon_code': coupon_code,
+  //       },
+  //       success: function (response) {
+  //         console.log(response.discount_percentage)
+  //         window.location.reload()
+  //       }
+  //     });
+  //   });
+  // });
+
+
+    function applyCoupon(e) {
       e.preventDefault();
 
       var coupon_code = $('#inputCoupon').val();
@@ -275,8 +296,9 @@
           window.location.reload()
         }
       });
-    });
-  });
+    }
+
+  
 
 
 </script>
