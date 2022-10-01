@@ -12,10 +12,6 @@
 <!-- JQuery -->
 
 
-<!-- Data table -->
-  <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.min.css' %}" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" /> -->
-
   
 
 {% endblock %}
@@ -24,195 +20,26 @@
 
 
 {% block content %}
+
+
 <div class="container-xxl flex-grow-1 container-p-y">
   <div class="d-flex justify-content-between ">
     <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Order Mangement / </span>Payments </h6>
   </div>
-  
-  <!-- <div class="nav-align-top mb-4">
-    <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
-      <li class="nav-item">
-        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-          data-bs-target="#navs-pills-justified-home" aria-controls="navs-pills-justified-home" aria-selected="true">
-          <i class="tf-icons bx bx-home"></i> Home
-          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger">3</span>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-          data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile"
-          aria-selected="false">
-          <i class="tf-icons bx bx-user"></i> Profile
-        </button>
-      </li>
-      <li class="nav-item">
-        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-          data-bs-target="#navs-pills-justified-messages" aria-controls="navs-pills-justified-messages"
-          aria-selected="false">
-          <i class="tf-icons bx bx-message-square"></i> Messages
-        </button>
-      </li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
-        <div class="card mt-5">
-          <h5 class="card-header">Payments</h5>
-          <div class="table-responsive text-nowrap">
-            <table class="table " id="user_table">
-              <thead>
-                <tr>
-                  <th>SN</th>
-                  <th>Title and Author</th>
-                  <th>Price</th>
-                  <th>Sub-Category</th>
-                  <th>Stock</th>
-                  <th class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% if products %}
-                {% for product in products %}
-                <tr>
-                  <td>{{ forloop.counter }}</td>
-                  <td><span class="name"><strong>{{ product.name }}</strong></span><br>
-                    <span class="email ">{{ product.author }}</span>
-                  </td>
-                  <td><span class="name">₹{{ product.price }}</span></td>
-                  <td><span class="name">{{ product.sub_category }}</span></td>
-                  <td><span class="name">{{ product.stock }}</span></td>
-                  <td class="delete">
-                    <div class="btn-group dropstart mx-3">
-                      <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'edit-product' pk=product.id %}">Edit Product</a></li>
-                        <li>
-                          <a class="dropdown-item" href="{% url 'del-product' pk=product.id %}"
-                            onclick="deleteconfirm(event,'{{product.name}}')">
-                            Delete Product
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
-        <div class="card mt-5">
-          <h5 class="card-header">Payments</h5>
-          <div class="table-responsive text-nowrap">
-            <table class="table " id="user_table">
-              <thead>
-                <tr>
-                  <th>SN</th>
-                  <th>Title and Author</th>
-                  <th>Price</th>
-                  <th>Sub-Category</th>
-                  <th>Stock</th>
-                  <th class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% if products %}
-                {% for product in products %}
-                <tr>
-                  <td>{{ forloop.counter }}</td>
-                  <td><span class="name"><strong>{{ product.name }}</strong></span><br>
-                    <span class="email ">{{ product.author }}</span>
-                  </td>
-                  <td><span class="name">₹{{ product.price }}</span></td>
-                  <td><span class="name">{{ product.sub_category }}</span></td>
-                  <td><span class="name">{{ product.stock }}</span></td>
-                  <td class="delete">
-                    <div class="btn-group dropstart mx-3">
-                      <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'edit-product' pk=product.id %}">Edit Product</a></li>
-                        <li>
-                          <a class="dropdown-item" href="{% url 'del-product' pk=product.id %}"
-                            onclick="deleteconfirm(event,'{{product.name}}')">
-                            Delete Product
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
-        <div class="card mt-5">
-          <h5 class="card-header">Payments</h5>
-          <div class="table-responsive text-nowrap">
-            <table class="table " id="user_table">
-              <thead>
-                <tr>
-                  <th>SN</th>
-                  <th>Title and Author</th>
-                  <th>Price</th>
-                  <th>Sub-Category</th>
-                  <th>Stock</th>
-                  <th class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% if products %}
-                {% for product in products %}
-                <tr>
-                  <td>{{ forloop.counter }}</td>
-                  <td><span class="name"><strong>{{ product.name }}</strong></span><br>
-                    <span class="email ">{{ product.author }}</span>
-                  </td>
-                  <td><span class="name">₹{{ product.price }}</span></td>
-                  <td><span class="name">{{ product.sub_category }}</span></td>
-                  <td><span class="name">{{ product.stock }}</span></td>
-                  <td class="delete">
-                    <div class="btn-group dropstart mx-3">
-                      <button type="button" class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'edit-product' pk=product.id %}">Edit Product</a></li>
-                        <li>
-                          <a class="dropdown-item" href="{% url 'del-product' pk=product.id %}"
-                            onclick="deleteconfirm(event,'{{product.name}}')">
-                            Delete Product
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+
+  {% if 'search' in request.path %}
+  <div class="col-12 text-center mb-5">
+    <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
+    <p class="text-muted">{{ payment_count }} items found for keyword '{{ request.GET.keyword }}'</p>
+  </div>
+  {% endif %}
+
+
 
   <div class="card mt-5">
     <h5 class="card-header">Payments</h5>
     <div class="table-responsive text-nowrap">
+      {% if payments %}
       <table class="table " id="paymentTable">
         <thead>
           <tr>
@@ -225,7 +52,6 @@
           </tr>
         </thead>
         <tbody>
-          {% if payments %}
           {% for payment in payments %}
           <tr>
             <td>{{ forloop.counter }}</td>
@@ -242,34 +68,64 @@
             
           </tr>
           {% endfor %}
-          {% endif %}
         </tbody>
       </table>
+      {% else %}
+      <h4 class="text-center py-5 "> No Payments Found</h4>
+      {% endif %}
     </div>
   </div>
 
 </div>
+
+<!-- paginator -->
+<nav aria-label="Page navigation example">
+  {% if payments.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if payments.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ payments.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in payments.paginator.page_range%}
+    {% if payments.number == i %}
+    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if payments.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ payments.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
 {% endblock %}
 
 
 
 {% block script %}
 
-<!-- <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-
-
-<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js'%}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.bootstrap5.min.js'%}"></script> -->
-
-
-<!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-
-<script>
-  $(document).ready(function () {
-    $('#paymentTable').DataTable();
-  });
-</script> -->
 
 {% endblock %}

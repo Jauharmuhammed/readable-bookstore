@@ -1,7 +1,3 @@
-from email.policy import default
-from enum import unique
-from pyexpat import model
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from accounts.models import CustomUser, Address
 from products.models import Products, Variation
@@ -37,17 +33,20 @@ class ShippingMethod(models.Model):
       return self.shipping_method
 
 
+status=(
+    ('Pending','Pending'),
+    ('Placed','Placed'),
+    ('Processing','Processing'),
+    ('Shipped','Shipped'),
+    ('Out for Delivery','Out for Delivery'),
+    ('Delivered','Delivered'),
+    ('Returned','Returned'),
+    ('Return Confirmed','Return Confirmed'),
+    ('Cancelled','Cancelled'),
+)
+
 class Order(models.Model):
-    status=(
-        ('Pending','Pending'),
-        ('Placed','Placed'),
-        ('Processing','Processing'),
-        ('Shipped','Shipped'),
-        ('Delivered','Delivered'),
-        ('Returned','Returned'),
-        ('Return Confirmed','Return Confirmed'),
-        ('Cancelled','Cancelled'),
-    )
+    
 
     user=models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
     payment=models.ForeignKey(Payment, on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -69,6 +68,15 @@ class Order(models.Model):
     def __str__(self):
         return str(self.order_id)
 
+
+class OrderDetails(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order_status = models.CharField(max_length=20,choices=status)
+    note = models.TextField(max_length = 500, blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.order.order_id)
 
 class OrderProduct(models.Model):
     order=models.ForeignKey(Order, on_delete=models.CASCADE)

@@ -266,7 +266,7 @@ a:focus-within {
     position: fixed !important;
     left: 50% !important;
     transform: translateX(-50%);
-    top: 113px !important;
+    top: 109px !important;
     z-index: -10;
   }
 
@@ -304,5 +304,11 @@ a:focus-within {
   {
     display: block !important;
   } */
+}
+
+
+.border-search-input 
+{
+  border-right: none;
 }
 

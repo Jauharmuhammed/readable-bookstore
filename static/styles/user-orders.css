@@ -92,3 +92,270 @@ a {
 .main-order-box:hover{
   background-color: #8e8c6d15;
 }
+
+
+
+
+/* track your order */
+
+.track-your-order ul {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+  list-style: none;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.track-your-order ul li {
+  position: relative;
+  z-index: 10;
+  font-weight: 500 !important;
+}
+
+.track-your-order ul li::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(206, 206, 206);
+  margin: 0 auto -40px auto;
+  position: relative;
+  z-index: 10;
+}
+
+.track-your-order ul li::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  z-index: -1;
+  width: 100%;
+  height: 3px;
+  background: rgb(206, 206, 206);
+}
+
+.track-your-order ul li span {
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  z-index: -1;
+  width: 0;
+  height: 3px;
+  background: rgb(206, 206, 206);
+  z-index: 2;
+}
+
+.track-your-order ul li:last-child span,
+.track-your-order ul li:last-child::after {
+  display: none;
+}
+
+.track-your-order ul .completed::before {
+  background: rgb(206, 206, 206);
+}
+
+.track-your-order ul .completed span {
+  width: 100%;
+}
+
+.track-your-order ul .completed {
+  animation: colorAnimation 1s forwards;
+}
+
+.track-your-order ul .completed span {
+  animation: myAnimation 1s forwards;
+}
+
+.track-your-order ul .completed::before {
+  animation: bgAnimation 1s forwards;
+}
+
+.track-your-order ul .completed:nth-child(2),
+.track-your-order ul .completed:nth-child(2)::before,
+.track-your-order ul .completed:nth-child(2) span {
+  animation-delay: 1s !important;
+}
+
+.track-your-order ul .completed:nth-child(3),
+.track-your-order ul .completed:nth-child(3)::before,
+.track-your-order ul .completed:nth-child(3) span {
+  animation-delay: 2s !important;
+}
+
+.track-your-order ul .completed:nth-child(4),
+.track-your-order ul .completed:nth-child(4)::before,
+.track-your-order ul .completed:nth-child(4) span {
+  animation-delay: 3s !important;
+}
+
+
+@keyframes myAnimation {
+  0% {
+    background-color: var(--color-success-light);
+    width: 0;
+  }
+
+  100% {
+    background-color: var(--color-success-light);
+    width: 100%;
+  }
+}
+
+@keyframes bgAnimation {
+  0% {
+    background-color: rgb(206, 206, 206);
+  }
+
+  100% {
+    background-color: var(--color-success-light);
+  }
+}
+
+
+@keyframes colorAnimation {
+  0% {
+    color: rgb(206, 206, 206);
+  }
+
+  100% {
+    color: var(--color-success-light);
+  }
+}
+
+
+/* track your order red */
+
+.track-your-order-red ul {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+  list-style: none;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.track-your-order-red ul li {
+  position: relative;
+  z-index: 10;
+  font-weight: 500 !important;
+}
+
+.track-your-order-red ul li::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(206, 206, 206);
+  margin: 0 auto -40px auto;
+  position: relative;
+  z-index: 10;
+}
+
+.track-your-order-red ul li::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  z-index: -1;
+  width: 100%;
+  height: 3px;
+  background: rgb(206, 206, 206);
+}
+
+.track-your-order-red ul li span {
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  z-index: -1;
+  width: 0;
+  height: 3px;
+  background: rgb(206, 206, 206);
+  z-index: 2;
+}
+
+.track-your-order-red ul li:last-child span,
+.track-your-order-red ul li:last-child::after {
+  display: none;
+}
+
+.track-your-order-red ul .completed::before {
+  background: rgb(206, 206, 206);
+}
+
+.track-your-order-red ul .completed span {
+  width: 100%;
+}
+
+.track-your-order-red ul .completed {
+  animation: colorAnimationRed 1s forwards;
+}
+
+.track-your-order-red ul .completed span {
+  animation: myAnimationRed 1s forwards;
+}
+
+.track-your-order-red ul .completed::before {
+  animation: bgAnimationRed 1s forwards;
+}
+
+.track-your-order-red ul .completed:nth-child(2),
+.track-your-order-red ul .completed:nth-child(2)::before,
+.track-your-order-red ul .completed:nth-child(2) span {
+  animation-delay: 1s !important;
+}
+
+.track-your-order-red ul .completed:nth-child(3),
+.track-your-order-red ul .completed:nth-child(3)::before,
+.track-your-order-red ul .completed:nth-child(3) span {
+  animation-delay: 2s !important;
+}
+
+.track-your-order-red ul .completed:nth-child(4),
+.track-your-order-red ul .completed:nth-child(4)::before,
+.track-your-order-red ul .completed:nth-child(4) span {
+  animation-delay: 3s !important;
+}
+
+
+
+@keyframes myAnimationRed {
+  0% {
+    background-color: var(--color-danger);
+    width: 0;
+  }
+
+  100% {
+    background-color: var(--color-danger);
+    width: 100%;
+  }
+}
+
+@keyframes bgAnimationRed {
+  0% {
+    background-color: rgb(206, 206, 206);
+  }
+
+  100% {
+    background-color: var(--color-danger);
+  }
+}
+
+
+@keyframes colorAnimationRed {
+  0% {
+    color: rgb(206, 206, 206);
+  }
+
+  100% {
+    color: var(--color-danger);
+  }
+}

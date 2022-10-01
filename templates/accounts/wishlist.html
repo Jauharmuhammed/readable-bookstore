@@ -51,12 +51,14 @@
               </h6>
               {% endif %}
 
-              {% if wishlist_item.product.offer_price %}
-              <span class="h6 card-subtitle mb-0">&#8377;{{ wishlist_item.product.offer_price }}</span>
-              <span class="small card-subtitle mb-0 text-muted" style="text-decoration: line-through;">&#8377;{{ wishlist_item.product.price }}</span>
-              <span class="small card-subtitle mb-0 text-success"> ( {{ wishlist_item.product.offer }}% OFF )</span>
+              {% if wishlist_item.product.offer_price == wishlist_item.product.price %}
+              <h6>₹ {{wishlist_item.product.price}}</h6>
               {% else %}
-              <span class="h6 card-subtitle mb-0">&#8377;{{ wishlist_item.product.price }}</span>
+              <div>
+                <span class="h6">₹ {{wishlist_item.product.offer_price}} </span>
+                <span class="text-muted small" style="text-decoration: line-through;">₹ {{wishlist_item.product.price}}</span>
+                <span class="text-success small"> ( {{ wishlist_item.product.offer }}% OFF ) </span>
+              </div>
               {% endif %}
             </div>
           </div>
@@ -66,6 +68,51 @@
     </div>
   </section>
   {% endif %}
+
+  <!-- paginator -->
+  <nav aria-label="Page navigation example">
+    {% if wishlist_items.has_other_pages %}
+    <ul class="pagination justify-content-center">
+      {% if wishlist_items.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ wishlist_items.previous_page_number}}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %}
+  
+      {% for i in wishlist_items.paginator.page_range%}
+      {% if wishlist_items.number == i %}
+      <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+      {% else %}
+      <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+      {% endif %}
+      {% endfor %}
+  
+      {% if wishlist_items.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ wishlist_items.next_page_number}}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav>
+
+
   <div class="row d-flex justify-content-center border-top mt-5">
     <div class="my-auto col-12 ">
       <div class="row mt-4">
@@ -82,6 +129,7 @@
 
 </div>
 
+
 {% else %}
 <div class="text-center empty-wishlist">
   <div class="pt-5">YOUR WISHLIST IS EMPTY !</div>
@@ -95,6 +143,8 @@
   <div>Login to view items in your wishlist.</div>
   <a href="{% url 'login' %}" class=" btn mt-4 px-5 py-2">LOGIN</a>
 </div>
+
+
 
 {% endif %}
 

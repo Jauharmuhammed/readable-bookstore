@@ -43,7 +43,7 @@
               <span class="email ">{{ user.email }}</span>
             </td>
             <td><span class="name">+91 {{ user.mobile_number }}</span></td>
-            <td><span class="name">{{ user.date_joined }}</span></td>
+            <td><span class="name">{{ user.date_joined |date }}</span></td>
             <td class="text-center">
               {% if user.is_active %}
               <span class="text-success">
@@ -80,7 +80,53 @@
   </div>
   <!--/ Hoverable Table rows -->
 
+  
 </div>
+
+<!-- paginator -->
+<nav aria-label="Page navigation example">
+  {% if users.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if users.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ users.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in users.paginator.page_range%}
+      {% if users.number == i %}
+        <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if users.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ users.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
+
 {% endblock %}
 
 

@@ -82,14 +82,7 @@ def add_to_cart(request, product_id):
             product_variation.append(variation)
         except:
             pass
-      
-      try:
-        cart = Cart.objects.get(cart_id=_cart_id(request))
-      except Cart.DoesNotExist:
-        cart = Cart.objects.create(
-          cart_id = _cart_id(request)
-        )
-      cart.save()
+    
 
       is_cart_item_exists = CartItem.objects.filter(product=product, user=user).exists()
       if is_cart_item_exists:
@@ -123,7 +116,6 @@ def add_to_cart(request, product_id):
       else:
         cart_item = CartItem.objects.create(
           product = product,
-          cart = cart,
           quantity = 1,
           user = user
         )

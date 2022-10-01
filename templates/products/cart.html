@@ -60,14 +60,14 @@
                   {% endfor %}
                   {% endif %}
 
-                  {% if cart_item.product.offer_price %}
-                  <div class="pt-1">
-                    <span class="h6 ">₹ {{ cart_item.product.offer_price }}</span>
-                    <span class=" small text-decoration-line-through ">₹ {{ cart_item.product.price }}</span>
-                    <span class="small text-success">( {{ cart_item.product.offer }}% OFF ) </span>
-                  </div>
+                  {% if cart_item.product.offer_price == cart_item.product.price %}
+                  <h6 class="pt-1">₹ {{cart_item.product.price}}</h6>
                   {% else %}
-                  <h6 class=" pt-1">₹ {{ cart_item.product.price }}</h6>
+                  <div class="pt-1">
+                    <span class="h6">₹ {{cart_item.product.offer_price}} </span>
+                    <span class="text-muted small" style="text-decoration: line-through;">₹ {{cart_item.product.price}}</span>
+                    <span class="text-success small"> ( {{ cart_item.product.offer }}% OFF ) </span>
+                  </div>
                   {% endif %}
 
                   {% if cart_item.quantity > cart_item.product.stock %}

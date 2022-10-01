@@ -5,7 +5,7 @@ from products.models import Products, Variation
 from django.contrib import messages
 
 from carts.models import CartItem, ShippingCharge
-from orders.models import Coupon, CouponCheck, Order, Payment, OrderProduct, ShippingMethod
+from orders.models import Coupon, CouponCheck, Order, OrderDetails, Payment, OrderProduct, ShippingMethod
 from .forms import OrderForm
 
 import datetime
@@ -164,7 +164,7 @@ def shipping_method(request, sub_total=0, total=0, sub_total_mrp=0, shipping_cos
       sub_total = sub_total - coupon_discount
 
       request.session['coupon_discount'] = round(coupon_discount)
-      del request.session['coupon_id']
+      # del request.session['coupon_id']
     
     elif 'coupon_discount' in request.session:
       coupon_discount = request.session['coupon_discount']
@@ -388,14 +388,30 @@ def place_order(request, sub_total=0, total=0, sub_total_mrp=0, shipping_cost=0,
       #clear the cart items of the user
       CartItem.objects.filter(user=current_user).delete()
 
+      # create order date object for the order
+      OrderDetails.objects.create(
+        order = order,
+        order_status = order.status,
+      )
+
       # delete data from session
       if request.session['order_id']:
         del request.session['order_id']
         del request.session['address_id']
         del request.session['shipping_method_id']
         
-      if request.session['coupon_discount']:
+      if 'coupon_discount' in request.session:
         del request.session['coupon_discount']
+
+      if 'coupon_id' in  request.session:
+        coupon_id =  request.session['coupon_id']
+        coupon = Coupon.objects.get(id=coupon_id)
+        CouponCheck.objects.create(
+          user= request.user,
+          coupon = coupon,
+        )
+        del request.session['coupon_id']
+      
 
 
 
@@ -517,6 +533,13 @@ def payment(request):
     #clear the cart items of the user
     CartItem.objects.filter(user=current_user).delete()
 
+    # create order date object for the order
+    OrderDetails.objects.create(
+      order = order,
+      order_status = order.status,
+    )
+
+
     # delete data from session
     if order_id in request.session:
       del request.session['order_id']
@@ -526,7 +549,16 @@ def payment(request):
     if 'coupon_discount' in request.session:
       del request.session['coupon_discount']
 
-    
+
+    # create a coupen check object that helpes to evaluate the coupon status
+    if 'coupon_id' in  request.session:
+        coupon_id =  request.session['coupon_id']
+        coupon = Coupon.objects.get(id=coupon_id)
+        CouponCheck.objects.create(
+          user= request.user,
+          coupon = coupon,
+        )
+        del request.session['coupon_id']
 
 
     # Send order recieved email to to the customer

@@ -7,6 +7,7 @@
   --color-dark : black;
   --color-danger : #CB2B2B;
   --color-success : #12700A;
+  --color-success-light : #00b06a;
 
   --primary-2 : #8e8c6d;
   --secondary-2 : #142f3a;
@@ -330,3 +331,4 @@ input:active
   border-radius: none !important;
   z-index: 999999;
 }
+

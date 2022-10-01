@@ -27,6 +27,8 @@ urlpatterns = [
 
     path('orders/', views.orders, name='user-orders'),
     path('orders/<str:order_id>/', views.order_details, name='user-order-details'),
+    path('orders/cancel-order/<int:id>/', views.cancel_order, name='user-order-cancel'),
+    path('orders/return-order/<int:id>/', views.return_order, name='user-order-return'),
 
     path('address/', views.address, name='user-address'),
     path('address/add-new-address', views.add_new_address, name='add-new-address'),

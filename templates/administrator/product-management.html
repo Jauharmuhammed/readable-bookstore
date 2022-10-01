@@ -24,10 +24,20 @@
       </button>
     </a>
   </div>
+
+  {% if 'search' in request.path %}
+  <div class="col-12 text-center mb-5">
+    <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
+    <p class="text-muted">{{ product_count }} items found for keyword '{{ request.GET.keyword }}'</p>
+  </div>
+  {% endif %}
+
+
   <!-- Hoverable Table rows -->
   <div class="card mt-5">
     <h5 class="card-header">Products</h5>
     <div class="table-responsive text-nowrap">
+      {% if products %}
       <table class="table " id="user_table">
         <thead>
           <tr>
@@ -40,7 +50,6 @@
           </tr>
         </thead>
         <tbody>
-          {% if products %}
           {% for product in products %}
           <tr> 
             <td class="col-1">{{ forloop.counter }}</td>
@@ -71,14 +80,60 @@
             </td>
           </tr>
           {% endfor %}
-          {% endif %}
         </tbody>
       </table>
+      {% endif %}
     </div>
   </div>
   <!--/ Hoverable Table rows -->
 
 </div>
+
+
+
+<!-- paginator -->
+<nav aria-label="Page navigation example">
+  {% if products.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ products.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in products.paginator.page_range%}
+    {% if products.number == i %}
+    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ products.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
 {% endblock %}
 
 

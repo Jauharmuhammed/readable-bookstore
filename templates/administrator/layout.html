@@ -98,7 +98,7 @@
             </a>
           </li>
           <li
-            class="menu-item {% if request.resolver_match.view_name == 'order-management' or request.resolver_match.view_name == 'payment-management' or request.resolver_match.view_name == 'placed-orders' or request.resolver_match.view_name == 'pending-orders' or request.resolver_match.view_name == 'cancelled-orders' or request.resolver_match.view_name == 'completed-orders' or request.resolver_match.view_name == 'closed-orders' %}active open{% endif %}">
+            class="menu-item {% if 'order-management' in request.path or 'payment-management' in request.path %} active open{% endif %}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class="menu-icon tf-icons bx bx-package"></i>
               <div data-i18n="Layouts">Order Management</div>
@@ -110,31 +110,14 @@
                   <div>All Orders</div>
                 </a>
               </li>
-              <li class="menu-item {% if request.resolver_match.view_name == 'placed-orders' %}active{% endif %}">
-                <a href="{% url 'placed-orders' %}" class="menu-link">
-                  <div>Placed Orders</div>
+              {% for status in statuses %}
+              <li class="menu-item {% if status in request.path  %}active{% endif %}">
+                <a href="{% url 'filtered-orders' status %}" class="menu-link">
+                  <div>{{status}} Orders</div>
                 </a>
               </li>
-              <li class="menu-item {% if request.resolver_match.view_name == 'pending-orders' %}active{% endif %}">
-                <a href="{% url 'pending-orders' %}" class="menu-link">
-                  <div>Pending Orders</div>
-                </a>
-              </li>
-              <li class="menu-item {% if request.resolver_match.view_name == 'cancelled-orders' %}active{% endif %}">
-                <a href="{% url 'cancelled-orders' %}" class="menu-link">
-                  <div>Cancelled Orders</div>
-                </a>
-              </li>
-              <li class="menu-item {% if request.resolver_match.view_name == 'completed-orders' %}active{% endif %}">
-                <a href="{% url 'completed-orders' %}" class="menu-link">
-                  <div>Completed Orders</div>
-                </a>
-              </li>
-              <li class="menu-item {% if request.resolver_match.view_name == 'closed-orders' %}active{% endif %}">
-                <a href="{% url 'closed-orders' %}" class="menu-link">
-                  <div>Closed Orders</div>
-                </a>
-              </li>
+              {% endfor %}
+              
               <li class="menu-item {% if request.resolver_match.view_name == 'payment-management' %}active{% endif %}">
                 <a href="{% url 'payment-management' %}" class="menu-link">
                   <div>Payments</div>
@@ -263,24 +246,25 @@
         <nav
           class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
           id="layout-navbar">
-          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-              <i class="bx bx-menu bx-sm"></i>
-            </a>
-          </div>
 
-          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+          <div class="navbar-nav-right d-flex align-items-center justify-content-between" id="navbar-collapse">
             <!-- Search -->
-            <div class="navbar-nav align-items-center">
-              <div class="nav-item d-flex align-items-center">
-                <i class="bx bx-search fs-4 lh-0"></i>
-                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                  aria-label="Search..." />
-              </div>
+            <div class="navbar-nav align-items-center w-100">
+              
+              <form class="w-100" action=" {% if 'order-management' in request.path %} {% url 'order-search' %} 
+              {% elif 'payment-management' in request.path %} {% url 'payment-search' %} 
+              {% elif 'product-management' in request.path %} {% url 'product-search' %} 
+              {% endif %}">
+                <div class="nav-item d-flex align-items-center ">
+                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <input type="text" name="keyword" class="form-control border-0 shadow-none" placeholder="Search..."
+                    aria-label="Search..." />
+                </div>
+              </form>
             </div>
             <!-- /Search -->
 
-            <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <ul class="navbar-nav flex-row align-items-center ms-5">
               <!-- Place this tag where you want the button to render. -->
               
 

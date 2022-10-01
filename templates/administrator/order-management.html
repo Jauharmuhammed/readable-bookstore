@@ -35,14 +35,21 @@
   <div class="d-flex justify-content-between ">
     <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Order Mangement / </span>
       {% if request.path == '/administrator/order-management/' %} All Orders
-      {% elif 'placed-orders' in request.path %} Placed Orders
-      {% elif 'pending-orders' in request.path %} Pending Orders
-      {% elif 'cancelled-orders' in request.path %} Cancelled Orders 
-      {% elif 'completed-orders' in request.path %} Completed Orders
-      {% elif 'closed-orders' in request.path %} Closed Orders
       {% endif %}
+
+      {% for status in statuses %}
+      {% if status in request.path %} {{status}} orders
+      {% endif %}
+      {% endfor %}
     </h6>
   </div>
+
+  {% if 'search' in request.path %}
+  <div class="col-12 text-center mb-5">
+    <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
+    <p class="text-muted">{{ orders_count }} items found for keyword '{{ request.GET.keyword }}'</p>
+  </div>
+  {% endif %}
 
 {% if orders %}
   
@@ -83,10 +90,10 @@
           <td><span class="name">{{ order.order_total}}0</span></td>
           <td>
             <span
-              class="name {% if order.status == 'Placed' %} text-primary {% elif order.status == 'Pending' or order.status == 'Returned'%} text-warning {% elif order.status == 'Cancelled' %}  text-danger {% elif order.status == 'Delivered' or order.status == 'Return Confirmed' %} text-success {% endif %}"
+              class="name {% if order.status == 'Placed' %} text-primary {% elif order.status == 'Pending' or order.status == 'Returned' or order.status == 'Processing' %} text-warning {% elif order.status == 'Cancelled' or order.status == 'Return Confirmed' %}  text-danger {% elif order.status == 'Shipped' %} text-info {% elif order.status == 'Delivered'  %} text-success {% endif %}"
               id="status-{{ order.id }}">{{ order.status }}
             </span>
-            {% if order.status == 'Pending' or order.status == 'Placed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Returned' %}
+            {% if order.status == 'Pending' or order.status == 'Placed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Out for Delivery' or order.status == 'Returned' %}
             <button onclick="orderStatusUpdate(event, '{{ order.id }}')" value="{{ order.status }}" hidden
               id="orderStatusUpdateButton-{{ order.id }}"></button>
             <label for="orderStatusUpdateButton-{{ order.id }}" id="label-{{ order.id }}">
@@ -201,12 +208,10 @@
 <div class="card mt-5 py-5">
   <h4 class="card-header text-center"> Empty!</h4>
   <h5 class="card-header text-center"> No 
-      {% if 'placed-orders' in request.path %} Placed Orders
-      {% elif 'pending-orders' in request.path %} Pending Orders
-      {% elif 'cancelled-orders' in request.path %} Cancelled Orders 
-      {% elif 'completed-orders' in request.path %} Completed Orders 
-      {% elif 'closed-orders' in request.path %} Closed Orders 
+      {% for status in statuses %}
+      {% if status in request.path  %} {{status}}
       {% endif %}
+      {% endfor %} Orders
 
   </h5>
 </div>
@@ -215,6 +220,48 @@
 
 </div>
 
+<!-- paginator -->
+<nav aria-label="Page navigation example">
+  {% if orders.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if orders.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ orders.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in orders.paginator.page_range%}
+    {% if orders.number == i %}
+    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if orders.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ orders.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
 
 
 {% endblock %}
@@ -238,7 +285,10 @@
     } else if (currentStatus.trim() == 'Processing') {
       options['Shipped'] = 'Shipped';
     } else if (currentStatus.trim() == 'Shipped') {
+      options['Out for Delivery'] = 'Out for Delivery';
+    } else if (currentStatus.trim() == 'Out for Delivery') {
       options['Delivered'] = 'Delivered';
+      options['Cancelled'] = 'Cancelled';
     } else if (currentStatus.trim() == 'Returned') {
       options['Return Confirmed'] = 'Return Confirmed';
     };
@@ -265,57 +315,18 @@
         }).then((value) => {
           const statusDiv = document.getElementById('status-' +id);
           statusDiv.textContent = status;
-          const label = document.getElementById('label-' +id);
-          label.setAttribute("hidden", true);
-          const productStatus = document.a('class-status-' +id);
-          for (var i in productStatus) {
-            productStatus[i].textContent = status;
+          if (status == 'Cancelled' || status == 'Return Confirmed' || status == 'Delivered'){
+            const label = document.getElementById('label-' + id);
+            label.setAttribute("hidden", true);
           }
+          
         });
       }
     });
   }
 
 
-  // async function orderStatusUpdate(ev, id){
-  //   const div = document.getElementById('status-' + id)
-  //   const { value: status } = await Swal.fire({
-  //     title: 'Select Order Status',
-  //     input: 'select',
-  //     inputOptions: {
-  //       'Pending': 'Pending',
-  //       'Cancelled': 'Cancelled',
-  //     },
-      
-  //     inputPlaceholder: 'Choose order status',
-  //     inputValue: div.textContent,
-  //     showCancelButton: true,
-  //   })
 
-  //   data = {
-  //     "order_status": status,
-  //   }
-  //   $.ajax({
-  //     method: "GET",
-  //     url: "/administrator/order-management/update-order-status/cancel/" +id,
-  //     data: data,
-  //     success: function (response) {
-
-  //       swal(response.status, {
-  //         timer: 3000,
-  //       }).then((value) => {
-  //         const statusDiv = document.getElementById('status-' +id);
-  //         statusDiv.textContent = status;
-  //         const label = document.getElementById('label-' +id);
-  //         label.setAttribute("hidden", true);
-  //         const productStatus = document.getElementsByClassName('class-status-' +id);
-  //         for (var i in productStatus) {
-  //           productStatus[i].textContent = status;
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
 
 </script>
 

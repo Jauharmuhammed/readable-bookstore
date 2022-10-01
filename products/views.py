@@ -12,6 +12,9 @@ from .forms import ReviewForm
 from categories.models import Category, SubCategory, Language
 from orders.models import OrderProduct
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+
+
 def products(request, category_slug=None, sub_category_slug= None):
   categories = None
   sub_categories = None
@@ -36,10 +39,15 @@ def products(request, category_slug=None, sub_category_slug= None):
   else:
     products = Products.objects.filter(is_available=True).order_by('-modified_date')
 
+
+  paginator = Paginator(products, 8)
+  page = request.GET.get('page')
+  paged_products = paginator.get_page(page)
+
   product_count = products.count()
 
   context = {
-    'products' : products,
+    'products' : paged_products,
     'product_count': product_count,
   }
   return render(request, 'products/products.html', context)
@@ -58,8 +66,12 @@ def products_by_language(request, language_slug=None):
 
   product_count = products.count()
 
+  paginator = Paginator(products, 8)
+  page = request.GET.get('page')
+  paged_products = paginator.get_page(page)
+
   context = {
-    'products' : products,
+    'products' : paged_products,
     'product_count': product_count,
   }
   return render(request, 'products/products.html', context)
@@ -106,8 +118,13 @@ def search(request):
     else:
       products = None
       product_count = 0
+
+    paginator = Paginator(products, 8)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+  
   context = {
-    'products' : products ,
+    'products' : paged_products ,
     'product_count': product_count,
     'keyword' : keyword
   }

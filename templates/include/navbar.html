@@ -23,11 +23,11 @@
     <section class="section-right me-3 order-lg-2">
       <div class="nav-icones d-flex justify-content-end ">
         <ul class="list-unstyled my-auto user-dropdown">
+          
           <li>
             <a class="navbar-icon " href="#" data-bs-toggle="modal" data-bs-target="#searchModal">
               <iconify-icon icon="bytesize:search"></iconify-icon>
             </a>
-            
           </li>
           <li class="nav-item navbar-dropdown dropdown-user dropdown mx-4">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -218,9 +218,9 @@
       <div class="modal-body text-center d-flex flex-column justify-content-center">
         <form action="{% url 'search' %}" name="search_form">
           <div class=" mb-5 d-flex justify-content-center">
-            <input type="search" class="btn btn-invert py-3 w-50 text-start"
-            placeholder="SEARCH IN OUR SHOP" name="keyword" autofocus="autofocus" id="search">
-            <button type="submit" class="btn btn-invert py-3 px-4 ">
+            <input type="search" class="btn btn-invert py-3 w-50 text-start border-search-input"
+            placeholder="SEARCH IN OUR SHOP" name="keyword" autofocus="autofocus" id="search" >
+            <button type="submit" class="btn btn-invert py-3 px-4 border-search" id="search-btn">
                 <iconify-icon icon="bytesize:search"></iconify-icon>
             </button>
           </div>
@@ -286,4 +286,6 @@
 
   });
     // DOMContentLoaded  end
+
+  
 </script>

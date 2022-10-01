@@ -87,6 +87,97 @@
   </div>
 </section>
 
+<!-- paginator -->
+{% if 'search' in request.path %}
+<nav aria-label="Page navigation example">
+  {% if products.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?keyword={{keyword}}&page={{ products.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in products.paginator.page_range%}
+    {% if products.number == i %}
+    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?keyword={{keyword}}&page={{i}}">{{i}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?keyword={{keyword}}&page={{ products.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
+{% else %}
+
+<nav aria-label="Page navigation example">
+  {% if products.has_other_pages %}
+  <ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ products.previous_page_number}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+
+    {% for i in products.paginator.page_range%}
+    {% if products.number == i %}
+    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ products.next_page_number}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
+</nav>
+
+{% endif %}
+
+
 {% endif %}
 
 

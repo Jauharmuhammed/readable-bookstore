@@ -24,8 +24,10 @@ from twilio.base.exceptions import TwilioRestException
 
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
-from orders.models import Order, OrderProduct
-from products.models import Wishlist
+from orders.models import Order, OrderDetails, OrderProduct, Payment
+from products.models import Products, Wishlist
+
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import *
 from .forms import *
@@ -301,11 +303,16 @@ def wishlist(request):
   try:
     wishlist_items = Wishlist.objects.filter(user=request.user).order_by('-created_date')
     wishlist_count = wishlist_items.count()
+
+    paginator = Paginator(wishlist_items, 8)
+    page = request.GET.get('page')
+    paged_wishlist_items = paginator.get_page(page)
+
   except:
     wishlist_items = None
     wishlist_count= 0
   context = {
-    'wishlist_items': wishlist_items,
+    'wishlist_items': paged_wishlist_items,
     'wishlist_count': wishlist_count
   }
 
@@ -427,10 +434,16 @@ def change_password(request):
 def orders(request):
   orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
   order_products = OrderProduct.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
-  print(orders)
+  order_details = OrderDetails.objects.filter(order__in=orders)
+
+  paginator = Paginator(orders, 8)
+  page = request.GET.get('page')
+  paged_orders = paginator.get_page(page)
+
   context = {
     'order_products':order_products,
-    'orders':orders,
+    'orders':paged_orders,
+    'order_details':order_details,
   }
   return render(request, 'accounts/orders.html', context)
 
@@ -441,14 +454,87 @@ def order_details(request, order_id):
   try:
     order = get_object_or_404(Order, user=request.user,order_id=order_id, is_ordered=True)
     order_products = OrderProduct.objects.filter(user=request.user, order_id=order, is_ordered=True)
+    order_details = OrderDetails.objects.filter(order=order)
   except (Order.DoesNotExist or OrderProduct.DoesNotExist):
     order = None
     order_products =None
   context = {
     'order_products':order_products,
     'order':order,
+    'order_details':order_details,
   }
   return render(request, 'accounts/order-details.html', context)
+
+@login_required(login_url='login')
+def cancel_order(request, id):
+  url = request.META.get('HTTP_REFERER')
+  if request.method == "POST":
+    order_note = request.POST['order_note']
+    order_cancel = Order.objects.get(id=id)
+    if order_cancel.status == 'Pending' or order_cancel.status == 'Placed' or order_cancel.status == 'Shipped':
+
+      order_products = OrderProduct.objects.filter(order=order_cancel.id)
+      for order_product in order_products:
+        product = Products.objects.get(id=order_product.product_id)
+        product.stock += order_product.quantity
+        product.save()
+
+      if order_cancel.status == 'Placed' or order_cancel.status == 'Shipped':
+        payment = Payment.objects.get(id=order_cancel.payment.id)
+        if payment.payment_method == 'razorpay':
+          payment.status = 'Refunded'
+          payment.save()
+
+        elif payment.payment_method == 'payOnDelivery':
+          payment.status = 'Failed'
+          payment.save()
+
+      elif order_cancel.status == 'Pending':
+        payment = Payment.objects.get(id=order_cancel.payment.id)
+        payment.status = 'Failed'
+        payment.save()
+
+      order_cancel.status = 'Cancelled'
+      order_cancel.save()
+
+      # create order date object for the order
+      OrderDetails.objects.create(
+        order = order_cancel,
+        order_status = order_cancel.status,
+        note = order_note,
+      )
+
+      
+
+      messages.success(request, 'Order cancelled successfully')
+
+    elif order_cancel.status == 'Out for Delivery':
+      messages.error(request, "We cannot process cancellation request once the item is out for delivery, Please contact with the our courier partner or help center. If you dont want the product, Please don't recieve the product!")
+
+  return redirect(url)
+
+@login_required(login_url='login')
+def return_order(request, id):
+  url = request.META.get('HTTP_REFERER')
+  if request.method == "POST":
+    order_note = request.POST['order_note']
+    order_cancel = Order.objects.get(id=id)
+    if order_cancel.status == 'Delivered':
+
+
+      order_cancel.status = 'Returned'
+      order_cancel.save()
+
+      # create order date object for the order
+      OrderDetails.objects.create(
+        order = order_cancel,
+        order_status = order_cancel.status,
+        note = order_note,
+      )
+
+      messages.success(request, 'Return request recived')
+
+  return redirect(url)
 
 
 @login_required(login_url='login')

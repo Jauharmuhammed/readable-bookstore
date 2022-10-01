@@ -17,21 +17,16 @@ urlpatterns = [
     path('category-management/language/delete/<str:pk>/', views.del_language, name='del-language'),
 
     path('product-management/', views.product_management, name='product-management'),
+    path('product-management/search', views.product_search, name='product-search'),
     path('product-management/add-product/', views.add_product, name='add-product'),
     path('product-management/product/delete/<str:pk>/', views.del_product, name='del-product'),
     path('product-management/product/edit/<str:pk>/', views.edit_product, name='edit-product'),
 
     path('order-management/', views.order_management, name='order-management'),
-    path('order-management/placed-orders/', views.placed_orders, name='placed-orders'),
-    path('order-management/pending-orders/', views.pending_orders, name='pending-orders'),
-    path('order-management/cancelled-orders/', views.cancelled_orders, name='cancelled-orders'),
-    path('order-management/completed-orders/', views.completed_orders, name='completed-orders'),
-    path('order-management/closed-orders/', views.closed_orders, name='closed-orders'),
-
-    # path('order-management/update-order-product-status/<int:order_product_id>/', views.update_order_product_status, name='update-order-product-status'),
+    path('order-management/search/', views.order_search, name='order-search'),
+    path('order-management/<str:order_status>/', views.filtered_orders, name='filtered-orders'),
     path('order-management/update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
     path('payment-management/', views.payment_management, name='payment-management'),
-
-
+    path('payment-management/search/', views.payment_search, name='payment-search'),
 
 ]

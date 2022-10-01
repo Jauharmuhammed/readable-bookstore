@@ -51,9 +51,82 @@
                   </div>
                   <div class="col-4 px-0">
                     <div class="d-flex justify-content-end">
-                      <div class="my-auto">
-                          <h6 class=" mb-4 text-uppercase">Order Status</h6>
+                      <div class="d-flex flex-column justify-content-between ">
+                          <h6 class=" mb-4 text-uppercase text-end">Order Status</h6>
                           <p class="text-end"><strong>{{ order.status }}</strong></p>
+                          {% if order.status == 'Placed' or order.status == 'Pending' or order.status == 'Shipped' or order.status == 'Out for Delivery' %}
+                          <div class=" mt-5 text-end">
+                            <a href="" class="text-danger fw-normal" data-bs-toggle="modal" data-bs-target="#cancelOrderModal"> Cancel</a>
+                          </div>
+                          
+                          <!-- Modal -->
+                          <div class="modal fade" id="cancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                            aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <form action="{% url 'user-order-cancel' order.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelOrderModalLabel">Are you sure?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p class="text-center mb-4">
+                                      Are you sure that you want to cancel order with Order ID : {{ order.order_id }}
+                                    </p>
+                                    <div class="form-floating">
+                                      <textarea class="form-control" name="order_note" placeholder="Reason for cancellation" id="orderNote"
+                                        style="height: 140px" required></textarea>
+                                      <label for="orderNote">Reason for cancellation</label>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-invert" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-invert">Request Order Cancellation</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          {% endif %}
+
+                          {% if order.status == 'Delivered'  %}
+                          <div class=" mt-5 text-end">
+                            <a href="" class="text-danger fw-normal" data-bs-toggle="modal" data-bs-target="#cancelOrderModal"> Return </a>
+                          </div>
+                          
+                          <!-- Modal -->
+                          <div class="modal fade" id="cancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                            aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <form action="{% url 'user-order-return' order.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="cancelOrderModalLabel">Are you sure?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <p class="text-center mb-4">
+                                      Are you sure that you want to Return order with Order ID : {{ order.order_id }}
+                                    </p>
+                                    <div class="form-floating">
+                                      <textarea class="form-control" name="order_note" placeholder="Reason for cancellation" id="orderNote"
+                                        style="height: 140px" required></textarea>
+                                      <label for="orderNote">Reason for Return request</label>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer d-flex justify-content-between">
+                                    <button type="button" class="btn btn-invert" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-invert">Request Order Return request</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          {% endif %}
+
+
                       </div>
                     </div>
                   </div>
@@ -72,15 +145,190 @@
                     </div>
                   </div>
 
-                  <div class=" col-12 px-0 ">
-                    <div class="d-flex justify-content-start">
-                      <div class="pt-5">
-                        <h6 class=" mb-4 text-uppercase">Payment Details</h6>
-                        <p class="pb-0 mb-2">Payment Method : {% if order.payment.payment_method == 'payOnDelivery' %} Pay On Delivery {% elif order.payment.payment_method == 'razorpay' %} Razorpay {% endif %}</p>
-                        <p class="pb-0 mb-2">Payment Status : {{ order.payment.status }}</p>
-                      </div> 
+                  <!-- track your order -->
+                    <div class=" col-12 px-0 py-5">
+                      {% if order.status != 'Returned' and order.status != 'Return Confirmed' and order.status != 'Cancelled'  %}
+                      <div class=" track-your-order">
+                        <h6 class=" mb-5 pb-2 text-uppercase">track your order</h6>
+                          <ul data-steps-completed="{% if order.status == 'Placed' or order.status == 'Processing' %} 1
+                            {% elif order.status == 'Shipped'%} 2
+                            {% elif order.status == 'Out for Delivery'%} 3
+                            {% elif order.status == 'Delivered'%} 4 {% endif %}" 
+                            id="trackOrder-ul" class="py-4 px-0 px-lg-5 w-100">
+                            <li class="trackOrder-li">Order Placed <br><br><br> 
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Placed' in order_detail.order_status  %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            <li class="trackOrder-li">Shipped <br><br><br> 
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Shipped' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            <li class="trackOrder-li">Out for Delivery <br><br><br> 
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Out for Delivery' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small> 
+                            </li>
+                            <li class="trackOrder-li">Delivered <br><br><br> 
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Delivered' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                          </ul>
+                        </div>
+
+
+                        {% elif order.status == 'Cancelled' %}
+
+                        <div class="track-your-order-red">
+                        <h6 class=" mb-5 pb-2 text-uppercase">track your order</h6>
+                          <ul data-steps-completed="{% if order.status == 'Placed'%} 1
+
+                                                      {% for order_detail in order_details %}
+                                                      {% if 'Shipped' in order_detail.order_status %} 2
+                                                      {% endif %}
+                                                      {% endfor %}
+
+                                                      {% for order_detail in order_details %}
+                                                      {% if 'Out for Delivery' in order_detail.order_status %} 3
+                                                      {% endif %}
+                                                      {% endfor %}
+
+                                                      {% elif order.status == 'Cancelled'%} 4 {% endif %}"
+                                                      id="trackOrder-ul"
+                            class="py-4 px-0 px-lg-5 align-self-center w-100">
+                            <li class="trackOrder-li">Order Placed <br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Placed' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            {% for order_detail in order_details %}
+                            {% if 'Shipped' in order_detail.order_status %}
+                            <li class="trackOrder-li">Shipped<br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {{ order_detail.date | date }}
+                              </small>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            {% for order_detail in order_details %}
+                            {% if 'Out for Delivery' in order_detail.order_status %}
+                            <li class="trackOrder-li">Out for Delivery<br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {{ order_detail.date | date }}
+                              </small>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <li class="trackOrder-li">Cancelled <br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Cancelled' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                          </ul>
+                        </div>
+
+                        {% elif order.status == 'Returned' or order.status == 'Return Confirmed' %}
+                        
+                        <div class="track-your-order-red">
+                          <h6 class=" mb-5 pb-2 text-uppercase">track your order</h6>
+                          <ul data-steps-completed="{% if order.status == 'Placed'%} 1
+                                                    {% elif order.status == 'Delivered'%} 2 
+                                                    {% elif order.status == 'Returned'%} 3 
+                                                    {% elif order.status == 'Return Confirmed'%} 4 
+                                                    {% endif %}"
+                            id="trackOrder-ul" class="py-4 px-0 px-lg-5 w-100">
+                            <li class="trackOrder-li">Order Placed <br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Placed' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            <li class="trackOrder-li">Delivered<br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Delivered' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            
+                            <li class="trackOrder-li">Returned <br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Returned' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                            <li class="trackOrder-li">Return Confirmed <br><br><br>
+                              <span></span>
+                              <small class="text-dark">
+                                {% for order_detail in order_details %}
+                                {% if 'Return Confirmed' in order_detail.order_status %}
+                                {{ order_detail.date | date }}
+                                {% endif %}
+                                {% endfor %}
+                              </small>
+                            </li>
+                          </ul>
+                        </div>
+
+                      {% endif %}
                     </div>
-                  </div>
+                  
+                  <!-- /track your order -->
+
+                    <div class=" col-12 px-0 ">
+                      <div class="d-flex justify-content-start">
+                        <div class="pt-5">
+                          <h6 class=" mb-4 text-uppercase">Payment Details</h6>
+                          <p class="pb-0 mb-2">Payment Method : {% if order.payment.payment_method == 'payOnDelivery' %} Pay On Delivery {% elif order.payment.payment_method == 'razorpay' %} Razorpay {% endif %}</p>
+                          <p class="pb-0 mb-2">Payment Status : {{ order.payment.status }}</p>
+                        </div> 
+                      </div>
+                    </div>
 
                   <div class="col-12 px-0">
                     <div class="d-flex justify-content-start">
@@ -177,5 +425,18 @@
 
 {% block script %}
 
+<script>
+  const stepsCompleted = parseInt(document.getElementById('trackOrder-ul').getAttribute('data-steps-completed'));
+
+    const steps = document.getElementsByClassName('trackOrder-li');
+
+    setTimeout(() => {
+
+      for (let i = 0; i < stepsCompleted; i++) {
+        steps[i].classList.add('completed');
+      }
+
+    }, 0);
+</script>
 
 {% endblock %}

@@ -41,7 +41,12 @@
                       <div class="col-6 px-0 my-auto">
                         <div class="d-flex justify-content-start">
                           <div class="my-auto ">
-                            <span class="h6 mob-text">Order {{ order.status }}</span>
+                            <span class="h6 mob-text">{{ order.status }}</span>
+                            {% for order_detail in order_details %}
+                            {% if order == order_detail.order and order.status == order_detail.order_status  %}
+                            on {{ order_detail.date | date }}
+                            {% endif %}
+                            {% endfor %}
                           </div>
                         </div>
                       </div>
@@ -84,19 +89,55 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <div class="my-auto col-3 ">
-                      <div class="row ">
-                        <div class="col-12 px-0 text-end align-self-center">
-                          <h6 class="mob-text">{{ order.status }}</h6>
-                        </div>
-                      </div>
-                    </div> -->
                   </div>
                   {% endif %}
                   {% endfor %}
                 </div>
               {% endif %}
               {% endfor %}
+
+              <!-- paginator -->
+              <nav aria-label="Page navigation example">
+                {% if orders.has_other_pages %}
+                <ul class="pagination justify-content-center">
+                  {% if orders.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ orders.previous_page_number}}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+              
+                  {% for i in orders.paginator.page_range%}
+                  {% if orders.number == i %}
+                  <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                  {% endif %}
+                  {% endfor %}
+              
+                  {% if orders.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ orders.next_page_number}}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+                {% endif %}
+              </nav>
 
               {% else %}
                 <div class="text-center my-5 py-5">
