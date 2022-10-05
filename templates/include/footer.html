@@ -6,15 +6,15 @@
       <div class="row">
 
         <div class="footer-list footer-list-newsletter col-12  col-md-4 mb-3">
-          <form action="" method="POST">
+          <form action="{% url 'subscribe' %}" method="POST">
             {% csrf_token %}
             <p class="mb-4 text-uppercase">Newsletter</p>
             <p class=" mb-3">Subscribe to receive updates, access to exclusive deals, and more.</p>
             <div class="form-floating">
-              <input type="email" class="form-control mb-3" name='email' id="floatingInput" placeholder=" ">
-              <label for="floatingInput">Enter you email address</label>
+              <input type="email" class="form-control mb-3" name='email' id="subscribeInput" placeholder=" ">
+              <label for="subscribeInput">Enter you email address</label>
             </div>
-            <button class="w-50 btn btn-subscribe" type="submit">SUBSCRIBE</button>
+            <button class="w-50 btn btn-subscribe" type="submit" id="subscribeButton">SUBSCRIBE</button>
           </form>
         </div>
 
@@ -82,7 +82,12 @@
           </ul>
         </div>
         <div class="order-lg-1 order-md-2">
-          <p class="copyright">&copy; 2022 Readable Bookstore, Inc. All rights reserved.</p>
+          <p class="copyright">&copy; 
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+             Readable Bookstore, Inc. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

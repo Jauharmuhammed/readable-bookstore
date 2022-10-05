@@ -1,4 +1,4 @@
-from multiprocessing import context
+from unicodedata import name
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 
 from django.db.models import Q
 
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Subscriber
 from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
 from orders.models import Order, OrderDetails, OrderProduct, Payment
@@ -21,6 +21,9 @@ from django.http import JsonResponse, HttpResponse
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
+from datetime import datetime, timedelta
+import calendar
+import json
 
 
 def admin_login(request):
@@ -49,10 +52,146 @@ def admin_logout(request):
 @login_required(login_url='admin-login')
 @staff_member_required(login_url='login')
 def dashboard(request):
+    today = datetime.today().date()
+    yesterday = today - timedelta(1)
+
     User = get_user_model()
-    users = User.objects.all()
+    total_users_count = User.objects.all().count()
+    active_users_count = User.objects.filter(is_active=True).count()
+    non_active_users_count = total_users_count - active_users_count
+    new_users_today = User.objects.filter(date_joined__date=today, is_active = True).count()
+
+    total_subscribers_count = Subscriber.objects.all().count()
+    new_subscribers_today = Subscriber.objects.filter(subscribed_date__date=today).count()
+
+    total_orders_count = Order.objects.filter(is_ordered=True).count()
+    new_orders_today = Order.objects.filter(created_date__date=today, is_ordered=True).count()
+
+    placed_orders_count = Order.objects.filter(is_ordered=True, status='Placed').count() + Order.objects.filter(is_ordered=True, status='Processing').count()
+    shipped_orders_count = Order.objects.filter(is_ordered=True, status='Shipped').count()
+    out_for_delivery_orders_count = Order.objects.filter(is_ordered=True, status='Out for Delivery').count()
+    delivered_orders_count = Order.objects.filter(is_ordered=True, status='Delivered').count()
+    cancelled_orders_count = Order.objects.filter(is_ordered=True, status='Cancelled').count()
+    returned_orders_count = Order.objects.filter(is_ordered=True, status='Returned').count() +  Order.objects.filter(is_ordered=True, status='Return Confirmed').count()
+
+    all_orders = Order.objects.filter(is_ordered=True)
+    total_order_amount = 0
+    for order in all_orders:
+      total_order_amount += order.order_total
+
+    todays_orders = Order.objects.filter(is_ordered=True, created_date__date=today)
+    total_order_amount_today = 0
+    for todays_order in todays_orders:
+      total_order_amount_today += todays_order.order_total
+
+    total_products = Products.objects.all()
+    total_products_count = total_products.count()
+    total_products_stock = 0
+    out_of_stock_items = 0
+    low_stock_items = 0
+    for products in total_products:
+      total_products_stock += products.stock
+      if products.stock == 0:
+        out_of_stock_items += 1
+      if products.stock < 10 :
+        low_stock_items += 1
+
+    total_languages = Language.objects.all().count() - 1
+    total_categories = Category.objects.all().count() 
+    total_subcategories = SubCategory.objects.all().count() 
+
+    last_week_sale = []
+    day = datetime.today().date()
+    weekday_list = []
+    for _ in range(7):
+      day_orders = Order.objects.filter(is_ordered=True, created_date__date=day)
+      sale_of_the_day = 0
+      for order in day_orders:
+        sale_of_the_day += order.order_total
+      last_week_sale.append(round(sale_of_the_day))
+      weekday_list.append(calendar.day_abbr[day.weekday()])
+      day = day - timedelta(1)
+
+    last_week_sale.reverse()
+    weekday_list.reverse()
+    last_week_sale_json = json.dumps(last_week_sale)
+    weekday_list_json = json.dumps(weekday_list)
+
+
+    successful_payment_orders = Order.objects.filter(is_ordered=True)
+    razorpay_transactions = 0
+    pay_on_delivery_transactions =0 
+    pending_transactions = 0
+    refunds = 0
+    all_transactions = 0 
+    for order in successful_payment_orders:
+      if order.payment.payment_method == 'razorpay' and  order.payment.status == 'Successful':
+        razorpay_transactions += order.order_total
+      elif order.payment.payment_method == 'payOnDelivery' and  order.payment.status == 'Successful':
+        pay_on_delivery_transactions += order.order_total
+
+      if order.payment.status == 'Pending':
+        pending_transactions += order.order_total
+
+      if order.payment.status == 'Refunded':
+        refunds += order.order_total
+
+      if order.payment.status == 'Refunded' or order.payment.status == 'Successful':
+        all_transactions += order.order_total
+
+    all_successful_transactions = razorpay_transactions + pay_on_delivery_transactions
+
+    # subcategories = SubCategory.objects.all()
+    # subcategory_list = []
+    # for subcategory in subcategories:
+    #   subcategory_list.append(subcategory)
+    # order_products = OrderProduct.objects.filter(is_ordered=True)
+    # for order_product in order_products:
+    #   if order_product.product.sub_category in
+    #   subcategory_list.append({'subcategory': order_product.product.sub_category , 'total':order_product.total})
+
+
+
     context = {
-        'users' : users,
+        'total_users_count' : total_users_count,
+        'active_users_count': active_users_count,
+        'non_active_users_count':non_active_users_count,
+        'new_users_today':new_users_today,
+
+        'subscribers_count':total_subscribers_count,
+        'new_subscribers_today':new_subscribers_today,
+        
+        'total_orders_count':total_orders_count,
+        'new_orders_today':new_orders_today,
+        'placed_orders_count': placed_orders_count,
+        'shipped_orders_count': shipped_orders_count,
+        'out_for_delivery_orders_count': out_for_delivery_orders_count,
+        'delivered_orders_count': delivered_orders_count,
+        'cancelled_orders_count': cancelled_orders_count,
+        'returned_orders_count': returned_orders_count,
+
+        'total_order_amount': round(total_order_amount),
+        'total_order_amount_today':round(total_order_amount_today),
+
+        'total_products_count': total_products_count,
+        'total_products_stock':total_products_stock,
+        'out_of_stock_items':out_of_stock_items,
+        'low_stock_items':low_stock_items,
+
+        'total_languages':total_languages,
+        'total_categories':total_categories,
+        'total_subcategories':total_subcategories,
+
+        'last_week_sale':last_week_sale_json,
+        'weekday_list':weekday_list_json,
+
+        'all_successful_transactions':round(all_successful_transactions),
+        'razorpay_transactions':round(razorpay_transactions),
+        'pay_on_delivery_transactions': round(pay_on_delivery_transactions),
+        'pending_transactions':round(pending_transactions),
+        'refunds':round(refunds),
+        'all_transactions': round(all_transactions)
+
     }
     return render(request, 'administrator/index.html', context)
 
@@ -63,14 +202,106 @@ def user_management(request):
     User = get_user_model()
     users = User.objects.all().order_by('-date_joined')
 
-    paginator = Paginator(users, 10)
-    page = request.GET.get('page')
-    paged_users = paginator.get_page(page)
+    if users is not None:
+      paginator = Paginator(users, 10)
+      page = request.GET.get('page')
+      paged_users = paginator.get_page(page)
+    else:
+      paged_users = None
 
     context = {
         'users' : paged_users,
     }
     return render(request, 'administrator/user-management.html', context)
+
+
+
+  
+@login_required(login_url='admin-login')
+@staff_member_required(login_url='login')
+def user_search(request):
+  if 'keyword' in request.GET:
+    keyword = request.GET['keyword']
+    if keyword :
+      User = get_user_model()
+      users = User.objects.filter(
+        Q(first_name__icontains=keyword) | 
+        Q(last_name__icontains=keyword) | 
+        Q(email__icontains=keyword) |
+        Q(mobile_number__iexact=keyword)
+      ).order_by('-date_joined')
+
+      user_count = users.count()
+
+      paginator = Paginator(users, 10)
+      page = request.GET.get('page')
+      paged_users = paginator.get_page(page)
+  
+    else:
+      paged_users = None
+      user_count = 0
+
+  context = {
+      'users' : paged_users,
+      'user_count': user_count,
+  }
+  return render(request, 'administrator/user-management.html', context)
+
+
+@login_required(login_url='admin-login')
+@staff_member_required(login_url='login')
+def subscriber_management(request):
+    subscribers = Subscriber.objects.all().order_by('-subscribed_date')
+
+    if subscribers is not None:
+      paginator = Paginator(subscribers, 20)
+      page = request.GET.get('page')
+      paged_subscribers = paginator.get_page(page)
+    else:
+      paged_subscribers = None
+
+    context = {
+        'subscribers' : paged_subscribers,
+    }
+    return render(request, 'administrator/subscriber-management.html', context)
+
+
+  
+@login_required(login_url='admin-login')
+@staff_member_required(login_url='login')
+def subscriber_search(request):
+  if 'keyword' in request.GET:
+    keyword = request.GET['keyword']
+    if keyword :
+      subscribers = Subscriber.objects.filter(
+        email__icontains=keyword
+      ).order_by('-subscribed_date')
+      subscriber_count = subscribers.count()
+
+      paginator = Paginator(subscribers, 10)
+      page = request.GET.get('page')
+      paged_subscribers = paginator.get_page(page)
+  
+    else:
+      paged_subscribers = None
+      subscriber_count = 0
+
+  context = {
+      'subscribers' : paged_subscribers,
+      'subscriber_count':subscriber_count,
+  }
+  return render(request, 'administrator/subscriber-management.html', context)
+
+
+@login_required(login_url= 'admin-login')
+@staff_member_required(login_url='login')
+def remove_subscription(request, pk):
+  try:
+    subscriber = Subscriber.objects.get(pk=pk)
+    subscriber.delete()
+  except Subscriber.DoesNotExist:
+    pass
+  return redirect('subscriber-management')
 
   
 @login_required(login_url= 'admin-login')
@@ -109,7 +340,6 @@ def category_management(request):
             return redirect('category-management')
 
         else:
-            # messages.error(request, 'Language with the same name exists.')
             language_form= LanguageCreationForm(request.POST, request.FILES)
 
     if request.method == 'POST' and 'sub_category_submit' in request.POST:
@@ -119,7 +349,6 @@ def category_management(request):
             return redirect('category-management')
 
         else:
-            # messages.error(request, 'Sub-category with the same name exists.')
             sub_category_form= SubCategoryCreationForm(request.POST, request.FILES)
 
     if request.method == 'POST' and 'category_submit' in request.POST:
@@ -142,6 +371,32 @@ def category_management(request):
       'language_form' : language_form,
     }
     return render(request, 'administrator/category-management.html', context)
+
+
+
+@login_required(login_url='admin-login')
+@staff_member_required(login_url='login')
+def edit_category(request, pk):
+  category_edit = Category.objects.get(pk=pk)
+  if request.method == 'POST':
+    edit_form = CategoryCreationForm(request.POST, request.FILES, instance=category_edit)
+    if edit_form.is_valid():
+      edit_form.save()
+  return redirect('category-management')
+
+
+@login_required(login_url='admin-login')
+@staff_member_required(login_url='login')
+def edit_subcategory(request, pk):
+  subcategory_edit = SubCategory.objects.get(pk=pk)
+  if request.method == 'POST':
+    edit_form = SubCategoryCreationForm(request.POST, request.FILES, instance=subcategory_edit)
+    if edit_form.is_valid():
+      edit_form.save()
+
+  return redirect('category-management')
+
+
 
 @login_required(login_url='admin-login')
 @staff_member_required(login_url='login')
@@ -175,10 +430,12 @@ def del_language(request, pk):
 def product_management(request):
     products = Products.objects.all().order_by('-modified_date')
 
-    paginator = Paginator(products, 10)
-    page = request.GET.get('page')
-    paged_products = paginator.get_page(page)
-
+    if products is not None:
+      paginator = Paginator(products, 10)
+      page = request.GET.get('page')
+      paged_products = paginator.get_page(page)
+    else:
+      paged_products = None
 
     variations = Variation.objects.all()
     context = {
@@ -202,18 +459,19 @@ def product_search(request):
           Q(isbn__iexact=keyword) |
           Q(language__language_name__iexact=keyword)
         ).order_by('-modified_date')
-      product_count = products.count()
 
+      paginator = Paginator(products, 10)
+      page = request.GET.get('page')
+      paged_products = paginator.get_page(page)
+  
+      product_count = products.count()
       variations = Variation.objects.all()
     else:
-      products = None
+      paged_products = None
       product_count = 0
       variations = None
 
-    paginator = Paginator(products, 10)
-    page = request.GET.get('page')
-    paged_products = paginator.get_page(page)
-  
+
   context = {
     'products' : paged_products ,
     'product_count': product_count,
@@ -267,7 +525,6 @@ def del_product(request, pk):
 @staff_member_required(login_url='login')
 def edit_product(request, pk):
     product_edit = Products.objects.get(pk=pk)
-    print(product_edit, type(product_edit))
     product_name = product_edit.name
     edit_form = ProductCreationForm(instance=product_edit)
     if request.method == 'POST':
@@ -315,9 +572,12 @@ def edit_product(request, pk):
 def order_management(request):
   orders = Order.objects.filter(is_ordered=True).order_by('-created_date')
 
-  paginator = Paginator(orders, 10)
-  page = request.GET.get('page')
-  paged_orders = paginator.get_page(page)
+  if orders is not None:
+    paginator = Paginator(orders, 10)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
+  else:
+    paged_orders = None
 
   order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
   statuses = ['Pending', 'Placed','Processing','Shipped','Delivered','Returned','Return Confirmed','Cancelled',]
@@ -335,9 +595,12 @@ def order_management(request):
 def filtered_orders(request, order_status):
   orders = Order.objects.filter(is_ordered=True, status = order_status).order_by('-created_date')
 
-  paginator = Paginator(orders, 10)
-  page = request.GET.get('page')
-  paged_orders = paginator.get_page(page)
+  if orders is not None:
+    paginator = Paginator(orders, 10)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
+  else:
+    paged_orders = None
 
   order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
   statuses = ['Pending', 'Placed','Processing','Shipped','Delivered', 'Out for Delivery','Returned','Return Confirmed','Cancelled',]
@@ -372,6 +635,15 @@ def update_order_status(request, order_id):
         product = Products.objects.get(id=order_product.product_id)
         product.stock += order_product.quantity
         product.save()
+
+      payment = Payment.objects.get(id=order.payment.id)
+      if order.payment.payment_method == 'payOnDelivery':
+        payment.status = 'Failed'
+        payment.save()
+
+      elif order.payment.payment_method == 'razorpay':
+        payment.status = 'Refunded'
+        payment.save()
         
     if order_status == 'Delivered' and order.payment.payment_method == 'payOnDelivery':
 
@@ -405,9 +677,12 @@ def update_order_status(request, order_id):
 def payment_management(request):
   payments = Payment.objects.all().order_by('-created_date')
 
-  paginator = Paginator(payments, 10)
-  page = request.GET.get('page')
-  paged_payments = paginator.get_page(page)
+  if payments is not None:
+    paginator = Paginator(payments, 10)
+    page = request.GET.get('page')
+    paged_payments = paginator.get_page(page)
+  else:
+    paged_payments = None
 
   orders = Order.objects.filter(is_ordered=True)
   context = {
@@ -427,6 +702,8 @@ def order_search(request):
 
       orders = Order.objects.filter(
           Q(user__email__icontains=keyword) | 
+          Q(user__first_name__icontains=keyword) | 
+          Q(user__last_name__icontains=keyword) | 
           Q(status__icontains=keyword) | 
           Q(payment__status__icontains=keyword) | 
           Q(payment__payment_method__icontains=keyword) | 
@@ -443,7 +720,7 @@ def order_search(request):
       order_products = OrderProduct.objects.filter(is_ordered=True).order_by('-created_date')
       statuses = ['Pending', 'Placed','Processing','Shipped','Delivered','Returned','Return Confirmed','Cancelled',]
     else:
-      orders = None
+      paged_orders = None
       order_products = None
       statuses = None
 
@@ -479,8 +756,9 @@ def payment_search(request):
       orders = Order.objects.filter(is_ordered=True)
 
     else:
-      payments = None
+      paged_payments = None
       orders = None
+
   context = {
     'payments':paged_payments,
     'orders':orders,

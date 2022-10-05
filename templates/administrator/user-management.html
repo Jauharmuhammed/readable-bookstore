@@ -18,6 +18,13 @@
 <div class="container-xxl flex-grow-1 container-p-y">
   <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> User Mangement</h6>
 
+  {% if 'search' in request.path %}
+  <div class="col-12 text-center mb-5">
+    <h4 class="search-heading fw-normal">SEARCH RESULTS</h4>
+    <p class="text-muted">{{ user_count }} items found for keyword '{{ request.GET.keyword }}'</p>
+  </div>
+  {% endif %}
+
   <!-- Hoverable Table rows -->
   <div class="card">
     <h5 class="card-header">Users</h5>

@@ -78,6 +78,7 @@ TEMPLATES = [
                 'categories.context_processors.sub_category_links',
                 'categories.context_processors.language_links',
                 'carts.context_processors.cart_counter',
+                'accounts.context_processors.profile_picture',
             ],
         },
     },

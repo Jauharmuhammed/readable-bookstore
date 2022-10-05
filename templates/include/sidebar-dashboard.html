@@ -6,7 +6,11 @@
         <header class="text-center">
           <div class="image my-4">
             <a target="_blank" href="#">
+              {% if profile_picture %}
+              <img src="{{ profile_picture }}" style="border-radius: 50% !important; width: 100px;">
+              {% else %}
               <img src="https://www.w3schools.com/howto/img_avatar2.png" style="border-radius: 50% !important; width: 100px;">
+              {% endif %}
             </a>
           </div>
           <h5 class="mt-4 mb-1">

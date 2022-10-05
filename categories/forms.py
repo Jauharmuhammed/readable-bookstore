@@ -10,6 +10,7 @@ class CategoryCreationForm(forms.ModelForm):
 
     widgets = {
               'category_name': forms.TextInput(attrs={'id':"nameWithTitle", 'class':"form-control", 'placeholder':"Category Name"}),
+              'tagline': forms.Textarea(attrs={'id':"taglineWithTitle", 'class':"form-control", 'placeholder':"Category Tagline", 'rows':2}),
               'description': forms.Textarea(attrs={'id':"descriptionWithTitle", 'class':"form-control", 'placeholder':"Category Description", 'rows':4}),
           }
 
@@ -21,7 +22,9 @@ class SubCategoryCreationForm(forms.ModelForm):
     widgets = {
               'subcategory_name': forms.TextInput(attrs={'id':"nameWithTitle", 'class':"form-control", 'placeholder':"Sub-category Name"}),
               'category' : forms.Select(attrs={'id':"nameWithTitle", 'class':"form-control"}),
+              'tagline': forms.Textarea(attrs={'id':"taglineWithTitle", 'class':"form-control", 'placeholder':"Category Tagline", 'rows':2}),
               'description': forms.Textarea(attrs={'id':"descriptionWithTitle", 'class':"form-control", 'placeholder':"Sub-category Description", 'rows':4}),
+              'discount': forms.NumberInput(attrs={'id':"discountWithTitle", 'class':"form-control", 'placeholder':"Discount", 'max':99,}),
           }
 
 class LanguageCreationForm(forms.ModelForm):

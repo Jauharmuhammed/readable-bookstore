@@ -1,8 +1,11 @@
 import os
+import re
+
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -57,6 +60,12 @@ def user_register(request):
 
                 user.save()
 
+                UserProfile.objects.create(user=user)
+
+                subscriber = Subscriber.objects.filter(email=email).exists()
+                if not subscriber:
+                  Subscriber.objects.create(email=email)
+
                 #user activation using email id
                 current_site = get_current_site(request)
                 mail_subject = 'Activation email for your account'
@@ -74,6 +83,47 @@ def user_register(request):
         context = {'form': form}
         return render(request, 'accounts/register.html', context)
 
+
+def subscribe(request):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == "POST":
+      email = request.POST['email']
+      if not re.match(r"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", email):
+        messages.error(request, 'Invalid Email Address')
+      elif Subscriber.objects.filter(email=email):
+        messages.error(request, "Already subscribed to our Newsletter")
+      else:
+        Subscriber.objects.create(email=email)
+        messages.success(request, "Subscription Successful")
+
+        current_site = get_current_site(request)
+        subscriber = Subscriber.objects.get(email=email)
+        mail_subject = 'Subscription Successful'
+        message = render_to_string('accounts/subscription-successful-email.html',{
+            'subscriber' : subscriber,
+            'domain' : current_site,
+            'uid' : urlsafe_base64_encode(force_bytes(subscriber.pk)),
+        })
+        to_email = email
+        send_mail(mail_subject, message, 'readablebookstore@gmail.com', [to_email], fail_silently=False)
+    return redirect(url)
+
+def unsubscribe(request, uidb64):
+  try:
+    uid = urlsafe_base64_decode(uidb64).decode()
+    subscriber = Subscriber.objects.get(pk=uid)
+  except(TypeError, ValueError, OverflowError, Subscriber.DoesNotExist):
+    subscriber = None
+
+  if subscriber is not None:
+    subscriber.delete()
+    return HttpResponse('Unsubscribed Successfully')
+  else:
+    return HttpResponse('Sorry, an error occured')
+
+
+
+@never_cache
 def user_login(request):
     if request.user.is_authenticated :
         return redirect('home')
@@ -142,10 +192,13 @@ def user_login(request):
                 messages.error(request, "Invalid login credentials")
         return render(request, 'accounts/login.html')
 
+
+@never_cache
 @login_required(login_url= 'login')
 def user_logout(request):
     logout(request)
     return redirect('login')
+
 
 def user_activate(request, uidb64, token):
     try:
@@ -166,6 +219,7 @@ def user_activate(request, uidb64, token):
     
 
 
+@never_cache
 def login_with_otp(request):
   if request.user.is_authenticated :
         return redirect('home')
@@ -200,6 +254,7 @@ def login_with_otp(request):
 
 
 
+@never_cache
 def login_with_otp_verify(request):
   if request.user.is_authenticated :
         return redirect('home')
@@ -238,6 +293,7 @@ def login_with_otp_verify(request):
           return render(request,'accounts/login-with-otp-verify.html' )
 
 
+@never_cache
 def forgot_password(request):
   if request.method == 'POST':
     email = request.POST['email']
@@ -264,6 +320,7 @@ def forgot_password(request):
   return render(request, 'accounts/forgot-password.html')
 
 
+@never_cache
 def forgot_password_verify(request, uidb64, token):
   try:
     uid = urlsafe_base64_decode(uidb64).decode()
@@ -309,7 +366,7 @@ def wishlist(request):
     paged_wishlist_items = paginator.get_page(page)
 
   except:
-    wishlist_items = None
+    paged_wishlist_items = None
     wishlist_count= 0
   context = {
     'wishlist_items': paged_wishlist_items,
@@ -436,9 +493,12 @@ def orders(request):
   order_products = OrderProduct.objects.filter(user=request.user, is_ordered=True).order_by('-created_date')
   order_details = OrderDetails.objects.filter(order__in=orders)
 
-  paginator = Paginator(orders, 8)
-  page = request.GET.get('page')
-  paged_orders = paginator.get_page(page)
+  if orders is not None:
+    paginator = Paginator(orders, 8)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
+  else:
+    paged_orders = None
 
   context = {
     'order_products':order_products,

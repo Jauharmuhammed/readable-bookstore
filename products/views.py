@@ -39,10 +39,12 @@ def products(request, category_slug=None, sub_category_slug= None):
   else:
     products = Products.objects.filter(is_available=True).order_by('-modified_date')
 
-
-  paginator = Paginator(products, 8)
-  page = request.GET.get('page')
-  paged_products = paginator.get_page(page)
+  if products is not None:
+    paginator = Paginator(products, 8)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+  else:
+    paged_products = None
 
   product_count = products.count()
 
@@ -66,9 +68,12 @@ def products_by_language(request, language_slug=None):
 
   product_count = products.count()
 
-  paginator = Paginator(products, 8)
-  page = request.GET.get('page')
-  paged_products = paginator.get_page(page)
+  if products is not None:
+    paginator = Paginator(products, 8)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+  else:
+    paged_products = None
 
   context = {
     'products' : paged_products,
@@ -115,13 +120,16 @@ def search(request):
           Q(language__language_name__iexact=keyword)
         ).order_by('-modified_date')
       product_count = products.count()
+
+      paginator = Paginator(products, 8)
+      page = request.GET.get('page')
+      paged_products = paginator.get_page(page)
+
     else:
       products = None
       product_count = 0
+      paged_products = None
 
-    paginator = Paginator(products, 8)
-    page = request.GET.get('page')
-    paged_products = paginator.get_page(page)
   
   context = {
     'products' : paged_products ,

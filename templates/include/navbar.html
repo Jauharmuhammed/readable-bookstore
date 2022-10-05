@@ -37,12 +37,12 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-user mt-0 p-0">
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{% url 'user-dashboard' %}">
                   <div class="d-flex">
                     <div class="flex-shrink-0 ms-2 me-3">
                       <div class="avatar avatar-online">
                         {% if profile_picture %}
-                        <img src="{% static '{{ profile_picture }}' %} "  style="width:3rem;" alt class="w-px-40 h-auto rounded-circle" />
+                        <img src="{{ profile_picture }}"  style="width:3rem;" alt class="w-px-40 h-auto rounded-circle" />
                         {% else %}
                         <img src="{% static 'images/avatar-basic-user.png' %} "  style="width:3rem !important;" alt class="w-px-40 h-auto rounded-circle" />
                         {% endif %}
@@ -59,7 +59,7 @@
               </li>
               {% if user.is_authenticated %}
               <li>
-                <a class="dropdown-item" href="{% url 'user-dashboard' %}">
+                <a class="dropdown-item" href="{% url 'user-profile' %}">
                   <i class="bx bx-user me-2"></i>
                   <span class="align-middle">My Profile</span>
                 </a>
@@ -287,5 +287,15 @@
   });
     // DOMContentLoaded  end
 
+  let button = document.getElementById("search-btn")
+  let input = document.getElementById("search")
+
+  input.addEventListener("input", function (e) {
+    if (input.value.length == 0) {
+      button.disabled = true
+    } else {
+      button.disabled = false
+    }
+  })
   
 </script>

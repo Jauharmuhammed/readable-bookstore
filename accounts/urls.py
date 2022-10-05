@@ -7,6 +7,9 @@ urlpatterns = [
 	  path('logout/', views.user_logout, name="logout"),
     path('register/', views.user_register, name='register'),
 
+    path('subscribe/', views.subscribe, name='subscribe'),
+    path('unsubscribe/<uidb64>/', views.unsubscribe, name='unsubscribe'),
+
     path('activate/<uidb64>/<token>/', views.user_activate, name='activate'),
 
     path('login/login-with-otp', views.login_with_otp, name='login-with-otp'),

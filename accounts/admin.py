@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import CustomUser, Address, UserProfile
+from .models import CustomUser, Address, Subscriber, UserProfile
 from django.utils.html import format_html
 
 class CustomUserAdmin(UserAdmin):
@@ -24,3 +24,4 @@ class UserProfileAdmin(admin.ModelAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Address)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Subscriber)

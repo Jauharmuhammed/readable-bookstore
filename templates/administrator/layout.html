@@ -17,7 +17,8 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="" />
+  <link rel="icon" type="image/x-icon" href="{% static 'images/readable-icon-black-1.jpg' %}">
+
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -91,11 +92,24 @@
               <div >Dashboard</div>
             </a>
           </li>
-          <li class="menu-item {% if request.resolver_match.view_name == 'user-management' %}active{% endif %}">
-            <a href="{% url 'user-management' %}" class="menu-link">
+          <li class="menu-item {% if 'user-management' in request.path or 'subscriber-management' in request.path %} active open{% endif %}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
               <i class='menu-icon tf-icons bx bxs-user-detail'></i>
-              <div >User Management</div>
+              <div data-i18n="Layouts">User Management</div>
             </a>
+          
+            <ul class="menu-sub">
+              <li class="menu-item {% if request.resolver_match.view_name == 'user-management' %}active{% endif %}">
+                <a href="{% url 'user-management' %}" class="menu-link">
+                  <div>All Users</div>
+                </a>
+              </li>
+              <li class="menu-item {% if 'subscriber-management' in request.path  %}active{% endif %}">
+                <a href="{% url 'subscriber-management' %}" class="menu-link">
+                  <div>Subscribers</div>
+                </a>
+              </li>
+            </ul>
           </li>
           <li
             class="menu-item {% if 'order-management' in request.path or 'payment-management' in request.path %} active open{% endif %}">
@@ -254,6 +268,8 @@
               <form class="w-100" action=" {% if 'order-management' in request.path %} {% url 'order-search' %} 
               {% elif 'payment-management' in request.path %} {% url 'payment-search' %} 
               {% elif 'product-management' in request.path %} {% url 'product-search' %} 
+              {% elif 'user-management' in request.path %} {% url 'user-search' %} 
+              {% elif 'subscriber-management' in request.path %} {% url 'subscriber-search' %} 
               {% endif %}">
                 <div class="nav-item d-flex align-items-center ">
                   <i class="bx bx-search fs-4 lh-0"></i>

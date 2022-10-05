@@ -41,7 +41,13 @@
             </div>
             <div class="row">
               <div class="col mb-3">
-                <label for="nameWithTitle" class="form-label">{{ category_form.description.label }}</label>
+                <label for="taglineWithTitle" class="form-label">{{ category_form.tagline.label }}</label>
+                {{ category_form.tagline }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="descriptionWithTitle" class="form-label">{{ category_form.description.label }}</label>
                 {{ category_form.description }}
               </div>
             </div>
@@ -106,6 +112,11 @@
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCenter{{category.id}}">Add Sub-category</a></li>
                     <li>
+                      <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{category.id}}">
+                        Edit This Category
+                      </button>
+                    </li>
+                    <li>
                       <a class="dropdown-item" href="{% url 'del-category' pk=category.id %}"
                         onclick="deleteconfirm(event,'{{category.category_name}}')">
                         Delete This Category
@@ -115,7 +126,57 @@
                 </div>
               </div>
             </div>
-            <!-- modal -->
+
+            
+            <!-- Edit category modal -->
+            <div class="modal fade" id="editCategoryModal{{category.id}}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModal">Edit category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form action="{% url 'edit-category' category.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="categoryName" class="form-label">Category Name</label>
+                          <input type="text" name="category_name" id="categoryName" class="form-control" placeholder="Category Name" value="{{ category.category_name}}">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="categoryTagline" class="form-label">Tagline</label>
+                          <textarea  name="tagline" id="categoryTagline" class="form-control" placeholder="Tagline" rows="2"> {{ category.tagline}}</textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="categoryDescriptipon" class="form-label">Descriptipon</label>
+                          <textarea  name="description" id="categoryDescriptipon" class="form-control" placeholder="Tagline" rows="5"> {{ category.description}}</textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="categoryImage" class="form-label">Image</label>
+                          <img src="{% if category.image %}{{ category.image.url}} {% endif %}" width="100" alt="Category Image" class=" border p-2 mb-1 image-fluid">
+                          <input type="file" name="image" id="categoryImage" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                      </button>
+                      <input type="submit" class="btn btn-primary" value="Save">
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add a new Sub-category modal -->
             <div class="modal fade" id="modalCenter{{category.id}}" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -142,6 +203,12 @@
                       </div>
                       <div class="row">
                         <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ sub_category_form.tagline.label}}</label>
+                          {{ sub_category_form.tagline }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
                           <label for="nameWithTitle" class="form-label">{{ sub_category_form.description.label}}</label>
                           {{ sub_category_form.description }}
                         </div>
@@ -150,6 +217,12 @@
                         <div class="col mb-3">
                           <label for="nameWithTitle" class="form-label">{{ sub_category_form.image.label }}</label>
                           {{ sub_category_form.image }}
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col mb-3">
+                          <label for="nameWithTitle" class="form-label">{{ sub_category_form.discount.label }}</label>
+                          {{ sub_category_form.discount }}
                         </div>
                       </div>
                     </div>
@@ -163,12 +236,16 @@
                 </div>
               </div>
             </div>
+
+
+
             <div class="table-responsive text-nowrap">
               <table class="table " id="user_table">
                 <thead>
                   <tr>
                     <th>Serial No</th>
                     <th>Sub-Category Name</th>
+                    <th>Discount %</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -179,6 +256,7 @@
                   <tr>
                     <td><span class="name">{{ forloop.counter }}</span></td>
                     <td><span class="name">{{ sub_category.subcategory_name }}</span></td>
+                    <td><span class="name">{{ sub_category.discount }}</span></td>
                     <td>
                       <a type="button" class="btn btn-danger py-1"
                         href="{% url 'del-sub-category' pk=sub_category.id %}"
@@ -186,6 +264,79 @@
                         Delete
                       </a>
                     </td>
+                    <td>
+                      <button type="button" class="btn btn-primary py-1" data-bs-toggle="modal" data-bs-target="#modalEditCategory-{{sub_category.id}}">
+                        Edit
+                      </button>
+                    </td>
+
+
+                    <!-- edit subcategory -->
+                    <div class="modal fade" id="modalEditCategory-{{sub_category.id}}" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditCategory">Edit Subcategory</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form action="{% url 'edit-subcategory' sub_category.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="subCategoryName" class="form-label">Subcategory Name</label>
+                                  <input type="text" name="subcategory_name" id="subCategoryName" class="form-control" placeholder="Subcategory Name"
+                                    value="{{ sub_category.subcategory_name }}">
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="subcategoryEditCategory" class="form-label">Category</label>
+                                  <select name="category" id="subcategoryEditCategory" class="form-control">
+                                    <option value='{{ sub_category.category.id }}'>{{sub_category.category}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="cubCategoryTagline" class="form-label">Tagline</label>
+                                  <textarea name="tagline" id="cubCategoryTagline" class="form-control" placeholder="Tagline"
+                                    rows="2"> {{ sub_category.tagline}}</textarea>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="SubCategoryDescriptipon" class="form-label">Descriptipon</label>
+                                  <textarea name="description" id="SubCategoryDescriptipon" class="form-control" placeholder="Descriptipon"
+                                    rows="5"> {{ sub_category.description}}</textarea>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="SubCategoryImage" class="form-label">Image</label>
+                                  <img src="{% if sub_category.image %}{{ sub_category.image.url}} {% endif %}" width="100" alt="Category Image"
+                                    class=" border p-2 mb-1 image-fluid">
+                                  <input type="file" name="image" id="SubCategoryImage" class="form-control">
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col mb-3">
+                                  <label for="subCategoryDiscount" class="form-label">Discount</label>
+                                  <input type="number" name="discount" max="99" id="subCategoryDiscount" class="form-control" placeholder="Discount"
+                                    value="{{ sub_category.discount}}">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                              </button>
+                              <input type="submit" name="sub_category_submit" class="btn btn-primary" value="Save">
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                   </tr>
                   {% endif %}
                   {% endfor %}
@@ -197,6 +348,8 @@
         </div>
         {% endfor %}
         <!-- Tab Test -->
+
+        
 
 
         <!-- Tab -->
@@ -328,3 +481,4 @@
 </script>
 
 {% endblock %}
+

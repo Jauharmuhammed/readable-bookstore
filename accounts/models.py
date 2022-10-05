@@ -1,3 +1,6 @@
+import email
+from enum import unique
+from pyexpat import model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
@@ -93,6 +96,7 @@ class Address(models.Model):
     country=models.CharField(max_length=50)
 
     date_added = models.DateTimeField(auto_now_add=True)
+
     # is_active is used if the user is deleted an address that is used in an order, if the dont want to see or user the address again,
     # he can delete it, but it cannot be deleted from the database. so is_active is set to false. which helps to filter address to show the user
     is_active= models.BooleanField(default=True) 
@@ -135,5 +139,13 @@ class Address(models.Model):
 
       else:
         return False
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(max_length = 50, unique=True)
+    subscribed_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+      return self.email
 
 

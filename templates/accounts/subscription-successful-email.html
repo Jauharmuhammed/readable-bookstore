@@ -1,0 +1,14 @@
+{% autoescape off %}
+
+Hi,
+
+Thank You for subscribing us. You will get notification of latest offers and exclusive deals and more on our website. 
+
+
+Please do not reply on this email.
+You're receiving this email because you subscribed Readable Bookstore newsletter
+
+Click on the link below to unsubscribe from our mailing list.
+http://{{domain}}{% url 'unsubscribe' uidb64=uid %}
+
+{% endautoescape %}
