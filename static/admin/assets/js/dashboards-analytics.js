@@ -419,12 +419,12 @@
   const chartOrderStatistics = document.querySelector('#orderStatisticsChart'),
     orderChartConfig = {
       chart: {
-        height: 165,
-        width: 130,
+        height: 330,
+        width: 290,
         type: 'donut'
       },
-      labels: ['Electronic', 'Sports', 'Decor', 'Fashion'],
-      series: [85, 15, 50, 50],
+      labels: sorted_products_by_sales,
+      series: sorted_product_quantity_by_sales,
       colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
       stroke: {
         width: 5,
@@ -449,7 +449,7 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '75%',
+            size: '70%',
             labels: {
               show: true,
               value: {
@@ -465,15 +465,6 @@
                 offsetY: 20,
                 fontFamily: 'Public Sans'
               },
-              total: {
-                show: true,
-                fontSize: '0.8125rem',
-                color: axisColor,
-                label: 'Weekly',
-                formatter: function (w) {
-                  return '38%';
-                }
-              }
             }
           }
         }

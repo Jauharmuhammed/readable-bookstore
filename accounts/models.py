@@ -1,6 +1,3 @@
-import email
-from enum import unique
-from pyexpat import model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
@@ -74,9 +71,9 @@ class CustomUser(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(blank=True, upload_to='userprofile')
-    date_of_birth = models.DateField(blank=True)
-    location = models.CharField(blank=True, max_length=30)
+    profile_picture = models.ImageField(blank=True, upload_to='userprofile', null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    location = models.CharField(blank=True, max_length=30, null=True)
 
     def __str__(self) :
        return self.user.first_name

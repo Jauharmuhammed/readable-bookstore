@@ -36,4 +36,9 @@ urlpatterns = [
     path('payment-management/', views.payment_management, name='payment-management'),
     path('payment-management/search/', views.payment_search, name='payment-search'),
 
+    path('banner-management/', views.banner_management, name='banner-management'),
+
+    path('coupon-management/', views.coupon_management, name='coupon-management'),
+    path('coupon-management/add-coupon/', views.add_coupon, name='add-coupon'),
+    
 ]

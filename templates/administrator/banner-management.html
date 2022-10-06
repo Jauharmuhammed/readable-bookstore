@@ -1,0 +1,90 @@
+{% extends 'administrator/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Banner Mangement</h6>
+
+  <div class="row g-0">
+    <div class="banner-homepage" style="background-image: url('{{ banner.banner_image.url }}');" >
+      <h3 class="text-center banner-title">{{banner.title}}</h3>
+      <small class="text-center d-block banner-subtitle">{{banner.tagline}}</small>
+      <div class="banner-buttons d-flex justify-content-between ">
+        <a href="#"><button class="btn btn-outline-dark py-2 small">SEARCH</button></a>
+        <a href="#"><button class="btn btn-outline-dark py-2 small">VIEW ALL</button></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="py-5 mt-5">
+    <form action="{% url 'banner-management' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="hidden" name="banner_id" value="{{banner.id}}">
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.banner_image.label }}<span
+            class="text-danger"><small> *</small></span></label>
+        <div class="col-sm-10">
+          <div class="input-group input-group-merge">
+            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-image"></i></span>
+            {{ form.banner_image }}
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.title.label }}<span
+            class="text-danger"><small> *</small></span></label>
+        <div class="col-sm-10">
+          <div class="input-group input-group-merge">
+            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-heading"></i></span>
+            <input type="text" name="title" value="{{banner.title}}" class="form-control" placeholder="Title" maxlength="255" required="" id="id_title">
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">{{ form.tagline.label }}<span
+            class="text-danger"><small> *</small></span></label>
+        <div class="col-sm-10">
+          <div class="input-group input-group-merge">
+            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-purchase-tag"></i></span>
+            <input type="text" name="tagline" value="{{ banner.tagline }}" class="form-control" placeholder="Tagline" maxlength="255" required=""
+              id="id_tagline">
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-end">
+        <div class="col-sm-10 text-end mt-3">
+          <input type="submit" class=" btn btn-primary" value="Save">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block script %}
+
+
+
+{% endblock %}

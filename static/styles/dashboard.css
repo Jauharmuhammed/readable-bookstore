@@ -53,6 +53,7 @@
   --font-bold-40 : 700 2.5rem 'Montserrat', sans-serif;
   --font-bold-48 : 700 3rem 'Montserrat', sans-serif;
 
+
 }
 
 .btn-danger{
@@ -108,4 +109,66 @@ p, body, html {
 table {
   table-layout: initial !important;
   width: 100% !important;
+}
+
+.banner-homepage {
+  background-size: cover;
+  min-height: 300px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+
+@media (max-width:480px) {
+  .banner-homepage {
+    height: 300px !important;
+    background-position: center center;
+  }
+}
+
+.banner-title {
+  margin-top: 9rem;
+  font-family: var(--italic-font);
+}
+
+.banner-subtitle {
+  margin-top: 1.5rem;
+}
+
+@media (max-width:480px) {
+
+  .banner-title {
+    margin-top: 7rem;
+    font-size: 2rem;
+  }
+
+  .banner-subtitle {
+    margin-top: 1rem;
+    font-weight: 400;
+  }
+}
+
+.banner-buttons {
+  margin: 13% 14%;
+}
+
+.banner-buttons button,
+.banner-buttons button:hover {
+  background-color: transparent !important;
+  width: 9rem;
+}
+
+@media (max-width:480px) {
+
+  .banner-buttons {
+    margin: 65% 10%;
+  }
+
+  .banner-buttons button,
+  .banner-buttons button:hover {
+    display: block;
+    background-color: transparent !important;
+    width: 9rem;
+  }
 }

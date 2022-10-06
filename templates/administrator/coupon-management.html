@@ -1,0 +1,112 @@
+{% extends 'administrator/layout.html' %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="d-flex justify-content-between">
+    <h6 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Coupon Mangement</h6>
+    <button type="button" class="btn btn-primary  my-3 align-items-center text-nowrap" data-bs-toggle="modal"
+      data-bs-target="#modalCenterCoupon">
+      Add Coupon
+    </button>
+  </div>
+
+
+  <div class="modal fade" id="modalCenterCoupon" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCenterTitle">Create a new category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'add-coupon' %}" , method="POST">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+                <label for="couponCode" class="form-label">Coupon Code</label>
+                <input class="form-control" type="text" name="coupon_code" id="couponCode" required minlength="5">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="couponDiscount" class="form-label">Coupon Discount</label>
+                <input class="form-control" type="number" name="coupon_discount" id="couponDiscount" required min="1" max="20">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="couponDescription" class="form-label">Coupon Description</label>
+                <textarea type="text" class="form-control" name="coupon_description" id="couponDescription" rows="4"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3">
+                <label for="couponActive" class="form-label">Is Active</label>
+                <input class="form-check" type="checkbox" name="is_active" id="couponActive">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input class="form-control" type="submit" name="category_submit" class="btn btn-primary" value="Save">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-5">
+    <h5 class="card-header">Coupons</h5>
+    <div class="table-responsive text-nowrap">
+      {% if coupons %}
+      <table class="table " id="paymentTable">
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Coupon Code</th>
+            <th>Discount(%)</th>
+            <th>Created Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for coupon in coupons %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><span class="name">{{ coupon.coupon_code }}</span></td>
+            <td><span class="name">{{ coupon.coupon_discount }}</span></td>
+            <td><span class="name">{{ coupon.created_date | date }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <h4 class="text-center py-5 "> No coupons Found</h4>
+      {% endif %}
+    </div>
+  </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{% block script %}
+
+
+
+{% endblock %}

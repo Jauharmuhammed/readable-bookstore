@@ -157,17 +157,24 @@
                   <h6 class=" text-end fw-lighter small">DISCOUNT MRP :&nbsp;&nbsp; ₹ <span id="subTotal">{{ discount_mrp }}</span>.00</h6> <br>
                   <h6 class=" text-end ">TOTAL :&nbsp;&nbsp; ₹ <span id="subTotal">{{ sub_total }}</span>.00</h6>
                   <h6 class="fw-normal text-end "><small>Shipping & taxes calculated at checkout</small></h6>
+
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'products' %}" class=" btn btn-invert py-2 my-2">CONTINUE SHOPPING</a>
                     
+                    
 
-                    {% if out_of_stock_item %}
+                    {% if out_of_stock_item or sub_total > 100000 %}
                     <button class=" btn px-5 py-2 my-2 disabled" style="background-color: rgb(142, 140,109);">CHECKOUT</button>
                     {% else %}
                     <a href="{% url 'checkout' %}" class=" btn px-5 py-2 my-2  ">CHECKOUT</a>
                     {% endif %}
 
+                    
+
                   </div>
+                    {% if sub_total > 100000 %}
+                    <small class="text-danger d-block text-end">( Cart Value is limited to 100000 )</small>
+                    {% endif %}
 
               </div>
           </div>

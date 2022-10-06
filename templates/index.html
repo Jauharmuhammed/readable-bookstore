@@ -83,9 +83,9 @@
   <!-- /slide -->
 
   <div class="row g-0">
-    <div class="banner-homepage ">
-      <h1 class="text-center banner-title">If you can’t find it at the library, WE HAVE IT!</h1>
-      <h6 class="text-center banner-subtitle">Your one stop shop for all your reading needs.</h6>
+    <div class="banner-homepage" style="background-image: url('{{ banner.banner_image.url }}');" >
+      <h1 class="text-center banner-title">{{banner.title}}</h1>
+      <h6 class="text-center banner-subtitle">{{banner.tagline}}</h6>
       <div class="banner-buttons d-flex justify-content-between ">
         {% if request.user.is_authenticated %}
         <a href=""><button class="btn btn-invert py-2 ">SEARCH</button></a>

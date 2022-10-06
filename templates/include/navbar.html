@@ -108,26 +108,6 @@
               {% endif %}
             </ul>
           </li>
-          <!-- <li class="dropdown">
-            <a class="navbar-icon dropdown-toggle active" href="#" data-bs-toggle="dropdown">
-              <iconify-icon icon="simple-line-icons:user"></iconify-icon>
-            </a>
-            <div class="user-menu dropdown-menu">
-              <ul class="list-unstyled">
-                {% if user.is_authenticated %}
-                <li><a class="dropdown-item border-bottom mb-2" href="#"> Hi, {{ user.first_name }}. </a></li>
-                <li><a class="dropdown-item" href="{% url 'user-dashboard'%}"> Profile </a></li>
-                <li><a class="dropdown-item" href="#"> Settings </a></li>
-                <li><a class="dropdown-item" href="{% url 'wishlist'%}"> Whishlist </a></li>
-                <li><a class="dropdown-item" href="#"> Orders </a></li>
-                <li><a class="dropdown-item" href="{% url 'logout'%}"> Logout </a></li>
-                {% else %}
-                <li><a class="dropdown-item" href="{% url 'login' %}"> Login </a></li>
-                <li><a class="dropdown-item" href="{% url 'register' %}"> Register </a></li>
-                {% endif %}
-              </ul>
-            </div>
-          </li> -->
 
           <li>
             <a class="navbar-icon" href="{% url 'wishlist'%}">
@@ -137,11 +117,10 @@
           <li>
             <a class="navbar-icon position-relative" href="{% url 'cart' %}">
               <iconify-icon icon="bi:bag"></iconify-icon>
-              {% if cart_count > 0 %}
-              <span class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge" id="cartCountBadge">
+              
+              <span  id="cartCountBadge" class="position-absolute bottom-50 start-50   badge rounded-pill cart-badge {% if cart_count == 0 %} d-none {% endif %}">
                 {{ cart_count }}
                 <span class="visually-hidden"></span>
-                {% endif %}
               </span>
             </a>
           </li>

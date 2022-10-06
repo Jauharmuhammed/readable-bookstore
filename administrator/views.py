@@ -1,3 +1,4 @@
+from multiprocessing import context
 from unicodedata import name
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -9,9 +10,11 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 from accounts.models import CustomUser, Subscriber
+from administrator.forms import BannerForm
 from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
-from orders.models import Order, OrderDetails, OrderProduct, Payment
+from administrator.models import Banner
+from orders.models import Coupon, Order, OrderDetails, OrderProduct, Payment
 from orders.views import payment
 
 from products.models import Products, Variation
@@ -103,7 +106,7 @@ def dashboard(request):
     last_week_sale = []
     day = datetime.today().date()
     weekday_list = []
-    for _ in range(7):
+    for _ in range(10):
       day_orders = Order.objects.filter(is_ordered=True, created_date__date=day)
       sale_of_the_day = 0
       for order in day_orders:
@@ -141,14 +144,25 @@ def dashboard(request):
 
     all_successful_transactions = razorpay_transactions + pay_on_delivery_transactions
 
-    # subcategories = SubCategory.objects.all()
-    # subcategory_list = []
-    # for subcategory in subcategories:
-    #   subcategory_list.append(subcategory)
-    # order_products = OrderProduct.objects.filter(is_ordered=True)
-    # for order_product in order_products:
-    #   if order_product.product.sub_category in
-    #   subcategory_list.append({'subcategory': order_product.product.sub_category , 'total':order_product.total})
+
+    order_products = OrderProduct.objects.filter(is_ordered=True)
+    order_product_dict = {}
+    for order_product in order_products:
+      if order_product.product.name in order_product_dict:
+        quantity = order_product_dict[order_product.product.name]
+        quantity += order_product.quantity
+        order_product_dict[order_product.product.name] = quantity
+      else:
+        order_product_dict[order_product.product.name]=order_product.quantity
+
+    sorted_order_product_dict = dict(sorted(order_product_dict.items(), key=lambda item: item[1], reverse=True))
+
+    sorted_products_by_sales = list(sorted_order_product_dict.keys())
+    sorted_product_quantity_by_sales = list(sorted_order_product_dict.values())
+    print(order_product_dict)
+    print(sorted_order_product_dict)
+    print(sorted_products_by_sales)
+    print(sorted_product_quantity_by_sales)
 
 
 
@@ -190,7 +204,10 @@ def dashboard(request):
         'pay_on_delivery_transactions': round(pay_on_delivery_transactions),
         'pending_transactions':round(pending_transactions),
         'refunds':round(refunds),
-        'all_transactions': round(all_transactions)
+        'all_transactions': round(all_transactions),
+
+        'sorted_products_by_sales':json.dumps(sorted_products_by_sales[:4]),
+        'sorted_product_quantity_by_sales':json.dumps(sorted_product_quantity_by_sales[:4]),
 
     }
     return render(request, 'administrator/index.html', context)
@@ -765,3 +782,43 @@ def payment_search(request):
     'payment_count':payment_count,
   }
   return render(request, 'administrator/payment-management.html', context)
+
+
+
+def banner_management(request):
+  banner = Banner.objects.first()
+  form = BannerForm()
+  if request.method == 'POST':
+    banner_id = request.POST['banner_id']
+    update_banner = Banner.objects.get(id=banner_id)
+    form = BannerForm(request.POST, request.FILES, instance=update_banner)
+    if form.is_valid():
+      form.save()
+    else:
+      print(form.errors)
+  context = {
+    'banner' : banner,
+    'form': form,
+  }
+  return render(request, 'administrator/banner-management.html', context)
+
+
+def coupon_management(request):
+  coupons = Coupon.objects.all()
+  context = {
+    'coupons':coupons,
+  }
+  return render(request, 'administrator/coupon-management.html', context)
+  
+
+def add_coupon(request):
+  if request.method == 'POST':
+    form = Coupon()
+    form.coupon_code = request.POST['coupon_code']
+    form.coupon_discount = request.POST['coupon_discount']
+    form.coupon_description = request.POST['coupon_description']
+    form.is_active = request.POST['is_active']
+
+    form.save()
+
+    return redirect('coupon-management')

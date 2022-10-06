@@ -10,13 +10,7 @@
   integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
   crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<!-- drift css -->
-<link rel="stylesheet" href="{% static 'css/drift-basic.min.css' %}">
-
 <script src="https://kit.fontawesome.com/636cd13699.js" crossorigin="anonymous"></script>
-
-
-<script src="{% static 'js/drift.min.js' %}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"></script>
@@ -54,7 +48,7 @@
       </div>
       <div class="col-md-9 ">
         <!-- <form action="{% url 'add-to-cart' product_id=product.id %}" method="POST" class="h-100"> -->
-          <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-4">
+          <div class="detail p-3 right-side d-flex flex-column justify-content-between h-100 pt-4" id="detail">
             <div class="content-top d-flex flex-column justify-content-start h-100">
               <div class="d-flex justify-content-between align-items-center">
                 <h3>{{ product.name }}</h3>
@@ -363,13 +357,6 @@
 {% block script %}
 
 <script>
-  var demoTrigger = document.querySelector('.drift-demo-trigger');
-  var paneContainer = document.querySelector('.detail');
-
-  new Drift(demoTrigger, {
-    paneContainer: paneContainer,
-    inlinePane: false,
-  });
 
   function deleteReview(ev, name) {
     ev.preventDefault();
@@ -410,7 +397,14 @@
         success: function (response) {
           current_cart_count = $('#cartCountBadge').text()
           new_cart_count = parseInt(current_cart_count) + 1
+          $('#cartCountBadge').attr("style", "display: block !important");
           document.getElementById('cartCountBadge').innerHTML = new_cart_count
+
+          // $('#addToCartButton').html('Go To Cart');
+          // $('#addToCartButton').href('/cart/');
+          var href = "/cart/"
+          var content = 'Go To Cart'
+          $("#addToCartButton").replaceWith("<a class='btn pt-2 d-flex justify-content-center align-items-center' href=\"" + href + "\">" + content + "</a>");
 
           $(document).ready(function () {
           $('.toast').toast('show');

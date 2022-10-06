@@ -103,13 +103,19 @@
                   <div class="accordion-body">
 
                     <div class="form-payment">
-                      <input type="radio" name="payment-method" id="razorpay" value="razorpay" checked>
+                      <input type="radio" name="payment-method" id="razorpay" value="razorpay" 
+                      {% if total > 10000 %} disabled {% else %} checked {% endif %}
+                      >
                       <label for="razorpay" class="box first">
                         <div class="course"> <span class="circle"></span>
                           <span class="subject pt-1">
                             <div class="d-flex justify-content-between">
                               <p class="pe-1">
-                                <span class="h6">Pay with Razorpay</span><br><br>
+                                <span class="h6">Pay with Razorpay</span><br>
+                                {% if total > 10000 %}
+                                <small class=" d-block text-danger"> Razorpay doesn't support payments above 10000 for now.</small>
+                                {% endif %}
+                                <br>
                                 After clicking “Place Order”, you will be redirected to Razorpay to complete your purchase securely.
                               </p>
                               <div class="my-auto">

@@ -6,7 +6,7 @@ a {
 .book,
 .book-img {
   width: 80px;
-  height: max-content;
+  /* height: min-content; */
 }
 
 .book {
