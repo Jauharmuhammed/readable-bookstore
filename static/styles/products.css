@@ -189,6 +189,10 @@
   .book-cell {
     width: 100%;
   }
+  .gallery {
+    padding-top: 29%;
+    min-height: 100vh;
+  }
 }
 
 @media (max-width: 458px) {

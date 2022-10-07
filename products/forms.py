@@ -17,8 +17,10 @@ class ProductCreationForm(forms.ModelForm):
               'Publisher': forms.TextInput(attrs={'class':"form-control", 'placeholder':"Publisher"}),
               'release_date': forms.DateInput(attrs={'class':"form-control", 'type':"date", 'value':"YYYY-MM-DD", 'id':"html5-date-input"}),
               'price': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Price", 'min':'0',}),
+              'discount': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Discount", 'min':'0','max':'99'}),
               'stock': forms.NumberInput(attrs={'class':"form-control", 'placeholder':"Stock", 'min':'0'}),
               'is_available': forms.CheckboxInput(),
+
               'cover_image' : forms.ClearableFileInput(),
               'image1' : forms.ClearableFileInput(),
               'image2' : forms.ClearableFileInput(),

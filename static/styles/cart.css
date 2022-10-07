@@ -54,7 +54,7 @@ body {
   border: none !important;
 }
 .empty-cart{
-  margin: 50vh;
+  margin: 50vh 0;
 }
 
 .container-cart a {
