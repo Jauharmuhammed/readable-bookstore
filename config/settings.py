@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from ctypes import cast
 from pathlib import Path
 import os
 from decouple import config
@@ -102,7 +101,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DATABASES_NAME'),
-        'USER' : 'postgres',
+        'USER' : 'myprojectuser',
         'PASSWORD' : config('DATABASES_PASSWORD'),
         'HOST' : 'localhost',
         'POST' : '5432'
