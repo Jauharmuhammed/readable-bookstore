@@ -189,9 +189,9 @@
   .book-cell {
     width: 100%;
   }
+
   .gallery {
-    padding-top: 29%;
-    min-height: 100vh;
+    padding-top: 29% !important;
   }
 }
 
