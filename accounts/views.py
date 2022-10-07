@@ -1,6 +1,6 @@
 import os
 import re
-
+from decouple import config
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -231,8 +231,8 @@ def login_with_otp(request):
           try:
             request.session['mobile_number'] = mobile_number
 
-            account_sid = os.environ['TWILIO_ACCOUNT_SID']
-            auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            account_sid = config('TWILIO_ACCOUNT_SID')
+            auth_token = config('TWILIO_AUTH_TOKEN')
             client = Client(account_sid,auth_token)
 
             verification = client.verify \
@@ -264,8 +264,8 @@ def login_with_otp_verify(request):
 
           mobile_number= request.session['mobile_number']
 
-          account_sid = os.environ['TWILIO_ACCOUNT_SID']
-          auth_token = os.environ['TWILIO_AUTH_TOKEN']
+          account_sid = config('TWILIO_ACCOUNT_SID')
+          auth_token = config('TWILIO_AUTH_TOKEN')
           client = Client(account_sid, auth_token)
 
           verification_check = client.verify \

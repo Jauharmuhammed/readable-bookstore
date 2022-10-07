@@ -14,6 +14,7 @@ from administrator.forms import BannerForm
 from categories.models import Category, SubCategory, Language
 from categories.forms import CategoryCreationForm, SubCategoryCreationForm, LanguageCreationForm
 from administrator.models import Banner
+from orders.forms import CouponForm
 from orders.models import Coupon, Order, OrderDetails, OrderProduct, Payment
 from orders.views import payment
 
@@ -590,7 +591,7 @@ def order_management(request):
   orders = Order.objects.filter(is_ordered=True).order_by('-created_date')
 
   if orders is not None:
-    paginator = Paginator(orders, 10)
+    paginator = Paginator(orders, 20)
     page = request.GET.get('page')
     paged_orders = paginator.get_page(page)
   else:
@@ -817,8 +818,38 @@ def add_coupon(request):
     form.coupon_code = request.POST['coupon_code']
     form.coupon_discount = request.POST['coupon_discount']
     form.coupon_description = request.POST['coupon_description']
-    form.is_active = request.POST['is_active']
+    if request.POST.get('is_active') == 'on':
+      form.is_active = True
+    else:
+      form.is_active = False
 
     form.save()
 
     return redirect('coupon-management')
+
+def delete_coupon(request, pk):
+  try:
+    del_coupon = Coupon.objects.get(pk=pk)
+  except Coupon.ObjectDoesNotExist:
+    messages.error(request, 'Sorry an error occured')
+  
+  if del_coupon is not None:
+    del_coupon.delete()
+    messages.success(request, 'Coupon deleted successfully')
+
+  return redirect('coupon-management')
+
+def edit_coupon(request, pk):
+  if request.method == 'POST':
+    try:
+      edit_coupon = Coupon.objects.get(pk=pk)
+    except Coupon.ObjectDoesNotExist:
+      messages.error(request, 'Sorry an error occured')
+
+    if edit_coupon:
+      edit_form = CouponForm(request.POST, instance=edit_coupon)
+      if edit_form.is_valid():
+        edit_form.save()
+      messages.success(request, 'Changes saved successfully')
+
+  return redirect('coupon-management')

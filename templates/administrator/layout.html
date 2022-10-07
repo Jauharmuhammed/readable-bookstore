@@ -34,6 +34,7 @@
   <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
   <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
 
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
 
@@ -68,6 +69,23 @@
 </head>
 
 <body>
+
+
+
+  <!-- messages alerts -->
+  {% include 'include/messages.html' %}
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>
+    $(document).ready(function () {
+      $('.toast').toast('show');
+    });
+  </script>
+  {% endfor %}
+  {% endif %}
+
+
   <!-- Layout wrapper -->
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -319,6 +337,7 @@
   {% endblock %}
 
   <!-- Custom JS -->
+
 
   <script src="{% static 'scripts/dashboard.js' %} "></script>
 

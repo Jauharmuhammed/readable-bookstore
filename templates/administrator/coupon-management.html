@@ -56,7 +56,7 @@
             <div class="row">
               <div class="col mb-3">
                 <label for="couponActive" class="form-label">Is Active</label>
-                <input class="form-check" type="checkbox" name="is_active" id="couponActive">
+                <input class="form-check" type="checkbox" name="is_active" id="couponActive" >
               </div>
             </div>
           </div>
@@ -79,6 +79,8 @@
             <th>Coupon Code</th>
             <th>Discount(%)</th>
             <th>Created Date</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -88,6 +90,72 @@
             <td><span class="name">{{ coupon.coupon_code }}</span></td>
             <td><span class="name">{{ coupon.coupon_discount }}</span></td>
             <td><span class="name">{{ coupon.created_date | date }}</span></td>
+            <td><span class="name">
+              {% if coupon.is_active %} <i class="text-success bx bx-check"></i>
+              {% else %} <i class="text-danger bx bx-x"></i>
+              {% endif %}
+            </span></td>
+            <td><span class="name d-flex justify-content-end">
+              <span>
+                <a href="" class="text-secondary" data-bs-toggle="modal" data-bs-target="#modalCenterCouponEdit-{{coupon.id}}">
+                  <i class="bx bx-edit"></i>
+                </a>
+
+                <!-- edit coupon modal -->
+                <div class="modal fade" id="modalCenterCouponEdit-{{coupon.id}}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Create a new category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form action="{% url 'edit-coupon' coupon.pk %}" , method="POST">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                          <div class="row">
+                            <div class="col mb-3">
+                              <label for="couponCode" class="form-label">Coupon Code</label>
+                              <input class="form-control" value="{{coupon.coupon_code}}" type="text" name="coupon_code" id="couponCode" required minlength="5">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col mb-3">
+                              <label for="couponDiscount" class="form-label">Coupon Discount</label>
+                              <input class="form-control"  value="{{coupon.coupon_discount}}" type="number" name="coupon_discount" id="couponDiscount" required min="1"
+                                max="20">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col mb-3">
+                              <label for="couponDescription" class="form-label">Coupon Description</label>
+                              <textarea type="text"  value="{{coupon.coupon_description}}" class="form-control" name="coupon_description" id="couponDescription"
+                                rows="4"></textarea>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col mb-3">
+                              <label for="couponActive" class="form-label">Is Active</label>
+                              <input class="form-check" type="checkbox" name="is_active" id="couponActive" {% if coupon.is_active %} checked{% endif %} >
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <input class="form-control" type="submit" name="category_submit" class="btn btn-primary" value="Save">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- edit coupon modal -->
+
+
+              </span>
+              <span>
+                <a href="{% url 'delete-coupon' coupon.pk %}" onclick="deleteCoupon(event,'{{coupon.coupon_code}}')" class="text-danger">
+                  <i class="ms-2 bx bx-trash"></i>
+                </a>
+              </span>
+            </span></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -107,6 +175,27 @@
 
 {% block script %}
 
-
+<script>
+  function deleteCoupon(ev, name) {
+    ev.preventDefault();
+    var urlToRedirect = ev.currentTarget.getAttribute('href');
+    console.log(urlToRedirect);
+    swal({
+      title: "Are you sure?",
+      text: ("Are you sure that you want to delete " + name + "?"),
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          swal("Poof! " + name + " has been deleted!", {
+            icon: "success",
+          });
+          window.location.href = urlToRedirect;
+        }
+      });
+  }
+</script>
 
 {% endblock %}

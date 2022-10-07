@@ -125,6 +125,10 @@ table {
     height: 300px !important;
     background-position: center center;
   }
+
+  *{
+    font-size: 12px;
+  }
 }
 
 .banner-title {
@@ -171,4 +175,13 @@ table {
     background-color: transparent !important;
     width: 9rem;
   }
+}
+
+.notification {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: none !important;
+  z-index: 999999;
 }
