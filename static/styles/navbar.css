@@ -163,6 +163,7 @@ a:focus-within {
 
 
 
+
 @media (max-width :575px) {
   .navbar-brand img {
     max-width: 120px;
@@ -189,6 +190,11 @@ a:focus-within {
 
   .navbar-bottom {
     top: 1.5rem;
+  }
+
+  .dropdown-item {
+    color: var(--color-dark);
+    padding: .6rem;
   }
 }
 

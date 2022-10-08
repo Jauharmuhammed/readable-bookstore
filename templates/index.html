@@ -35,9 +35,9 @@
       <div class="main swiper-slide" id="beach">
         <div class="left-side">
           <div class="main-wrapper d-flex flex-column ">
-            <h4 class="main-header">Categories</h4>
+            <h4 class="main-header">Top Categories</h4>
             <h2 class="main-title">{{ category.subcategory_name }}</h2>
-            <h4 class="main-subtitle">{{ category.category }}</h4>
+            <h4 class="main-subtitle">Min {{ category.discount }}% OFF</h4>
           </div>
           <div class="main-content">
             <div class="main-content__title">{{ category.category.tagline }}</div>
@@ -133,9 +133,18 @@
                 ( {{ product.review_count}} {% if product.review_count == 1 %} Rating {% else %} Ratings {% endif %} )
               </small>
             </div>
-            <div class="book-sum mt-3">{{ product.description | slice:":255"}}
-
-            </div><a href="{{ product.get_url }}" class="no-decoration">
+            <div class="book-sum mt-3">
+              {% if product.offer_price == product.price %}
+              <H5>₹ {{product.price}}</H5>
+              {% else %}
+              <div>
+                <span class="H5">₹ {{product.offer_price}} </span>
+                <span class="text-muted" style="text-decoration: line-through;">₹ {{product.price}}</span>
+                <span class="text-success"> ( {{ product.offer }}% OFF ) </span>
+              </div>
+              {% endif %}
+            </div>
+            <a href="{{ product.get_url }}" class="no-decoration">
               <div class="book-see">See The Book</div>
             </a>
           </div>
