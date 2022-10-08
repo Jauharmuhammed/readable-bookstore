@@ -45,6 +45,7 @@ def cart(request, cart_items=None, sub_total=0, sub_total_mrp=0, discount_mrp=0,
 
     total = sub_total + shipping_cost
 
+    out_of_stock_item = None
     for cart_item in cart_items:
       if cart_item.quantity > cart_item.product.stock:
         out_of_stock_item = True
