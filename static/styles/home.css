@@ -155,7 +155,7 @@
 }
 
 .book-open-hover img {
-  width: inherit;
+  width: -webkit-fill-available;
   height: -webkit-fill-available;
   transform-origin: 0 50%;
   transform: rotateY(0);
