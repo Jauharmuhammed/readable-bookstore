@@ -285,7 +285,6 @@ def login_with_otp_verify(request):
                   
               else:
                   return redirect('login-with-otp-verify')
-
           else:
               messages.error(request, 'OTP is incorrect')
               return redirect('login-with-otp-verify')
