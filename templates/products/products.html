@@ -39,11 +39,11 @@
               <div class="card mx-3">
                   <div class="img-container">
                     <a href="{{ product.get_url }}" >
-                      <img src='{{ product.cover_image.url }}'  alt="" class="image card-img-top px-lg-5 pt-lg-5 px-4 pt-4">
+                      <img src='{{ product.cover_image.url }}'  alt="{{product.name}} cover image" class="image card-img-top px-lg-5 pt-lg-5 px-4 pt-4">
                     </a>
                     <div class="overlay text-nowrap">
                         <a href="{{ product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>
-                        <button product_id="{{ product.id }}" class="btn btn-outline-secondary btn-sm btn-invert addToWishlistButton"><i class="far fa-heart"></i></button>
+                        <button product_id="{{ product.id }}" name="add to wishlist button" class="btn btn-outline-secondary btn-sm btn-invert addToWishlistButton"><i class="far fa-heart"></i></button>
                     </div>
                   </div>
                   <div class="card-body text-center">

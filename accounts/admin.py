@@ -17,7 +17,10 @@ class CustomUserAdmin(UserAdmin):
 
 class UserProfileAdmin(admin.ModelAdmin):
     def thumbnail(self, object):
+      if object.profile_picture:
         return format_html('<img src="{}" width="30" style="border-radius:50% ;">' .format(object.profile_picture.url))
+      else:
+        return format_html('<img src="../static/images/avatar-basic-user.png" width="30" style="border-radius:50% ;">')
     thumbnail.short_description = 'Profile picture'
     list_display = ('thumbnail', 'user', 'date_of_birth', 'location')
 

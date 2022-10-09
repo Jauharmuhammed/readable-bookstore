@@ -127,7 +127,7 @@ body {
 .main-subtitle {
   font-family: var(--italic-font);
   font-weight: 400;
-  font-size: 2rem;
+  font-size: 1.7rem;
   margin-top: 14px;
   margin-bottom: 60px;
   transition-delay: 0.4s;

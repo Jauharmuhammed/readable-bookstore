@@ -184,8 +184,9 @@ a:focus-within {
   }
 
   .navbar-top {
-    font-size: .5rem;
-    height: 1.5rem;
+    font-size: .8rem;
+    height: 2rem;
+    padding-top: .2rem !important;
   }
 
   .navbar-bottom {

@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav class="fixed-top navbar-top">
-  <p class="text-center pt-2 ">FREE SHIPPING FOR ORDERS ABOVE ₹500 . 10% DISCOUNT FOR FIRST PURCAHSE</p>
+  <p class="text-center pt-md-2">FREE SHIPPING FOR ORDERS ABOVE ₹499 . 10% OFF ON FIRST PURCAHSE</p>
 </nav>
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light navbar-bottom">
@@ -10,7 +10,7 @@
 
     <section class="section-left ms-4 d-flex justify-content-start">
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+      <button class="navbar-toggler" name="navigation toggle button" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <iconify-icon icon="fluent:navigation-20-regular"></iconify-icon>
       </button>
@@ -42,9 +42,9 @@
                     <div class="flex-shrink-0 ms-2 me-3">
                       <div class="avatar avatar-online">
                         {% if profile_picture %}
-                        <img src="{{ profile_picture }}"  style="width:3rem;" alt class="w-px-40 h-auto rounded-circle" />
+                        <img src="{{ profile_picture }}"  style="width:3rem;height:3rem;" alt="user profile picture" class="w-px-40 h-auto rounded-circle" />
                         {% else %}
-                        <img src="{% static 'images/avatar-basic-user.png' %} "  style="width:3rem !important;" alt class="w-px-40 h-auto rounded-circle" />
+                        <img src="{% static 'images/avatar-basic-user.png' %} "  style="width:3rem !important; height:3rem !important;" alt="user profile picture" class="w-px-40 h-auto rounded-circle" />
                         {% endif %}
                       </div>
                     </div>
@@ -199,7 +199,7 @@
           <div class=" mb-5 d-flex justify-content-center">
             <input type="search" class="btn btn-invert py-3 w-50 text-start border-search-input"
             placeholder="SEARCH IN OUR SHOP" name="keyword" autofocus="autofocus" id="search" >
-            <button type="submit" class="btn btn-invert py-3 px-4 border-search" id="search-btn">
+            <button type="submit" name='search submit button' class="btn btn-invert py-3 px-4 border-search" id="search-btn">
                 <iconify-icon icon="bytesize:search"></iconify-icon>
             </button>
           </div>

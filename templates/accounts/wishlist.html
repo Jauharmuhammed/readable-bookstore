@@ -31,7 +31,7 @@
           <div class="card mx-3 disabled">
             <div class="img-container">
               <a href="{{ wishlist_item.product.get_url }}">
-                <img src='{{ wishlist_item.product.cover_image.url }}' alt="" class="image card-img-top px-5 pt-5">
+                <img src='{{ wishlist_item.product.cover_image.url }}' alt="{{ wishlist_item.product.name }} cover image" class="image card-img-top px-5 pt-5">
               </a>
               <div class="overlay text-nowrap">
                 <a href="{{ wishlist_item.product.get_url }}" class="btn btn-outline-secondary btn-sm btn-invert"><i class="far fa-eye mr-2"></i>&nbsp; View</a>

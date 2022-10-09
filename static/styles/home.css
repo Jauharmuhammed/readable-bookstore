@@ -84,6 +84,11 @@
     background-color: transparent !important;
     width: 9rem;
   }
+
+  .book-open-hover {
+    width: 135px;
+    height: 198px;
+  }
 }
 
 .title-featured {
@@ -151,7 +156,7 @@
 
 .book-open-hover img {
   width: inherit;
-  height: inherit;
+  height: -webkit-fill-available;
   transform-origin: 0 50%;
   transform: rotateY(0);
   transition: all 0.45s ease;
@@ -194,6 +199,13 @@
 
 .book-open-hover-div {
   float: left;
+}
+
+@media (max-width:480px) {
+  .book-open-hover {
+    width: 128px;
+    height: 187px;
+  }
 }
 /* card */
 

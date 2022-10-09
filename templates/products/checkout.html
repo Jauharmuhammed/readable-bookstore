@@ -159,7 +159,7 @@
                   <div class=" d-flex justify-content-between">
                     <a href="{% url 'cart' %}" class=" btn btn-invert py-2 my-2">BACK TO CART</a>
                     <a href="">
-                      <button type="submit" class=" btn py-2 my-2  ">SAVE ADDRESS</button>
+                      <button type="submit" name="save address button" class=" btn py-2 my-2  ">SAVE ADDRESS</button>
                     </a>
                   </div>
                 </div>
@@ -177,7 +177,7 @@
               <div class="d-flex justify-content-start col-10 ">
                 <div class="book col-3 ">
                   <a href="#">
-                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img">
+                    <img src="{{ cart_item.product.cover_image.url }}" class="book-img" alt="{{cart_item.product.name}} cover image">
                   </a>
                 </div>
                 <div class="ps-2 my-auto flex-column d-flex col-9">

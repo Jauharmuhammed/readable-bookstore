@@ -26,21 +26,21 @@
       <div class="col-md-3">
         <div class="d-flex flex-column justify-content-bottom">
           <div class="main_image ">
-            <img src="{{ product.cover_image.url }}" class="drift-demo-trigger"
+            <img src="{{ product.cover_image.url }}" class="drift-demo-trigger" alt="{{product.name}} cover image"
               data-zoom="{{ product.cover_image.url }}" id="main_product_image" height="280">
 
           </div>
           <div class="thumbnail_images">
             <ul id="thumbnail" class="ps-0">
-              <li><img onclick="changeImage(this)" src="{{ product.cover_image.url }}" height="50"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.cover_image.url }}" alt="{{product.name}} image" height="50"></li>
               {% if product.image1 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image1.url }}" height="50"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image1.url }}" alt="{{product.name}} image" height="50"></li>
               {% endif %}
               {% if product.image2 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image2.url }}" height="50"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image2.url }}" alt="{{product.name}} image" height="50"></li>
               {% endif %}
               {% if product.image3 %}
-              <li><img onclick="changeImage(this)" src="{{ product.image3.url }}" height="50"></li>
+              <li><img onclick="changeImage(this)" src="{{ product.image3.url }}" alt="{{product.name}} image" height="50"></li>
               {% endif %}
             </ul>
           </div>
@@ -124,14 +124,14 @@
 
                   <div class="buttons d-flex flex-row mt-3 gap-3">
                     {% if product.stock < 1 or not product.is_available %} 
-                      <button class="btn disabled"> Add to Cart</button>
+                      <button class="btn disabled" name=" disabled add to cart button"> Add to Cart</button>
                     {% else %}
-                      <button type="submit" class="btn" id="addToCartButton" >
+                      <button type="submit" name="add to cart button" class="btn" id="addToCartButton" >
                         Add to Cart
                       </button>
                     {% endif %}
 
-                      <button id="addToWishlistButton" class="btn btn-invert" >Add to Wishlist</button>
+                      <button id="addToWishlistButton" name="add to wishlist button" class="btn btn-invert" >Add to Wishlist</button>
                   </div>
 
             </div>
@@ -144,19 +144,19 @@
       <div class="nav-align-top mb-4">
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
-            <button type="button" class="nav-link active text-uppercase" role="tab" data-bs-toggle="tab"
+            <button type="button" name="about tab button" class="nav-link active text-uppercase" role="tab" data-bs-toggle="tab"
               data-bs-target="#navs-top-description" aria-controls="navs-top-description" aria-selected="true">
               About
             </button>
           </li>
           <li class="nav-item">
-            <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
+            <button type="button" name="specification tab button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
               data-bs-target="#navs-top-details" aria-controls="navs-top-details" aria-selected="false">
               Specification
             </button>
           </li>
           <li class="nav-item">
-            <button type="button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
+            <button type="button" name="policy tab button" class="nav-link text-uppercase" role="tab" data-bs-toggle="tab"
               data-bs-target="#navs-top-policy" aria-controls="navs-top-policy" aria-selected="false">
               Policy
             </button>

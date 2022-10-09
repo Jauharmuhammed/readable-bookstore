@@ -38,9 +38,9 @@
                     <div class="image my-4 ms-3">
                       <a href="#">
                         {% if user_profile.profile_picture %}
-                        <img class="profile-image" src="{{ user_profile.profile_picture.url }}" >
+                        <img class="profile-image" alt="prfile image" src="{{ user_profile.profile_picture.url }}" >
                         {% else %}
-                        <img class="profile-image" src="https://www.w3schools.com/howto/img_avatar2.png" >
+                        <img class="profile-image" alt="prfile image" src="https://www.w3schools.com/howto/img_avatar2.png" >
                         {% endif %}
                       </a>
                     </div>
