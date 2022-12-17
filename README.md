@@ -1,5 +1,54 @@
 
-# Readable Bookstore (e-commerce website)
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/jauharmuhammed/README-template">
+    <img src="https://github.com/Jauharmuhammed/readable-bookstore/blob/main/static/images/readable-icon-black-1.jpg" alt="Logo" width="80" height="80" border-radius="50%">
+  </a>
+
+  <h3 align="center">Readable Bookstore</h3>
+
+  <p align="center">
+    An awesome e-commerce website for books.
+    <br />
+    <a href="https://github.com/jauharmuhammed/readable-bookstore"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://readablebookstore.online">View Site</a>
+    ·
+    <a href="https://github.com/jauharmuhammed/readable-bookstore/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/jauharmuhammed/readable-bookstore/issues">Request Feature</a>
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#running-this-project">Running this project</a>
+    </li>
+    <li><a href="#screenshots">Screenshots</a></li>
+    <li><a href="https://github.com/Jauharmuhammed">Contact</a></li>
+  </ol>
+</details>
+
+
+## About The Project
+<br>
+<p align='center'>
+<img src="https://github.com/Jauharmuhammed/readable-bookstore/blob/main/assets/product-listing.png" width='70%' >
+</p>
+<br>
 
 This is a fully functional e-commerce website for selling books designed and developed as a part of a full-stack web development project, and it is completely for learning purpose only. This project is developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS, Bootstrap and JavaScript. You can find the deployed project [here.](https://readablebookstore.online)
 
@@ -9,10 +58,21 @@ This is a fully functional e-commerce website for selling books designed and dev
 - Used Twilio API for OTP authentications and Razorpay for payment.
 - Deployed on AWS using Nginex and Router53
 
-### Tech stack
-Python Django | PostgresSQL | pgAdmin
-HTML5 | CSS3 | Bootstrap | JavaScript
-AWS | Nginx | Gunicorn | Router53 | Git | Github
+<br>
+
+### Built With
+
+![Python](https://img.shields.io/badge/Python%20-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![AWS](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5%20-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS%20-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+<br>
 
 ## Running this project
 
@@ -73,13 +133,11 @@ Now you can run the project with this command
 python manage.py runserver
 ```
 
----
+<br>
+
+## Screenshots :
 
 
-## 📸 Screenshots :
-
-
-**User Feed** : <br/>
 
 <table width="100%"> 
 <tr>
