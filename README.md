@@ -50,7 +50,7 @@
 </p>
 <br>
 
-This is a fully functional e-commerce website for selling books designed and developed as a part of a full-stack web development project, and it is completely for learning purpose only. This project is developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS, Bootstrap and JavaScript. You can find the deployed project [here.](https://readablebookstore.online)
+This is a fully functional e-commerce website for books designed and developed as a part of a full-stack web development project, and it is completely for learning purpose only. This project is developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS, Bootstrap and JavaScript. You can find the deployed project [here.](https://readablebookstore.online)
 
 - Modern and minimalistic design that appeals to the user.
 - Guest user functionality for improved user experience.
