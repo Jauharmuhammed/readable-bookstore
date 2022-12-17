@@ -135,7 +135,7 @@ python manage.py runserver
 
 <br>
 
-## Screenshots :
+## Screenshots
 
 
 
