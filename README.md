@@ -38,7 +38,7 @@
       <a href="#running-this-project">Running this project</a>
     </li>
     <li><a href="#screenshots">Screenshots</a></li>
-    <li><a href="contact">Contact</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
