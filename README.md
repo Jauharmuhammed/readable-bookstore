@@ -192,6 +192,23 @@ Login Page
 </table>
 <br/>
 
+<table width="100%"> 
+<tr>
+<td width="50%">
+<p align="center">
+  Admin Dashboard
+</p>
+<img src="https://github.com/Jauharmuhammed/readable-bookstore/blob/main/assets/Admin-dashboard.png">
+</td> 
+<td width="50%">
+<p align="center">
+Admin Order Management
+</p>
+<img src="https://github.com/Jauharmuhammed/readable-bookstore/blob/main/assets/Orger-Management.png">  
+</td>
+</table>
+<br/>
+
 
 
 
