@@ -8,7 +8,7 @@ class Category(models.Model):
   slug = AutoSlugField(populate_from='category_name', max_length=100, unique=True,)
   tagline = models.TextField(max_length=255, blank=True)
   description = models.TextField(max_length=1255, blank=True)
-  image = models.ImageField(upload_to='images/categories', blank=True)
+  image = models.ImageField(upload_to='readable_bookstore/images/categories', blank=True)
 
   class Meta:
     verbose_name = 'category'
@@ -27,7 +27,7 @@ class SubCategory(models.Model):
   category = models.ForeignKey('Category', on_delete=models.CASCADE)
   tagline = models.TextField(max_length=255, blank=True)
   description = models.TextField(max_length=1255, blank=True)
-  image = models.ImageField(upload_to='images/subcategories', blank=True)
+  image = models.ImageField(upload_to='readable_bookstore/images/subcategories', blank=True)
   discount = models.PositiveIntegerField(blank=True, default=0)
 
   class Meta:
@@ -45,7 +45,7 @@ class Language(models.Model):
   language_name = models.CharField(max_length=50, unique=True)
   slug = AutoSlugField(populate_from='language_name', max_length=100, unique=True,)
   description = models.TextField(max_length=255, blank=True)
-  image = models.ImageField(upload_to='images/subcategories', blank=True)
+  image = models.ImageField(upload_to='readable_bookstore/images/subcategories', blank=True)
 
   class Meta:
     verbose_name = 'language'

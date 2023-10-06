@@ -27,10 +27,10 @@ class Products(models.Model):
   stock = models.PositiveIntegerField(default=None)
   is_available = models.BooleanField(default=True)
 
-  cover_image = models.ImageField(upload_to='images/products')
-  image1 = models.ImageField(upload_to='images/products', blank=True, default=None, null=True)
-  image2 = models.ImageField(upload_to='images/products', blank=True, default=None, null=True)
-  image3 = models.ImageField(upload_to='images/products', blank=True, default=None, null=True)
+  cover_image = models.ImageField(upload_to='readable_bookstore/images/products')
+  image1 = models.ImageField(upload_to='readable_bookstore/images/products', blank=True, default=None, null=True)
+  image2 = models.ImageField(upload_to='readable_bookstore/images/products', blank=True, default=None, null=True)
+  image3 = models.ImageField(upload_to='readable_bookstore/images/products', blank=True, default=None, null=True)
 
   description = models.TextField(max_length=2000, blank=True, default=None)
   create_date = models.DateTimeField(auto_now_add=True)

@@ -71,7 +71,7 @@ class CustomUser(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(blank=True, upload_to='userprofile', null=True)
+    profile_picture = models.ImageField(blank=True, upload_to='readable_bookstore/userprofile', null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     location = models.CharField(blank=True, max_length=30, null=True)
 
