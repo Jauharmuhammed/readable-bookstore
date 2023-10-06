@@ -101,11 +101,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DATABASES_NAME'),
-        'USER' : 'myprojectuser',
+        'USER' : config('DATABASES_USER'),
         # 'USER' : 'postgres',
         'PASSWORD' : config('DATABASES_PASSWORD'),
-        'HOST' : 'localhost',
-        'POST' : '5432'
+        'HOST' : config('DATABASES_HOST'),
+        'PORT' : config('DATABASES_PORT')
     }
 }
 
@@ -184,3 +184,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 # razorpay
 
 RAZORPAY_SECRET_KEY = config('RAZORPAY_SECRET_KEY')
+
+CSRF_TRUSTED_ORIGINS = ['https://readable.jauharmuhammed.com']

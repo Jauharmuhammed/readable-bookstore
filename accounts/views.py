@@ -238,7 +238,7 @@ def login_with_otp(request):
             verification = client.verify \
                 .services('VA9c891ebf0f6f2f35cd621eda6e927657') \
                 .verifications \
-                .create(to='+91'+mobile_number, channel='sms')
+                .create(custom_friendly_name='Readable Bookstore' ,to='+91'+mobile_number, channel='sms')
 
             print(verification.status)
             messages.success(request, 'OTP is send to +91 '+mobile_number)
