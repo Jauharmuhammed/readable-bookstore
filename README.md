@@ -14,7 +14,7 @@
     <a href="https://github.com/jauharmuhammed/readable-bookstore"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://readablebookstore.online">View Site</a>
+    <a href="https://readable.jauharmuhammed.com">View Site</a>
     ·
     <a href="https://github.com/jauharmuhammed/readable-bookstore/issues">Report Bug</a>
     ·
@@ -50,7 +50,7 @@
 </p>
 <br>
 
-This is a fully functional e-commerce website for books designed and developed as a part of a full-stack web development project, and it is completely for learning purpose only. This project is developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS, Bootstrap and JavaScript. You can find the deployed project [here.](https://readablebookstore.online)
+This is a fully functional e-commerce website for books designed and developed as a part of a full-stack web development project, and it is completely for learning purpose only. This project is developed using Python Django framework as backend language, PostgreSQL as database and other tools like HTML, CSS, Bootstrap and JavaScript. You can find the deployed project [here.](https://readable.jauharmuhammed.com)
 
 - Modern and minimalistic design that appeals to the user.
 - Guest user functionality for improved user experience.
@@ -91,7 +91,7 @@ virtualenv venv
 That will create a new folder `env` in your project directory. Next activate it with this command on mac/linux:
 
 ```
-source venv/bin/active
+source venv/bin/activate
 ```
 
 Then install the project dependencies with
